@@ -52,6 +52,7 @@ func interact():
 	state_changed.emit(current_state)
 	is_transitioning = false
 	_play_idle()
+	super._ready()
 
 # 播放对应状态的循环待机动画
 func _play_idle():
