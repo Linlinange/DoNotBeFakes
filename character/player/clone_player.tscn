@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b0bej4kpe3812"]
+
+[ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="1_vme7s"]
+
+[node name="clone_player" unique_id=1654329773 instance=ExtResource("1_vme7s")]
+eyes_open = false
+eyes_activity = false
+control = false

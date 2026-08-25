@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://df0y7i8812xjt"]
+
+[ext_resource type="Texture2D" uid="uid://dn4l7xmgp3xyh" path="res://item/mirror/miror.png" id="1_avfs7"]
+[ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="1_mmn61"]
+[ext_resource type="Script" uid="uid://cxvwdt1guft35" path="res://item/mirror/mirror.gd" id="1_n4fir"]
+[ext_resource type="Texture2D" uid="uid://dh5cd8pc56jl4" path="res://item/mirror/outline_mask.png" id="2_n4fir"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="3_5udd3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_avfs7"]
+shader = ExtResource("1_mmn61")
+shader_parameter/outline_thickness = 1.0
+shader_parameter/color_a = Color(0, 0, 0, 1)
+shader_parameter/color_b = Color(0, 0, 0, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4cw0o"]
+resource_local_to_scene = true
+shader = ExtResource("3_5udd3")
+shader_parameter/color_a = Color(0.597, 0.597, 0.597, 1)
+shader_parameter/color_b = Color(1, 1, 1, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n4g46"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_avfs7")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fa4ut"]
+size = Vector2(22, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1cpo"]
+size = Vector2(128, 128)
+
+[node name="mirror" type="Area2D" unique_id=963879677]
+script = ExtResource("1_n4fir")
+
+[node name="outline" type="Sprite2D" parent="." unique_id=1959794280]
+material = SubResource("ShaderMaterial_avfs7")
+texture = ExtResource("2_n4fir")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=213758457]
+material = SubResource("ShaderMaterial_4cw0o")
+sprite_frames = SubResource("SpriteFrames_n4g46")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1689094119]
+visible = false
+shape = SubResource("RectangleShape2D_fa4ut")
+
+[node name="EffectArea" type="Area2D" parent="." unique_id=139695148]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectArea" unique_id=487806591]
+shape = SubResource("RectangleShape2D_m1cpo")

@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://cb0iui4ri07hm"]
+
+[ext_resource type="Script" uid="uid://dwnectmfpntuj" path="res://item/clue/clue.gd" id="1_6ebkb"]
+[ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="1_atwjf"]
+[ext_resource type="Texture2D" uid="uid://t637ojbp2rqu" path="res://item/button/outline_mask.png" id="2_6ebkb"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="3_hvbrj"]
+[ext_resource type="Texture2D" uid="uid://dke1qth8brxuu" path="res://item/clue/clue.png" id="4_f5sfe"]
+[ext_resource type="PackedScene" uid="uid://g67oilwkae2p" path="res://ui/bar/chat_bubble.tscn" id="6_hvbrj"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="7_f5sfe"]
+[ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="8_7ieuf"]
+[ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="9_ysi3q"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ghnlg"]
+shader = ExtResource("1_atwjf")
+shader_parameter/outline_thickness = 1.0
+shader_parameter/color_a = Color(0, 0, 0, 1)
+shader_parameter/color_b = Color(0, 0, 0, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2n6s"]
+shader = ExtResource("3_hvbrj")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.40392157, 0.40392157, 0.5647059, 1)
+shader_parameter/color_b = Color(1, 1, 1, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p4clt"]
+atlas = ExtResource("4_f5sfe")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jsrjt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p4clt")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1cpo"]
+size = Vector2(32, 32)
+
+[node name="clue" type="Area2D" unique_id=1442932112]
+z_index = 3
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_6ebkb")
+content = "[font_size=42]实验记录[font_size=24]
+[left]批次: 第13次
+克隆体化虚为实的
+能力首次成功[/left][/font_size]"
+fake = true
+fakable = true
+
+[node name="outline" type="Sprite2D" parent="." unique_id=1394527048]
+material = SubResource("ShaderMaterial_ghnlg")
+texture = ExtResource("2_6ebkb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=255018214]
+texture_filter = 1
+material = SubResource("ShaderMaterial_u2n6s")
+sprite_frames = SubResource("SpriteFrames_jsrjt")
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {},
+"slice_section": false
+}
+metadata/_aseprite_wizard_config_ = {
+"embed_tex": true,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": true,
+"scale": "1.0",
+"should_round_fps": true,
+"slice": "",
+"source": "res://item/button/button.aseprite",
+"source_uid": 2152995376336419102
+}
+metadata/_aseprite_wizard_source_file_hash_ = "d3ee2f31f86a8316aaed6d0b74a415a5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1221668683]
+visible = false
+shape = SubResource("RectangleShape2D_m1cpo")
+
+[node name="chat_bubble" parent="." unique_id=610564876 instance=ExtResource("6_hvbrj")]
+visible = false
+z_index = 10
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=468540580]
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
+follow_viewport_enabled = true
+
+[node name="tooltip" type="Label" parent="CanvasLayer" unique_id=1842388086]
+visible = false
+z_index = 20
+offset_left = -64.0
+offset_top = -96.0
+offset_right = 58.0
+offset_bottom = -59.0
+theme_override_fonts/font = ExtResource("7_f5sfe")
+theme_override_font_sizes/font_size = 36
+text = "ToolTip"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1492471282]
+stream = ExtResource("8_7ieuf")
+volume_db = -2.0
+script = ExtResource("9_ysi3q")

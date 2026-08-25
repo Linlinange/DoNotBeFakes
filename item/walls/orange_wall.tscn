@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://ct0nb3fjo7eko"]
+
+[ext_resource type="PackedScene" uid="uid://de88wrrj65kru" path="res://item/walls/wall.tscn" id="1_xj1la"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_a4umk"]
+[ext_resource type="Texture2D" uid="uid://d38kj4p5lu7gh" path="res://item/walls/wall.png" id="2_yq4rc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yq4rc"]
+resource_local_to_scene = true
+shader = ExtResource("2_a4umk")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.5176471, 0.41960785, 0.41960785, 1)
+shader_parameter/color_b = Color(0.96862745, 0.7137255, 0.4, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4umk"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(0, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4y8f"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(16, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_52o81"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(32, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_661dr"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(0, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dc5hg"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_87fn3"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(32, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j20t7"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(0, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acp0c"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(16, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pli4j"]
+resource_local_to_scene = true
+atlas = ExtResource("2_yq4rc")
+region = Rect2(32, 224, 16, 16)
+
+[node name="orange_wall" unique_id=295473202 groups=["orange"] instance=ExtResource("1_xj1la")]
+fakable = true
+
+[node name="TL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="0" unique_id=1913200412]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_a4umk")
+
+[node name="Top" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="1" unique_id=1968285712]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_k4y8f")
+
+[node name="TR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="2" unique_id=1300450473]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_52o81")
+
+[node name="Left" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="3" unique_id=633817272]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_661dr")
+
+[node name="Center" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="4" unique_id=7172557]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_dc5hg")
+
+[node name="Right" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="5" unique_id=2144194463]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_87fn3")
+
+[node name="BL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="6" unique_id=1229047507]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_j20t7")
+
+[node name="Bottom" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="7" unique_id=1886581542]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_acp0c")
+
+[node name="BR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="8" unique_id=20690178]
+material = SubResource("ShaderMaterial_yq4rc")
+texture = SubResource("AtlasTexture_pli4j")

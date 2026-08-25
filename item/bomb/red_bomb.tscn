@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://vtyopipr3o0h"]
+
+[ext_resource type="PackedScene" uid="uid://c8fwgsk3n81qg" path="res://item/bomb/bomb.tscn" id="1_ehsm0"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_6v6x3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ehsm0"]
+resource_local_to_scene = true
+shader = ExtResource("2_6v6x3")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.44705883, 0.30980393, 0.45490196, 1)
+shader_parameter/color_b = Color(0.9490196, 0.49803922, 0.49803922, 1)
+shader_parameter/cycle_speed = 2.0
+
+[node name="red_bomb" unique_id=97648337 groups=["red"] instance=ExtResource("1_ehsm0")]
+visible = true
+fake = true
+fakable = true
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=482823439]
+material = SubResource("ShaderMaterial_ehsm0")

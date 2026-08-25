@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://3g3vqefvs52y"]
+
+[ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="1_cydae"]
+[ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="2_kbdea"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yihe8"]
+texture = ExtResource("1_cydae")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+1:1/0 = 0
+1:2/0 = 0
+0:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+5:1/0 = 0
+5:0/0 = 0
+4:0/0 = 0
+5:3/0 = 0
+4:3/0 = 0
+3:3/0 = 0
+4:1/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+2:5/0 = 0
+1:5/0 = 0
+0:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_3yglx"]
+sources/0 = SubResource("TileSetAtlasSource_yihe8")
+
+[node name="floor" type="TileMapLayer" unique_id=1850046164]
+z_index = -10
+tile_set = SubResource("TileSet_3yglx")
+script = ExtResource("2_kbdea")
+clear_before_fill = false
+only_fill_empty = true

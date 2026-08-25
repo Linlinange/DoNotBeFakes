@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://g67oilwkae2p"]
+
+[ext_resource type="Script" uid="uid://co0sestdrgvth" path="res://ui/bar/chat_bubble.gd" id="1_u8w2k"]
+[ext_resource type="Texture2D" uid="uid://p675h24qugop" path="res://ui/bar/chat.png" id="2_hwoes"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="2_ub0yo"]
+
+[node name="chat_bubble" type="Node2D" unique_id=610564876]
+script = ExtResource("1_u8w2k")
+zoom = Vector2(2, 2)
+bubble_offset = Vector2(0, -16)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1205851689]
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("2_hwoes")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2038563953]
+layer = 2
+follow_viewport_enabled = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1555552442]
+offset_right = 32.0
+offset_bottom = 33.0
+theme_override_fonts/normal_font = ExtResource("2_ub0yo")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

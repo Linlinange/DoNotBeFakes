@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://c3irllqi3bbg4"]
+
+[ext_resource type="PackedScene" uid="uid://de88wrrj65kru" path="res://item/walls/wall.tscn" id="1_rvo0p"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_x7ewp"]
+[ext_resource type="Texture2D" uid="uid://d38kj4p5lu7gh" path="res://item/walls/wall.png" id="3_el8ki"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2qjfk"]
+resource_local_to_scene = true
+shader = ExtResource("2_x7ewp")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.37254903, 0.8039216, 0.89411765, 1)
+shader_parameter/color_b = Color(0.27058825, 0.40392157, 0.5764706, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2r54j"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(0, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axkp5"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(16, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmoev"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(32, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8m58o"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(0, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0xcrh"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ch0r"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(32, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v352i"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(0, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1fdc"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(16, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5et4x"]
+resource_local_to_scene = true
+atlas = ExtResource("3_el8ki")
+region = Rect2(32, 224, 16, 16)
+
+[node name="blue_wall" unique_id=295473202 groups=["blue"] instance=ExtResource("1_rvo0p")]
+fake = true
+
+[node name="TL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="0" unique_id=1913200412]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_2r54j")
+
+[node name="Top" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="1" unique_id=1968285712]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_axkp5")
+
+[node name="TR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="2" unique_id=1300450473]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_gmoev")
+
+[node name="Left" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="3" unique_id=633817272]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_8m58o")
+
+[node name="Center" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="4" unique_id=7172557]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_0xcrh")
+
+[node name="Right" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="5" unique_id=2144194463]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_6ch0r")
+
+[node name="BL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="6" unique_id=1229047507]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_v352i")
+
+[node name="Bottom" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="7" unique_id=1886581542]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_v1fdc")
+
+[node name="BR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="8" unique_id=20690178]
+material = SubResource("ShaderMaterial_2qjfk")
+texture = SubResource("AtlasTexture_5et4x")

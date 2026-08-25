@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://gwvq2tr52vx5"
+path="res://.godot/imported/White_Mona.aseprite-79ab8659c457f6a76f28cb9acf1ac19f.res"
+
+[deps]
+
+source_file="res://character/player/White_Mona.aseprite"
+dest_files=["res://.godot/imported/White_Mona.aseprite-79ab8659c457f6a76f28cb9acf1ac19f.res"]
+
+[params]
+

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dn5qialv0bxuo"
+path="res://.godot/imported/bomb.aseprite-f3e241ee5a13efb31abbea2781ad1da1.res"
+
+[deps]
+
+source_file="res://item/bomb/bomb.aseprite"
+dest_files=["res://.godot/imported/bomb.aseprite-f3e241ee5a13efb31abbea2781ad1da1.res"]
+
+[params]
+

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cc8kvidtnias4"]
+
+[ext_resource type="PackedScene" uid="uid://cvnubfack753p" path="res://ui/menu/scene_jumper.tscn" id="1_ldwkw"]
+
+[node name="level_chooser" unique_id=566272005 instance=ExtResource("1_ldwkw")]
+label_text = "N"
+null_tooltip = "本关未开放"
+
+[node name="RichTextLabel" parent="." index="0" unique_id=578834168]
+text = "[color=red]N[/color]"
+
+[node name="chat_bubble" parent="." index="1" unique_id=610564876]
+default_visible = false

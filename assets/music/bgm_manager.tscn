@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cmr8bwv1u2k4k"]
+
+[ext_resource type="Script" uid="uid://bekyt1n5pjvlf" path="res://assets/music/bgm_manager.gd" id="1_hy1aj"]
+
+[node name="BGMManager" type="AudioStreamPlayer" unique_id=779701030]
+script = ExtResource("1_hy1aj")
+fade_duration = 0.3

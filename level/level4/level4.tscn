@@ -1,0 +1,221 @@
+[gd_scene format=4 uid="uid://23em5cm4ocg7"]
+
+[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://level/items_contorl.gd" id="1_pd1s4"]
+[ext_resource type="Script" uid="uid://dbtlwhwr20y7d" path="res://level/level4/level4.gd" id="1_pxgm1"]
+[ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="2_i3mxp"]
+[ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="3_dkj4g"]
+[ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/export/export.tscn" id="4_cqv1u"]
+[ext_resource type="PackedScene" uid="uid://sd1avb781rh2" path="res://level/level5/level5.tscn" id="5_08015"]
+[ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="5_q4ekv"]
+[ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="6_jmqfl"]
+[ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="7_ff83e"]
+[ext_resource type="PackedScene" uid="uid://cojrs4v5ik1qr" path="res://item/walls/green_wall.tscn" id="8_xhjwf"]
+[ext_resource type="PackedScene" uid="uid://4g38ok11ixnl" path="res://item/button/orange_button.tscn" id="9_kqxmp"]
+[ext_resource type="PackedScene" uid="uid://ct0nb3fjo7eko" path="res://item/walls/orange_wall.tscn" id="9_v5qxg"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="10_8oxad"]
+[ext_resource type="PackedScene" uid="uid://3jio646518vs" path="res://item/bomb/green_bomb.tscn" id="11_08015"]
+[ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="11_pxgm1"]
+[ext_resource type="PackedScene" uid="uid://vtyopipr3o0h" path="res://item/bomb/red_bomb.tscn" id="12_kqxmp"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/bar/menu_bar.tscn" id="15_08015"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yihe8"]
+texture = ExtResource("2_i3mxp")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+1:1/0 = 0
+1:2/0 = 0
+0:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+5:1/0 = 0
+5:0/0 = 0
+4:0/0 = 0
+5:3/0 = 0
+4:3/0 = 0
+3:3/0 = 0
+4:1/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+2:5/0 = 0
+1:5/0 = 0
+0:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_3yglx"]
+sources/0 = SubResource("TileSetAtlasSource_yihe8")
+
+[node name="level4" type="Node2D" unique_id=860938987]
+script = ExtResource("1_pxgm1")
+
+[node name="floor" type="TileMapLayer" parent="." unique_id=725743754]
+tile_map_data = PackedByteArray("AAD5/+n/AAABAAMAAAD5/+r/AAAAAAEAAAD6/+n/AAABAAQAADD6/+r/AAABAAIAAAD7/+n/AAAAAAIAAAD7/+r/AAABAAEAAAA=")
+tile_set = SubResource("TileSet_3yglx")
+script = ExtResource("3_dkj4g")
+seed_value = 4
+clear_before_fill = false
+only_fill_empty = true
+
+[node name="export" parent="." unique_id=1735267967 instance=ExtResource("4_cqv1u")]
+z_index = 3
+position = Vector2(-112, 160)
+rotation = 3.1415927
+prompt_text = "按F进入下一关"
+next_scene = ExtResource("5_08015")
+
+[node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("5_q4ekv")]
+unique_name_in_owner = true
+position = Vector2(-128, -314)
+control = false
+
+[node name="Camera2D" type="Camera2D" parent="player" unique_id=2051621602]
+position = Vector2(-32, 96)
+zoom = Vector2(2, 2)
+limit_left = -304
+limit_top = -368
+limit_right = 368
+limit_bottom = 176
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="area1" type="Area2D" parent="." unique_id=1958475384]
+position = Vector2(-368, -288)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="area1" unique_id=310791451]
+position = Vector2(368, 288)
+debug_color = Color(1, 1, 0.7019608, 0.41960785)
+
+[node name="items_control" type="Node2D" parent="." unique_id=2098901336 node_paths=PackedStringArray("buttons")]
+script = ExtResource("1_pd1s4")
+buttons = [NodePath("green_button"), NodePath("orange_button")]
+
+[node name="green_button" parent="items_control" unique_id=1163502924 instance=ExtResource("7_ff83e")]
+position = Vector2(288, 96)
+fakable = true
+
+[node name="orange_button" parent="items_control" unique_id=1442932112 instance=ExtResource("9_kqxmp")]
+position = Vector2(32, -32)
+fakable = true
+
+[node name="green_item" type="Node2D" parent="items_control" unique_id=1543050604 node_paths=PackedStringArray("labels", "buttons", "walls") groups=["button", "green"]]
+z_index = 3
+script = ExtResource("6_jmqfl")
+labels_offset = Vector2(0, -48)
+labels = [NodePath("../../item_layer/button_text2")]
+buttons = [NodePath("../green_button")]
+walls = [NodePath("green_wall2")]
+
+[node name="green_wall2" parent="items_control/green_item" unique_id=1804663450 instance=ExtResource("8_xhjwf")]
+position = Vector2(-160, 48)
+size = Vector2(32, 96)
+anchor = Vector2(0.5, 0)
+
+[node name="green_item2" type="Node2D" parent="items_control" unique_id=468560210 node_paths=PackedStringArray("labels", "buttons", "walls") groups=["button", "green"]]
+z_index = 3
+script = ExtResource("6_jmqfl")
+labels_offset = Vector2(0, -48)
+labels = [NodePath("../../item_layer/button_text")]
+buttons = [NodePath("../green_button")]
+walls = [NodePath("green_wall2"), NodePath("green_wall3")]
+size_on = Vector2(128, 32)
+size_off = Vector2(32, 32)
+
+[node name="green_wall2" parent="items_control/green_item2" unique_id=295473202 instance=ExtResource("8_xhjwf")]
+position = Vector2(-16, -224)
+size = Vector2(32, 32)
+anchor = Vector2(1, 0.5)
+
+[node name="green_wall3" parent="items_control/green_item2" unique_id=735740126 instance=ExtResource("8_xhjwf")]
+position = Vector2(112, 32)
+size = Vector2(32, 32)
+anchor = Vector2(1, 0.5)
+
+[node name="orange_item" type="Node2D" parent="items_control" unique_id=537205319 node_paths=PackedStringArray("labels", "buttons", "walls") groups=["button", "green"]]
+z_index = 3
+script = ExtResource("6_jmqfl")
+labels_offset = Vector2(0, -48)
+labels = [NodePath("../../item_layer/button_text")]
+buttons = [NodePath("../orange_button")]
+walls = [NodePath("orange_wall")]
+size_off = Vector2(96, 32)
+
+[node name="orange_wall" parent="items_control/orange_item" unique_id=447360594 instance=ExtResource("9_v5qxg")]
+position = Vector2(-176, 32)
+size = Vector2(96, 32)
+anchor = Vector2(1, 0.5)
+fakable = false
+
+[node name="orange_item2" type="Node2D" parent="items_control" unique_id=1542185340 node_paths=PackedStringArray("labels", "buttons", "walls") groups=["button", "green"]]
+z_index = 3
+script = ExtResource("6_jmqfl")
+labels_offset = Vector2(0, -48)
+labels = [NodePath("../../item_layer/button_text")]
+buttons = [NodePath("../orange_button")]
+walls = [NodePath("orange_wall"), NodePath("orange_wall2")]
+size_on = Vector2(32, 128)
+size_off = Vector2(32, 32)
+
+[node name="orange_wall" parent="items_control/orange_item2" unique_id=1452213744 instance=ExtResource("9_v5qxg")]
+position = Vector2(224, -80)
+size = Vector2(32, 32)
+anchor = Vector2(0.5, 1)
+fakable = false
+
+[node name="orange_wall2" parent="items_control/orange_item2" unique_id=1707543969 instance=ExtResource("9_v5qxg")]
+position = Vector2(-32, 48)
+size = Vector2(32, 32)
+anchor = Vector2(0.5, 1)
+fakable = false
+
+[node name="bombs" type="Node2D" parent="items_control" unique_id=2012016312]
+
+[node name="green_bomb2" parent="items_control/bombs" unique_id=97648337 instance=ExtResource("11_08015")]
+position = Vector2(192, -96)
+
+[node name="green_bomb" parent="items_control/bombs" unique_id=836227821 instance=ExtResource("11_08015")]
+position = Vector2(128, -96)
+
+[node name="red_bomb" parent="items_control/bombs" unique_id=2145125070 instance=ExtResource("12_kqxmp")]
+position = Vector2(32, -160)
+
+[node name="red_bomb2" parent="items_control/bombs" unique_id=1287120619 instance=ExtResource("12_kqxmp")]
+position = Vector2(112, 96)
+
+[node name="red_bomb3" parent="items_control/bombs" unique_id=878920528 instance=ExtResource("12_kqxmp")]
+position = Vector2(-224, -32)
+
+[node name="external_wall" parent="." unique_id=1309993977 instance=ExtResource("11_pxgm1")]
+tile_map_data = PackedByteArray("AAD7/woAAAAAAAEAAAD8/woAAAADAAAAAAD9/woAAAABAAIAAAD+/woAAAABAAIAAAD//woAAAABAAIAAAAAAAoAAAABAAIAAAABAAoAAAABAAIAAAACAAoAAAABAAIAAAACAAkAAAABAAAAAAABAAkAAAABAAAAAAAAAAkAAAABAAAAAAD//wkAAAABAAAAAAD+/wkAAAADAAEAAAD9/wkAAAAEAAEAAAD8/wkAAAABAAAAAAD7/wkAAAAAAAAAAADy/wkAAAABAAAAAADy/woAAAABAAIAAADz/wkAAAABAAAAAADz/woAAAABAAIAAAD0/wkAAAABAAAAAAD0/woAAAABAAIAAAD1/wkAAAABAAAAAAD1/woAAAABAAIAAAD2/wkAAAABAAAAAAD2/woAAAAEAAAAAAD3/wkAAAACAAAAAAD3/woAAAACAAEAAAAKAAkAAAABAAAAAAAKAAoAAAABAAIAAAALAAkAAAABAAAAAAALAAoAAAABAAIAAAAMAAkAAAABAAAAAAAMAAoAAAABAAIAAAANAPv/AAAAAAAAAAANAPz/AAAAAAEAAAANAP3/AAAAAAEAAAANAP7/AAAAAAEAAAANAP//AAAAAAEAAAANAAAAAAAAAAEAAAANAAEAAAAEAAEAAAANAAIAAAABAAIAAAANAAkAAAABAAAAAAANAAoAAAABAAIAAAAMAAEAAAABAAAAAAAMAAIAAAABAAIAAAD///n/AAABAAAAAAD///r/AAABAAIAAAAAAPn/AAABAAAAAAAAAPr/AAABAAIAAAADAAkAAAABAAAAAAADAAoAAAABAAIAAAAEAAkAAAABAAAAAAAEAAoAAAABAAIAAAAFAAkAAAABAAAAAAAFAAoAAAABAAIAAAAGAAkAAAABAAAAAAAGAAoAAAABAAIAAAAHAAkAAAABAAAAAAAHAAoAAAABAAIAAAAIAAkAAAABAAAAAAAIAAoAAAABAAIAAAAJAAkAAAABAAAAAAAJAAoAAAABAAIAAAAFAPP/AAAAAAEAAAAFAPT/AAAAAAEAAAAGAPP/AAACAAEAAAAGAPT/AAACAAEAAAD1//X/AAAAAAEAAAD1//b/AAAAAAEAAAD2//P/AAACAAEAAAD2//T/AAACAAEAAAD2//X/AAACAAEAAAD2//b/AAACAAEAAADt//7/AAAAAAEAAADt////AAAAAAEAAADt/wAAAAAAAAEAAADt/wEAAAAAAAEAAADt/wIAAAAAAAEAAADt/wMAAAAAAAEAAADt/wQAAAAAAAEAAADt/wUAAAAAAAEAAADt/wYAAAAAAAEAAADt/wcAAAAAAAEAAADt/wgAAAAAAAEAAADu//7/AAACAAEAAADu////AAACAAEAAADu/wAAAAACAAEAAADu/wEAAAACAAEAAADu/wIAAAACAAEAAADu/wMAAAACAAEAAADu/wQAAAACAAEAAADu/wUAAAACAAEAAADu/wYAAAACAAEAAADu/wcAAAACAAEAAADu/wgAAAACAAEAAADt/+z/AAAAAAEAAADt/+3/AAAAAAEAAADt/+7/AAAAAAEAAADt/+//AAAAAAEAAADt//D/AAAAAAEAAADt//H/AAAAAAEAAADt//L/AAAAAAEAAADt//P/AAAAAAEAAADt//T/AAAAAAEAAADt//X/AAAAAAEAAADt//b/AAAAAAEAAADt//f/AAAAAAEAAADt//j/AAAAAAEAAADt//n/AAAAAAEAAADt//r/AAAAAAEAAADt//v/AAAAAAEAAADu/+z/AAACAAEAAADu/+3/AAACAAEAAADu/+7/AAACAAEAAADu/+//AAACAAEAAADu//D/AAACAAEAAADu//H/AAACAAEAAADu//L/AAACAAEAAADu//P/AAACAAEAAADu//T/AAACAAEAAADu//X/AAACAAEAAADu//b/AAACAAEAAADu//f/AAACAAEAAADu//j/AAACAAEAAADu//n/AAACAAEAAADu//r/AAACAAEAAADu//v/AAACAAEAAAD9/+n/AAADAAEAAAD9/+r/AAABAAIAAAD+/+n/AAABAAAAAAD+/+r/AAABAAIAAAD//+n/AAABAAAAAAD//+r/AAABAAIAAAAAAOn/AAABAAAAAAAAAOr/AAABAAIAAAABAOn/AAABAAAAAAABAOr/AAABAAIAAAACAOn/AAABAAAAAAACAOr/AAABAAIAAAADAOn/AAABAAAAAAADAOr/AAABAAIAAAAEAOn/AAABAAAAAAAEAOr/AAABAAIAAAAFAOn/AAABAAAAAAAFAOr/AAABAAIAAAAGAOn/AAABAAAAAAAGAOr/AAABAAIAAADt//z/AAAAAAEAAADt//3/AAAAAAEAAADu//z/AAACAAEAAADu//3/AAACAAEAAAD///H/AAAAAAAAAAD///L/AAAAAAIAAAAAAPH/AAABAAAAAAAAAPL/AAABAAIAAAABAPH/AAABAAAAAAABAPL/AAABAAIAAAACAPH/AAABAAAAAAACAPL/AAABAAIAAAAHAOn/AAABAAAAAAAHAOr/AAABAAIAAADv/wkAAAABAAAAAADv/woAAAABAAIAAADw/wkAAAABAAAAAADw/woAAAABAAIAAADt/wkAAAAAAAEAAADt/woAAAAAAAIAAADu/wkAAAADAAEAAADu/woAAAABAAIAAAD1/wEAAAAAAAAAAAD1/wIAAAAAAAIAAAD2/wEAAAABAAAAAAD2/wIAAAABAAIAAAD3/wEAAAABAAAAAAD3/wIAAAABAAIAAAD4/wEAAAABAAAAAAD4/wIAAAABAAIAAAD5/wEAAAABAAAAAAD5/wIAAAABAAIAAAD6/wEAAAABAAAAAAD6/wIAAAABAAIAAAAIAAEAAAABAAAAAAAIAAIAAAABAAIAAAAJAAEAAAABAAAAAAAJAAIAAAABAAIAAAAKAAEAAAABAAAAAAAKAAIAAAABAAIAAAALAAEAAAABAAAAAAALAAIAAAABAAIAAAAOAAkAAAABAAAAAAAOAAoAAAABAAIAAAAPAAkAAAABAAAAAAAPAAoAAAABAAIAAAAQAAkAAAABAAAAAAAQAAoAAAABAAIAAAARAAkAAAABAAAAAAARAAoAAAABAAIAAAASAAkAAAABAAAAAAASAAoAAAABAAIAAAD9/wMAAAAAAAAAAAD9/wQAAAAAAAEAAAD9/wUAAAAAAAEAAAD9/wYAAAAAAAEAAAD9/wcAAAAAAAEAAAD9/wgAAAAAAAEAAAD+/wMAAAACAAAAAAD+/wQAAAACAAEAAAD+/wUAAAACAAEAAAD+/wYAAAACAAEAAAD+/wcAAAACAAEAAAD+/wgAAAACAAEAAAAFAPn/AAAEAAEAAAAFAPr/AAABAAIAAAAGAPn/AAACAAEAAAAGAPr/AAACAAIAAAAOAPv/AAACAAAAAAAOAPz/AAACAAEAAAAOAP3/AAACAAEAAAAOAP7/AAACAAEAAAAOAP//AAACAAEAAAAOAAAAAAACAAEAAAAOAAEAAAACAAEAAAAOAAIAAAACAAIAAAD7/wEAAAABAAAAAAD7/wIAAAABAAIAAAD8/wEAAAACAAAAAAD8/wIAAAACAAIAAAAVAAkAAAAEAAEAAAAVAAoAAAABAAIAAAAWAAkAAAACAAEAAAAWAAoAAAACAAIAAAAVAPP/AAAAAAEAAAAVAPT/AAAAAAEAAAAVAPX/AAAAAAEAAAAVAPb/AAAAAAEAAAAVAPf/AAAAAAEAAAAVAPj/AAAAAAEAAAAVAPn/AAAAAAEAAAAVAPr/AAAAAAEAAAAVAPv/AAAAAAEAAAAVAPz/AAAAAAEAAAAVAP3/AAAAAAEAAAAVAP7/AAAAAAEAAAAVAP//AAAAAAEAAAAVAAAAAAAAAAEAAAAVAAEAAAAAAAEAAAAVAAIAAAAAAAEAAAAWAPP/AAACAAEAAAAWAPT/AAACAAEAAAAWAPX/AAACAAEAAAAWAPb/AAACAAEAAAAWAPf/AAACAAEAAAAWAPj/AAACAAEAAAAWAPn/AAACAAEAAAAWAPr/AAACAAEAAAAWAPv/AAACAAEAAAAWAPz/AAACAAEAAAAWAP3/AAACAAEAAAAWAP7/AAACAAEAAAAWAP//AAACAAEAAAAWAAAAAAACAAEAAAAWAAEAAAACAAEAAAAWAAIAAAACAAEAAAAUAAkAAAABAAAAAAAUAAoAAAABAAIAAAATAAkAAAABAAAAAAATAAoAAAABAAIAAAAVAAMAAAAAAAEAAAAVAAQAAAAAAAEAAAAVAAUAAAAAAAEAAAAVAAYAAAAAAAEAAAAVAAcAAAAAAAEAAAAVAAgAAAAAAAEAAAAWAAMAAAACAAEAAAAWAAQAAAACAAEAAAAWAAUAAAACAAEAAAAWAAYAAAACAAEAAAAWAAcAAAACAAEAAAAWAAgAAAACAAEAAAAMAOn/AAABAAAAAAAMAOr/AAABAAIAAAANAOn/AAABAAAAAAANAOr/AAAEAAAAAAANAOv/AAAAAAEAAAANAOz/AAAAAAEAAAANAO3/AAAAAAEAAAANAO7/AAAAAAEAAAANAO//AAAAAAEAAAANAPD/AAAAAAEAAAANAPH/AAAAAAEAAAANAPL/AAAAAAIAAAAOAOn/AAABAAAAAAAOAOr/AAADAAAAAAAOAOv/AAACAAEAAAAOAOz/AAACAAEAAAAOAO3/AAACAAEAAAAOAO7/AAACAAEAAAAOAO//AAACAAEAAAAOAPD/AAACAAEAAAAOAPH/AAADAAEAAAAOAPL/AAABAAIAAAAPAOn/AAABAAAAAAAPAOr/AAABAAIAAAAPAPH/AAABAAAAAAAPAPL/AAABAAIAAAAQAOn/AAABAAAAAAAQAOr/AAABAAIAAAAQAPH/AAABAAAAAAAQAPL/AAABAAIAAAARAOn/AAABAAAAAAARAOr/AAABAAIAAAARAPH/AAABAAAAAAARAPL/AAABAAIAAAASAOn/AAABAAAAAAASAOr/AAABAAIAAAASAPH/AAABAAAAAAASAPL/AAABAAIAAAATAOn/AAABAAAAAAATAOr/AAABAAIAAAATAPH/AAABAAAAAAATAPL/AAABAAIAAAAUAOn/AAABAAAAAAAUAOr/AAABAAIAAAAUAPH/AAABAAAAAAAUAPL/AAABAAIAAAAVAOn/AAABAAAAAAAVAOr/AAAEAAAAAAAVAOv/AAAAAAEAAAAVAOz/AAAAAAEAAAAVAO3/AAAAAAEAAAAVAO7/AAAAAAEAAAAVAO//AAAAAAEAAAAVAPD/AAAAAAEAAAAVAPH/AAAEAAEAAAAVAPL/AAAEAAAAAAAWAOn/AAACAAAAAAAWAOr/AAACAAEAAAAWAOv/AAACAAEAAAAWAOz/AAACAAEAAAAWAO3/AAACAAEAAAAWAO7/AAACAAEAAAAWAO//AAACAAEAAAAWAPD/AAACAAEAAAAWAPH/AAACAAEAAAAWAPL/AAACAAEAAAAFAPX/AAAAAAEAAAAFAPb/AAAAAAEAAAAFAPf/AAAAAAEAAAAFAPj/AAAAAAEAAAAGAPX/AAACAAEAAAAGAPb/AAACAAEAAAAGAPf/AAACAAEAAAAGAPj/AAACAAEAAAADAPH/AAABAAAAAAADAPL/AAABAAIAAAAEAPH/AAABAAAAAAAEAPL/AAABAAIAAAD1//H/AAAAAAAAAAD1//L/AAAAAAEAAAD2//H/AAACAAAAAAD2//L/AAACAAEAAAAIAOn/AAABAAAAAAAIAOr/AAABAAIAAAAJAOn/AAABAAAAAAAJAOr/AAABAAIAAAAKAOn/AAABAAAAAAAKAOr/AAABAAIAAAALAOn/AAABAAAAAAALAOr/AAABAAIAAAD1//f/AAAAAAEAAAD2//f/AAACAAEAAAD1//P/AAAAAAEAAAD1//T/AAAAAAEAAADw/+n/AAABAAAAAADw/+r/AAABAAIAAADt/+n/AAAAAAAAAADt/+r/AAAAAAEAAADu/+n/AAABAAAAAADu/+r/AAADAAAAAADv/+n/AAABAAAAAADv/+r/AAABAAIAAADt/+v/AAAAAAEAAADu/+v/AAACAAEAAAD5/wsAAAABAAAAAAD5/wwAAAABAAIAAAD6/wsAAAABAAAAAAD6/wwAAAABAAIAAAD7/wsAAAAEAAEAAAD7/wwAAAABAAIAAAD8/wsAAAACAAEAAAD8/wwAAAACAAIAAAD2/wsAAAAAAAEAAAD2/wwAAAAAAAIAAAD3/wsAAAADAAEAAAD3/wwAAAABAAIAAAD4/wsAAAABAAAAAAD4/wwAAAABAAIAAADx/wkAAAABAAAAAADx/woAAAABAAIAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAIAAAD9//n/AAAAAAAAAAD9//r/AAAAAAIAAAD+//n/AAABAAAAAAD+//r/AAABAAIAAADz/+n/AAABAAAAAADz/+r/AAABAAIAAAD0/+n/AAABAAAAAAD0/+r/AAABAAIAAAD1/+n/AAABAAAAAAD1/+r/AAABAAIAAAD2/+n/AAABAAAAAAD2/+r/AAABAAIAAAD3/+f/AAAAAAAAAAD3/+j/AAAAAAEAAAD4/+f/AAABAAAAAAD4/+j/AAADAAAAAAD5/+f/AAABAAAAAAD5/+j/AAABAAIAAAD6/+f/AAABAAAAAAD6/+j/AAABAAIAAAD7/+f/AAABAAAAAAD7/+j/AAABAAIAAAD8/+n/AAAAAAEAAAD8/+r/AAAAAAIAAAD3/+n/AAAEAAEAAAD3/+r/AAABAAIAAAD4/+n/AAACAAEAAAD4/+r/AAACAAIAAAD8/+f/AAABAAAAAAD8/+j/AAAEAAAAAAD9/+f/AAACAAAAAAD9/+j/AAACAAEAAADx/+n/AAABAAAAAADx/+r/AAABAAIAAADy/+n/AAABAAAAAADy/+r/AAABAAIAAAABAPn/AAABAAAAAAABAPr/AAABAAIAAAACAPn/AAABAAAAAAACAPr/AAABAAIAAAADAPn/AAABAAAAAAADAPr/AAABAAIAAAAEAPn/AAABAAAAAAAEAPr/AAABAAIAAAAFAPH/AAABAAAAAAAFAPL/AAAEAAAAAAAGAPH/AAACAAAAAAAGAPL/AAACAAEAAAD1//j/AAAAAAEAAAD2//j/AAACAAEAAAD1//n/AAAAAAEAAAD1//r/AAAAAAIAAAD2//n/AAACAAEAAAD2//r/AAACAAIAAAA=")
+
+[node name="item_layer" type="CanvasLayer" parent="." unique_id=1064628789]
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
+follow_viewport_enabled = true
+
+[node name="button_text" type="Label" parent="item_layer" unique_id=1593526766]
+z_index = 20
+offset_right = 58.0
+offset_bottom = 37.0
+theme_override_fonts/font = ExtResource("10_8oxad")
+theme_override_font_sizes/font_size = 36
+metadata/_edit_use_anchors_ = true
+
+[node name="button_text2" type="Label" parent="item_layer" unique_id=1515762083]
+z_index = 20
+offset_right = 58.0
+offset_bottom = 37.0
+theme_override_fonts/font = ExtResource("10_8oxad")
+theme_override_font_sizes/font_size = 36
+metadata/_edit_use_anchors_ = true
+
+[node name="menu_bar" parent="." unique_id=1969657292 instance=ExtResource("15_08015")]

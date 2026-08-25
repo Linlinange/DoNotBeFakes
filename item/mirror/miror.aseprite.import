@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cpgakfpkn0cvx"
+path="res://.godot/imported/miror.aseprite-20dfe6ad0af4618e3c64d07210351423.res"
+
+[deps]
+
+source_file="res://item/mirror/miror.aseprite"
+dest_files=["res://.godot/imported/miror.aseprite-20dfe6ad0af4618e3c64d07210351423.res"]
+
+[params]
+

@@ -1,0 +1,196 @@
+[gd_scene format=4 uid="uid://cnfobqg3ren6p"]
+
+[ext_resource type="Script" uid="uid://duagjxm8g73th" path="res://item/button/button.gd" id="1_nlmrh"]
+[ext_resource type="Texture2D" uid="uid://t637ojbp2rqu" path="res://item/button/outline_mask.png" id="2_nlmrh"]
+[ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="2_rseoq"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="4_ghnlg"]
+[ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="5_bdrql"]
+[ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="6_bdrql"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ghnlg"]
+shader = ExtResource("2_rseoq")
+shader_parameter/outline_thickness = 1.0
+shader_parameter/color_a = Color(0, 0, 0, 1)
+shader_parameter/color_b = Color(0, 0, 0, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2n6s"]
+resource_local_to_scene = true
+shader = ExtResource("4_ghnlg")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.40392157, 0.40392157, 0.5647059, 1)
+shader_parameter/color_b = Color(1, 1, 1, 1)
+shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_ghnlg"]
+_data = PackedByteArray("AAADAAUAAAABAAAAgAAAAGAAAADUAAAAUklGRswAAABXRUJQVlA4TMAAAAAvf8AXEBcgEEjy2p9rDYFAktf+XAsJEib7vzj/Af8KHDeSpEjrxB7ZNTUHJow/i28uO2u16p7jV0T/GbhtpMgLx7fQXxTfTwkAUFoGGEjyknUAVCpCPbAqVGLt1ZRUz42xtlr7ZzfWHp/lz8Uh9z9YCQBQWgYYSPKSd4AHVoVKRWzn4SVtVGZj7d89wSv5c3HI/Q9WAgCUlgEGkrzkHSBhFBEiYRQRVvVjX1SrmtKu+rHL3tlvu3yWPxeH3L++UgA=")
+size_override = Vector2(128, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u2n6s"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdrql"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o6nny"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6uvy4"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_540hf"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mkwh2"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wdd7b"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no43s"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwd0s"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m05qe"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04est"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5rqc"]
+atlas = SubResource("PortableCompressedTexture2D_ghnlg")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bsecy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2n6s")
+}],
+"loop": 1,
+"name": &"idle_off",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdrql")
+}],
+"loop": 1,
+"name": &"idle_on",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o6nny")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6uvy4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_540hf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mkwh2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wdd7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2n6s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u2n6s")
+}],
+"loop": 0,
+"name": &"turn_off",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_no43s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gwd0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m05qe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04est")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5rqc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdrql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdrql")
+}],
+"loop": 0,
+"name": &"turn_on",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1cpo"]
+size = Vector2(26, 17)
+
+[node name="button" type="Area2D" unique_id=1442932112 groups=["button"]]
+z_index = 3
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_nlmrh")
+visual_mode = 1
+
+[node name="outline" type="Sprite2D" parent="." unique_id=1394527048]
+material = SubResource("ShaderMaterial_ghnlg")
+texture = ExtResource("2_nlmrh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=255018214]
+texture_filter = 1
+material = SubResource("ShaderMaterial_u2n6s")
+sprite_frames = SubResource("SpriteFrames_bsecy")
+animation = &"turn_on"
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {},
+"slice_section": false
+}
+metadata/_aseprite_wizard_config_ = {
+"embed_tex": true,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": true,
+"scale": "1.0",
+"should_round_fps": true,
+"slice": "",
+"source": "res://item/button/button.aseprite",
+"source_uid": 2152995376336419102
+}
+metadata/_aseprite_wizard_source_file_hash_ = "d3ee2f31f86a8316aaed6d0b74a415a5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1221668683]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_m1cpo")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=48190645]
+stream = ExtResource("5_bdrql")
+volume_db = -2.0
+script = ExtResource("6_bdrql")

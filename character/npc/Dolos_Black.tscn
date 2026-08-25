@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://tiq6vow81ih3"]
+
+[ext_resource type="PackedScene" uid="uid://ejcadt4088nt" path="res://character/npc/npc.tscn" id="1_8j5sw"]
+
+[node name="Dolos_Black" unique_id=1654329773 instance=ExtResource("1_8j5sw")]

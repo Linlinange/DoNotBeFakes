@@ -1,0 +1,55 @@
+shader_type canvas_item;
+
+uniform float outline_thickness : hint_range(0.0, 5.0) = 1.0;
+uniform vec4 color_a : source_color = vec4(1.0, 1.0, 1.0, 1.0);  // 白
+uniform vec4 color_b : source_color = vec4(1.0, 1.0, 0.2, 1.0);  // 黄
+uniform float cycle_speed : hint_range(0.0, 5.0) = 2.0;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+    vec4 tex_color = texture(TEXTURE, UV);
+    vec2 ps = TEXTURE_PIXEL_SIZE * outline_thickness;
+    float max_alpha = 0.0;
+    
+    max_alpha = max(max_alpha, texture(TEXTURE, UV + vec2(ps.x, 0.0)).a);
+    max_alpha = max(max_alpha, texture(TEXTURE, UV - vec2(ps.x, 0.0)).a);
+    max_alpha = max(max_alpha, texture(TEXTURE, UV + vec2(0.0, ps.y)).a);
+    max_alpha = max(max_alpha, texture(TEXTURE, UV - vec2(0.0, ps.y)).a);
+    
+    float t = sin(TIME * cycle_speed) * 0.5 + 0.5;
+    vec4 final_color = mix(color_a, color_b, t);
+    
+    // 描边判断
+    bool is_outline = false;
+    
+    // 标准外描边
+    if (tex_color.a < 0.01 && max_alpha > 0.01) {
+        is_outline = true;
+    }
+    
+    // 如果图像完全不透明（无透明边距），纹理边缘的像素强制显示描边
+    if (!is_outline && tex_color.a > 0.01) {
+        bool is_uv_edge = UV.x < ps.x|| UV.x > 1.0 - ps.x 
+                       || UV.y < ps.y || UV.y > 1.0 - ps.y; 
+        if (is_uv_edge) {
+            is_outline = true;
+        }
+    }
+    
+    // 绘制
+    if (is_outline) {
+        COLOR = final_color;
+    } else if (tex_color.a > 0.01) {
+        COLOR = tex_color;
+    } else {
+        COLOR = vec4(0.0);
+    }
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the CanvasItem.
+//	// Uncomment to replace the default light processing function with this one.
+//}

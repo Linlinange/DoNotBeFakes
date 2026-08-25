@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://4g38ok11ixnl"]
+
+[ext_resource type="PackedScene" uid="uid://cnfobqg3ren6p" path="res://item/button/button.tscn" id="1_fp08v"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_pdsgb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qqy6l"]
+shader = ExtResource("2_pdsgb")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.5176471, 0.41960785, 0.41960785, 1)
+shader_parameter/color_b = Color(0.96862745, 0.7137255, 0.4, 1)
+shader_parameter/cycle_speed = 2.0
+
+[node name="orange_button" unique_id=1442932112 groups=["orange"] instance=ExtResource("1_fp08v")]
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=255018214]
+material = SubResource("ShaderMaterial_qqy6l")
+
+[node name="CollisionShape2D" parent="." index="2" unique_id=1221668683]
+visible = false

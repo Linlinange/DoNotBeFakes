@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://g67oilwkae2p"]
+
+[ext_resource type="Script" uid="uid://co0sestdrgvth" path="res://character/bar/chat.gd" id="1_gl28u"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/fonts/点点像素体方形.ttf" id="2_ub0yo"]
+
+[node name="UI" type="CanvasLayer" unique_id=1280936237]
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
+follow_viewport_enabled = true
+script = ExtResource("1_gl28u")
+
+[node name="Label" type="Label" parent="." unique_id=1925136026]
+z_index = 20
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("2_ub0yo")
+theme_override_font_sizes/font_size = 36

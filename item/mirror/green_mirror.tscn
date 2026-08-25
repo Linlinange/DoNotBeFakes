@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bvudla13rnmam"]
+
+[ext_resource type="PackedScene" uid="uid://3a3l0jp15ifr" path="res://item/mirror/map_mirror.tscn" id="1_tw2m8"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="4_0veei"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tw2m8"]
+resource_local_to_scene = true
+shader = ExtResource("4_0veei")
+shader_parameter/color_a = Color(0.27450982, 0.4392157, 0.5137255, 1)
+shader_parameter/color_b = Color(0.37254903, 0.89411765, 0.6784314, 1)
+shader_parameter/cycle_speed = 2.0
+
+[node name="green_mirror" unique_id=963879677 instance=ExtResource("1_tw2m8")]
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=213758457]
+material = SubResource("ShaderMaterial_tw2m8")
+
+[node name="CollisionShape2D" parent="EffectArea" parent_id_path=PackedInt32Array(139695148) index="0" unique_id=487806591]
+visible = false

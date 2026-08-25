@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://ct45nmko267ie"]
+
+[ext_resource type="Script" uid="uid://clhoskp1rt6b7" path="res://ui/menu/level_menu.gd" id="1_cubhr"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/fonts/点点像素体方形.ttf" id="1_tndtp"]
+[ext_resource type="PackedScene" uid="uid://cc8kvidtnias4" path="res://ui/menu/level_chooser.tscn" id="2_40swp"]
+[ext_resource type="PackedScene" uid="uid://cfda121k15hvs" path="res://level/level1/level1.tscn" id="3_pwayw"]
+[ext_resource type="PackedScene" uid="uid://8wafggfm8fnu" path="res://level/level2/level2.tscn" id="4_3yk6w"]
+[ext_resource type="PackedScene" uid="uid://3u2o80wbpd01" path="res://level/level3/level3.tscn" id="5_2w6hg"]
+[ext_resource type="PackedScene" uid="uid://sd1avb781rh2" path="res://level/level4/level4.tscn" id="6_tefdt"]
+[ext_resource type="PackedScene" uid="uid://cvnubfack753p" path="res://ui/menu/scene_jumper.tscn" id="7_0sqyv"]
+[ext_resource type="Texture2D" uid="uid://dte55yvsdwwnr" path="res://ui/back.png" id="8_cwskq"]
+[ext_resource type="PackedScene" uid="uid://df1cty7na2e4k" path="res://ui/menu/main_menu.tscn" id="9_0esd3"]
+[ext_resource type="PackedScene" uid="uid://3g3vqefvs52y" path="res://item/floor/floor.tscn" id="9_a0u8a"]
+[ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="12_wuawr"]
+
+[node name="level_choose" type="Control" unique_id=31535998]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_cubhr")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=476131348]
+layout_mode = 0
+offset_right = 1200.0
+offset_bottom = 208.0
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer" unique_id=1860446871]
+custom_minimum_size = Vector2(512, 128)
+layout_mode = 2
+mouse_filter = 1
+theme_override_fonts/normal_font = ExtResource("1_tndtp")
+theme_override_font_sizes/normal_font_size = 96
+text = "关卡选择"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer2" type="CenterContainer" parent="." unique_id=417208357]
+layout_mode = 0
+offset_top = 220.0
+offset_right = 1200.0
+offset_bottom = 700.0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CenterContainer2" unique_id=711039819]
+custom_minimum_size = Vector2(960, 480)
+layout_mode = 2
+theme_override_constants/h_separation = 48
+theme_override_constants/v_separation = 48
+
+[node name="1" parent="CenterContainer2/HFlowContainer" unique_id=957085456 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("3_pwayw")
+label_text = "1"
+
+[node name="2" parent="CenterContainer2/HFlowContainer" unique_id=1249177516 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("4_3yk6w")
+label_text = "2"
+
+[node name="3" parent="CenterContainer2/HFlowContainer" unique_id=1573373903 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("5_2w6hg")
+label_text = "3"
+
+[node name="4" parent="CenterContainer2/HFlowContainer" unique_id=1189056070 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("6_tefdt")
+label_text = "4"
+
+[node name="scene_jumper" parent="." unique_id=566272005 instance=ExtResource("7_0sqyv")]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 112.0
+offset_bottom = 112.0
+icon = ExtResource("8_cwskq")
+flat = true
+icon_alignment = 1
+expand_icon = true
+scene = ExtResource("9_0esd3")
+chat_offset = Vector2(256, 96)
+
+[node name="floor" parent="." unique_id=1850046164 instance=ExtResource("9_a0u8a")]
+z_index = -1
+fill_rect = Rect2i(0, 0, 160, 120)
+
+[node name="Dolos_Black" parent="." unique_id=1654329773 instance=ExtResource("12_wuawr")]
+unique_name_in_owner = true
+position = Vector2(1024, 176)
+scale = Vector2(2, 2)
+
+[node name="Timer" type="Timer" parent="." unique_id=1393400365]

@@ -1,0 +1,89 @@
+class_name FakableButton
+extends FakableObject
+
+enum State { OFF, ON }
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var audio: AudioStreamPlayer = $AudioStreamPlayer
+@onready var player_in_range: bool = false
+
+## 按钮当前的状态
+@export var current_state: State = State.OFF
+var is_transitioning: bool = false   # 正在播放切换动画，拒绝交互
+
+signal state_changed(new_state: State)
+signal turned_on
+signal turned_off
+
+func _ready():
+	_play_idle()
+	self.body_entered.connect(_on_body_entered)
+	self.body_exited.connect(_on_body_exited)
+
+@warning_ignore("unused_parameter")
+func _process(delta: float):
+	if player_in_range and Input.is_action_just_pressed("interact"):
+		interact()
+
+func interact():
+	"""切换按钮状态"""
+	if is_transitioning:
+		return
+	if fake:
+		return
+	#print("切换")
+	
+	audio.pitch_scale = randf_range(0.8, 1.2)
+	audio.play()
+	is_transitioning = true
+	
+	match current_state:
+		State.OFF:
+			sprite.play("turn_on")
+			await sprite.animation_finished
+			current_state = State.ON
+			turned_on.emit()
+		State.ON:
+			sprite.play("turn_off")
+			await sprite.animation_finished
+			current_state = State.OFF
+			turned_off.emit()
+	
+	state_changed.emit(current_state)
+	is_transitioning = false
+	_play_idle()
+
+# 播放对应状态的循环待机动画
+func _play_idle():
+	match current_state:
+		State.OFF:
+			sprite.play("idle_off")
+		State.ON:
+			sprite.play("idle_on")
+
+# ========== 公共接口 ==========
+
+func is_on() -> bool:
+	"""检查按钮是否开启"""
+	return current_state == State.ON
+
+func get_state() -> State:
+	"""获取状态"""
+	return current_state
+
+func get_state_name() -> String:
+	"""获取状态名"""
+	if current_state == State.ON:
+		return "ON"
+	else:
+		return "OFF"
+
+# ========== 交互检测（可选） ==========
+
+func _on_body_entered(body: Node2D):
+	if body.is_in_group("player"):
+		player_in_range = true
+
+func _on_body_exited(body: Node2D):
+	if body.is_in_group("player"):
+		player_in_range = false

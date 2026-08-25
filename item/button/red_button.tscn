@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://c8xggt46oxxwh"]
+
+[ext_resource type="PackedScene" uid="uid://cnfobqg3ren6p" path="res://item/button/button.tscn" id="1_rhe64"]
+[ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_jwg2t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uafvy"]
+resource_local_to_scene = true
+shader = ExtResource("2_jwg2t")
+shader_parameter/color_base = Color(1, 1, 1, 1)
+shader_parameter/color_a = Color(0.44705883, 0.30980393, 0.45490196, 1)
+shader_parameter/color_b = Color(0.9490196, 0.49803922, 0.49803922, 1)
+shader_parameter/cycle_speed = 2.0
+
+[node name="red_button" unique_id=1442932112 instance=ExtResource("1_rhe64")]
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=255018214]
+material = SubResource("ShaderMaterial_uafvy")
