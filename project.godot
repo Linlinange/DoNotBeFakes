@@ -11,11 +11,13 @@ config_version=5
 [application]
 
 config/name="DoNotBeFakes"
+config/version="1.0.0"
 run/main_scene="uid://df1cty7na2e4k"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="DoNotBeFakes"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/windows_native_icon="res://assets/image/Aletheia_White_x256.ico"
+config/icon="uid://c2vioxsx0sdj7"
+config/windows_native_icon="res://assets/image/icon.ico"
 config/show_image=true
 config/size/initial_screen=0
 config/stretch/mode="canvas_items"

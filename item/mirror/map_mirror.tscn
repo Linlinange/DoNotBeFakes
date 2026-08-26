@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="2_5u1ki"]
 [ext_resource type="Texture2D" uid="uid://dh5cd8pc56jl4" path="res://item/mirror/outline_mask.png" id="3_vgayu"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="4_3m24g"]
-[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="5_5u1ki"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="5_3m24g"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="6_3m24g"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="7_nrn4y"]
 
@@ -112,7 +112,11 @@ size = Vector2(22, 28)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m1cpo"]
 size = Vector2(128, 128)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nrn4y"]
+size = Vector2(32, 32)
+
 [node name="map_mirror" type="Area2D" unique_id=963879677]
+z_index = 5
 script = ExtResource("1_bqagn")
 
 [node name="outline" type="Sprite2D" parent="." unique_id=1959794280]
@@ -158,21 +162,12 @@ collision_mask = 3
 visible = false
 shape = SubResource("RectangleShape2D_m1cpo")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=580375559]
-scale = Vector2(0.5, 0.5)
-transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
-follow_viewport_enabled = true
+[node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("5_3m24g")]
 
-[node name="tooltip" type="Label" parent="CanvasLayer" unique_id=1657639287]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=1212419283]
 visible = false
-z_index = 20
-offset_left = -64.0
-offset_top = -96.0
-offset_right = 58.0
-offset_bottom = -59.0
-theme_override_fonts/font = ExtResource("5_5u1ki")
-theme_override_font_sizes/font_size = 36
-text = "ToolTip"
+shape = SubResource("RectangleShape2D_nrn4y")
+debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=856007702]
 stream = ExtResource("6_3m24g")

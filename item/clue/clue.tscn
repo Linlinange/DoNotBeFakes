@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="3_hvbrj"]
 [ext_resource type="Texture2D" uid="uid://dke1qth8brxuu" path="res://item/clue/clue.png" id="4_f5sfe"]
 [ext_resource type="PackedScene" uid="uid://g67oilwkae2p" path="res://ui/bar/chat_bubble.tscn" id="6_hvbrj"]
-[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="7_f5sfe"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="7_7ieuf"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="8_7ieuf"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="9_ysi3q"]
 
@@ -40,6 +40,9 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m1cpo"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ieuf"]
 size = Vector2(32, 32)
 
 [node name="clue" type="Area2D" unique_id=1442932112]
@@ -92,21 +95,12 @@ shape = SubResource("RectangleShape2D_m1cpo")
 visible = false
 z_index = 10
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=468540580]
-scale = Vector2(0.5, 0.5)
-transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
-follow_viewport_enabled = true
+[node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("7_7ieuf")]
 
-[node name="tooltip" type="Label" parent="CanvasLayer" unique_id=1842388086]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=627450152]
 visible = false
-z_index = 20
-offset_left = -64.0
-offset_top = -96.0
-offset_right = 58.0
-offset_bottom = -59.0
-theme_override_fonts/font = ExtResource("7_f5sfe")
-theme_override_font_sizes/font_size = 36
-text = "ToolTip"
+shape = SubResource("RectangleShape2D_7ieuf")
+debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1492471282]
 stream = ExtResource("8_7ieuf")

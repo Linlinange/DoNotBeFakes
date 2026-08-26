@@ -1,0 +1,19 @@
+{
+	"items": {
+		"white.1": "#676790",
+		"white.2": "#ffffff",
+		"blue.1": "#466793",
+		"blue.2": "#5fcde4",
+		"green.1": "#467083",
+		"green.2": "#5fe4ad",
+		"red.1": "#724f74",
+		"red.2": "#f27f7f",
+		"orange.1": "#846b6b",
+		"orange.2": "#f7b666"
+	},
+	"collision": {
+		"default": "#0099b36b",
+		"InteractComponent": "#3be8eb6b",
+		"level": "#ffffb36b"
+	}
+}

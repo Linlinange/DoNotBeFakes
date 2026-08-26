@@ -2,10 +2,14 @@
 
 [ext_resource type="Script" uid="uid://duagjxm8g73th" path="res://item/button/button.gd" id="1_nlmrh"]
 [ext_resource type="Texture2D" uid="uid://t637ojbp2rqu" path="res://item/button/outline_mask.png" id="2_nlmrh"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="2_o6nny"]
 [ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="2_rseoq"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="4_ghnlg"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="5_bdrql"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="6_bdrql"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o6nny"]
+size = Vector2(32, 32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ghnlg"]
 shader = ExtResource("2_rseoq")
@@ -155,6 +159,13 @@ collision_mask = 3
 script = ExtResource("1_nlmrh")
 visual_mode = 1
 
+[node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("2_o6nny")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=792467648]
+visible = false
+shape = SubResource("RectangleShape2D_o6nny")
+debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
+
 [node name="outline" type="Sprite2D" parent="." unique_id=1394527048]
 material = SubResource("ShaderMaterial_ghnlg")
 texture = ExtResource("2_nlmrh")
@@ -187,6 +198,7 @@ metadata/_aseprite_wizard_config_ = {
 metadata/_aseprite_wizard_source_file_hash_ = "d3ee2f31f86a8316aaed6d0b74a415a5"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1221668683]
+visible = false
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_m1cpo")
 

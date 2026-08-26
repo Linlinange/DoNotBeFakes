@@ -1,63 +1,68 @@
+class_name MapMirror
 extends Area2D
 
 enum State { INACTIVED, ACTIVED }
 enum Axis { X, Y }
 
-const _OFF = Vector2(0, -32)
-const _W = 10.0
-const _H = 12.0
-const _FILL = Color("fff170ff")
-const _LINE = Color("ad7013ff")
-const _LW = 1
+signal state_changed(new_state: State)
+signal activated
+@warning_ignore("unused_signal") signal deactivated
+
+
+@onready var control_target: Node2D = self
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var effect_area: Area2D = $EffectArea
+@onready var audio: AudioStreamPlayer = $AudioStreamPlayer
+@onready var interact_comp: InteractComponent = $InteractComponent
 
 ## 镜子当前的状态
 @export var current_state: State = State.INACTIVED
-## true=交互一定次数后永久保持，无法切换
-@export var disposable: bool = false
-## >0 则 N 秒后自动关闭，0=无限
-@export var effect_duration: float = 0.0 
+## >=0 则 N 秒后自动关闭，-1表示无限
+@export var effect_duration: float = -1.0
 ## 映射的轴: 轴为X时，映射后y坐标关于镜子的X轴翻转；轴为Y时，映射后坐标关于x坐标关于镜子Y轴翻转
 @export var axis: Axis = Axis.X
 ## 可映射的节点
 @export var nodes_tomap: Array[Node2D] = []
 ## 控制映射的玩家节点：为true时控制映射节点而不控制本体，否则控制本体而不控制节点
 @export var control_mapped: bool = false
-## 被靠近时会显示的提示
-@export var tooltip_content: String = "按F交互"
-## 提示的坐标偏移
-@export var tooltip_offset: Vector2 = Vector2(0, 0)
 
-@onready var control_target: Node2D = self
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var effect_area: Area2D = $EffectArea
-@onready var tooltip: Label = $CanvasLayer/tooltip
-@onready var audio: AudioStreamPlayer = $AudioStreamPlayer
-@onready var player_in_range: bool = false
+## 最大交互次数，-1 表示无限
+@export var max_interact_times: int = -1:
+	set(value):
+		max_interact_times = value
+		if interact_comp:
+			interact_comp.max_interact_times = value
+## 提示内容
+@export var tooltip_content: String = "按F切换控制对象":
+	set(value):
+		tooltip_content = value
+		if interact_comp:
+			interact_comp.tooltip_content = value
+## 提示偏移
+@export var tooltip_offset: Vector2 = Vector2(0, -32):
+	set(value):
+		tooltip_offset = value
+		if interact_comp:
+			interact_comp.tooltip_offset = value
 
-var nodes_mapped: Array[Node2D] = []
 
-var is_transitioning: bool = false   # 正在播放切换动画，拒绝交互 
+var nodes_mapped: Array[Node2D] = []	## 已被映射的节点
+var is_transitioning: bool = false		## 是否正在切换状态: 为true时, 拒绝交互
 
 var _timer: Timer
-var _interact_times: int = 0 # 交互次数 
-
-signal state_changed(new_state: State)
-signal activated
-@warning_ignore("unused_signal")
-signal deactivated
 
 
 func _ready():
 	_timer = Timer.new()
 	_timer.one_shot = true
 	_timer.timeout.connect(_deactivate)
-	tooltip.text = tooltip_content
-	tooltip.visible = false
-	tooltip.position = self.global_position*2 + Vector2(-64, 32) + tooltip_offset
 	add_child(_timer)
 	_update_visual()
-	self.body_entered.connect(_on_body_entered)
-	self.body_exited.connect(_on_body_exited)
+
+	interact_comp.interacted.connect(interact)
+	interact_comp.max_interact_times = self.max_interact_times
+	interact_comp.tooltip_content = self.tooltip_content
+	interact_comp.tooltip_offset = self.tooltip_offset
 	
 	# 创建映射节点
 	for node in nodes_tomap:
@@ -72,18 +77,12 @@ func _ready():
 			mapped.global_position.y = 2*self.global_position.y - node.global_position.y
 		if node.is_in_group("player"):
 			control_target = node
-		
+
 
 @warning_ignore("unused_parameter")
 func _process(delta: float):
 	if control_target:
 		queue_redraw()
-	if player_in_range:
-		tooltip.visible = true
-		if Input.is_action_just_pressed("interact"):
-			interact()
-	else:
-		tooltip.visible = false
 	
 	for i in len(nodes_mapped):
 		var node = nodes_tomap[i]
@@ -100,35 +99,75 @@ func _process(delta: float):
 				mapped.global_position.x = 2*self.global_position.x - node.global_position.x
 			else:
 				mapped.global_position.y = 2*self.global_position.y - node.global_position.y
-			
 
-func _draw():
-	if not control_target:
+
+# ========== 公共接口 ==========
+
+## 对节点进行特殊处理:
+## ex_children为true时, 将会递归处理此节点及其所有子节点
+@warning_ignore("shadowed_variable")
+func make_reflection(node: Node, axis: int, alpha: float = 0.5, ex_children: bool = false, tint: Color = Color.WHITE) -> void:
+	## 1. 关碰撞
+	#print(node)
+	if node is Player:
+		node.set_physics_process(false)
+	#node.set_process_input(false)
+	#node.set_process_unhandled_input(false)
+	#node.set_process_shortcut_input(false)
+	#node.set_process_unhandled_key_input(false)
+	if node is CollisionObject2D:
+		node.collision_layer = 0b10
+		node.collision_mask = 0b10
+	if node is Area2D:
+		node.monitoring = false
+		node.monitorable = false
+	if node is CollisionShape2D or node is CollisionPolygon2D:
+		node.set_deferred("disabled", true)
+	
+	## 2. 半透明
+	if node is CanvasItem:
+		var c = tint
+		c.a = alpha
+		node.modulate = c
+	
+	## 3. 翻转
+	if node is Sprite2D or node is AnimatedSprite2D:
+		if axis == Axis.Y:
+			node.scale.x *= -1
+		else:
+			node.scale.y *= -1
+	
+	## 递归
+	if not ex_children:
 		return
-	
-	# 目标在当前节点本地坐标系中的位置
-	var base = to_local(control_target.global_position)
-	
-	var tip   = base + _OFF + Vector2(0, _H * 0.6)
-	var left  = base + _OFF + Vector2(-_W, -_H * 0.4)
-	var right = base + _OFF + Vector2( _W, -_H * 0.4)
-	
-	var poly = PackedVector2Array([left, right, tip])
-	draw_colored_polygon(poly, _FILL)
-	
-	var stroke := PackedVector2Array([left, right, tip, left])
-	draw_polyline(stroke, _LINE, _LW, true)
+	for child in node.get_children():
+		make_reflection(child, axis, alpha)
 
+## 检查镜子是否激活
+func is_actived() -> bool:
+	return current_state == State.ACTIVED
 
+## 获取状态
+func get_state() -> State:
+	return current_state
+
+## 获取状态名
+func get_state_name() -> String:
+	if current_state == State.ACTIVED:
+		return "ACTIVED"
+	else:
+		return "INACTIVED"
+
+## 交互: 切换镜子状态并切换控制对象
 func interact():
-	"""外界调用：切换镜子状态"""
 	if is_transitioning:
 		return
-	if disposable and _interact_times >= 1:
-		return
-	else:
-		_interact_times += 1
 	
+	audio.pitch_scale = randf_range(2.1, 2.4)
+	audio.play()
+	is_transitioning = true
+	interact_comp.set_interactable(false)
+
 	match current_state:
 		State.INACTIVED:
 			sprite.play("active")
@@ -138,16 +177,25 @@ func interact():
 			sprite.play("inactive")
 			await sprite.animation_finished
 			_deactivate()
-	audio.pitch_scale = randf_range(2.1, 2.4)
-	audio.play()
+	
+	is_transitioning = false
+	interact_comp.set_interactable(true)
 
+## 获取交互次数
+func get_interact_times() -> int:
+	if interact_comp:
+		return interact_comp.get_interact_times()
+	else:
+		return -1
+
+# ========== 私有方法 ==========
 
 func _activate():
 	current_state = State.ACTIVED
 	activated.emit()
 	state_changed.emit(current_state)
 	
-	if effect_duration > 0:
+	if effect_duration >= 0:
 		_timer.start(effect_duration)
 	
 	# 映射节点控制
@@ -197,70 +245,3 @@ func _update_visual():
 			sprite.play("inactived")
 		State.ACTIVED:
 			sprite.play("actived")
-
-# ========== 公共接口 ==========
-
-## 递归处理一个节点及其所有子节点
-@warning_ignore("shadowed_variable")
-func make_reflection(node: Node, axis: int, alpha: float = 0.5, ex_children: bool = false, tint: Color = Color.WHITE) -> void:
-	## 1. 关碰撞
-	#print(node)
-	if node is Player:
-		node.set_physics_process(false)
-	#node.set_process_input(false)
-	#node.set_process_unhandled_input(false)
-	#node.set_process_shortcut_input(false)
-	#node.set_process_unhandled_key_input(false)
-	if node is CollisionObject2D:
-		node.collision_layer = 0b10
-		node.collision_mask = 0b10
-	if node is Area2D:
-		node.monitoring = false
-		node.monitorable = false
-	if node is CollisionShape2D or node is CollisionPolygon2D:
-		node.set_deferred("disabled", true)
-	
-	## 2. 半透明
-	if node is CanvasItem:
-		var c = tint
-		c.a = alpha
-		node.modulate = c
-	
-	## 3. 翻转
-	if node is Sprite2D or node is AnimatedSprite2D:
-		if axis == Axis.Y:
-			node.scale.x *= -1
-		else:
-			node.scale.y *= -1
-	
-	## 递归
-	if not ex_children:
-		return
-	for child in node.get_children():
-		make_reflection(child, axis, alpha)
-
-func is_actived() -> bool:
-	"""检查镜子是否激活"""
-	return current_state == State.ACTIVED
-
-func get_state() -> State:
-	"""获取状态"""
-	return current_state
-
-func get_state_name() -> String:
-	"""获取状态名"""
-	if current_state == State.ACTIVED:
-		return "ACTIVED"
-	else:
-		return "INACTIVED"
-
-
-# ========== 交互检测 ==========
-
-func _on_body_entered(body: Node2D):
-	if body.is_in_group("player"):
-		player_in_range = true
-
-func _on_body_exited(body: Node2D):
-	if body.is_in_group("player"):
-		player_in_range = false

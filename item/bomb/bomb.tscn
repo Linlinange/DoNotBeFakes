@@ -117,6 +117,7 @@ metadata/_aseprite_wizard_config_ = {
 metadata/_aseprite_wizard_source_file_hash_ = "3ed1a6f766f98d760ea275887d5db66d"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=88645204]
+visible = false
 shape = SubResource("RectangleShape2D_m1cpo")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=565443332]

@@ -4,13 +4,23 @@
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_kpe08"]
 [ext_resource type="Texture2D" uid="uid://d38kj4p5lu7gh" path="res://item/walls/wall.png" id="3_trxp2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_165gg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16tg4"]
 resource_local_to_scene = true
 shader = ExtResource("2_kpe08")
 shader_parameter/color_base = Color(1, 1, 1, 1)
 shader_parameter/color_a = Color(0.37254903, 0.8039216, 0.89411765, 1)
 shader_parameter/color_b = Color(0.27058825, 0.40392157, 0.5764706, 1)
 shader_parameter/cycle_speed = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvsfa"]
+resource_local_to_scene = true
+atlas = ExtResource("3_trxp2")
+region = Rect2(16, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_165gg"]
+resource_local_to_scene = true
+atlas = ExtResource("3_trxp2")
+region = Rect2(16, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g3u2b"]
 resource_local_to_scene = true
@@ -20,12 +30,12 @@ region = Rect2(16, 192, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_o5tl1"]
 resource_local_to_scene = true
 atlas = ExtResource("3_trxp2")
-region = Rect2(16, 192, 16, 16)
+region = Rect2(16, 208, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yvgnt"]
 resource_local_to_scene = true
 atlas = ExtResource("3_trxp2")
-region = Rect2(16, 192, 16, 16)
+region = Rect2(16, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pio0f"]
 resource_local_to_scene = true
@@ -35,24 +45,14 @@ region = Rect2(16, 208, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_4bvye"]
 resource_local_to_scene = true
 atlas = ExtResource("3_trxp2")
-region = Rect2(16, 16, 16, 16)
+region = Rect2(16, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ogr7"]
 resource_local_to_scene = true
 atlas = ExtResource("3_trxp2")
-region = Rect2(16, 208, 16, 16)
+region = Rect2(16, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vkj5v"]
-resource_local_to_scene = true
-atlas = ExtResource("3_trxp2")
-region = Rect2(16, 224, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_unx6s"]
-resource_local_to_scene = true
-atlas = ExtResource("3_trxp2")
-region = Rect2(16, 224, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ap5m7"]
 resource_local_to_scene = true
 atlas = ExtResource("3_trxp2")
 region = Rect2(16, 224, 16, 16)
@@ -62,37 +62,37 @@ collision_layer = 0
 collision_mask = 0
 
 [node name="TL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="0" unique_id=1913200412]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_g3u2b")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_lvsfa")
 
 [node name="Top" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="1" unique_id=1968285712]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_o5tl1")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_165gg")
 
 [node name="TR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="2" unique_id=1300450473]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_yvgnt")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_g3u2b")
 
 [node name="Left" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="3" unique_id=633817272]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_pio0f")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_o5tl1")
 
 [node name="Center" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="4" unique_id=7172557]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_4bvye")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_yvgnt")
 
 [node name="Right" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="5" unique_id=2144194463]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_6ogr7")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_pio0f")
 
 [node name="BL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="6" unique_id=1229047507]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_vkj5v")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_4bvye")
 
 [node name="Bottom" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="7" unique_id=1886581542]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_unx6s")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_6ogr7")
 
 [node name="BR" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="8" unique_id=20690178]
-material = SubResource("ShaderMaterial_165gg")
-texture = SubResource("AtlasTexture_ap5m7")
+material = SubResource("ShaderMaterial_16tg4")
+texture = SubResource("AtlasTexture_vkj5v")

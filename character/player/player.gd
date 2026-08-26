@@ -1,10 +1,20 @@
 class_name Player
 extends CharacterBody2D
 
+const _OFF = Vector2(0, -32)
+const _W = 10.0
+const _H = 12.0
+const _FILL = Color("ffdd1170")
+const _LINE = Color("ffdd11b3")
+const _LW = 1
+
 @export var speed: float = 180.0
 @export var eyes_open: bool = true
 @export var eyes_activity: bool = true
-@export var control: bool = true
+@export var control: bool = true:
+	set(value):
+		control = value
+		queue_redraw()
 @export var view_radius: float = 128.0
 @export var view_angle: float = 45.0
 @onready var eyes: AnimatedSprite2D = $sprite/eyes
@@ -61,7 +71,23 @@ func _process(_delta: float) -> void:
 		_update_eyes()
 
 
-# === 公开方法：外界查询视野内目标 ===
+func _draw():
+	if control:
+		# 目标在当前节点本地坐标系中的位置
+		
+		var tip   = _OFF + Vector2(0, _H * 0.6)
+		var left  = _OFF + Vector2(-_W, -_H * 0.4)
+		var right = _OFF + Vector2( _W, -_H * 0.4)
+		
+		var poly = PackedVector2Array([left, right, tip])
+		draw_colored_polygon(poly, _FILL)
+		
+		var stroke := PackedVector2Array([left, right, tip, left])
+		draw_polyline(stroke, _LINE, _LW, true)
+
+
+# ========== 公共方法 ==========
+
 func get_view_overlapping_bodies() -> Array[Node2D]:
 	return view_area.get_overlapping_bodies()
 
@@ -79,7 +105,8 @@ func set_view_enabled(enabled: bool) -> void:
 	view_area.monitorable = enabled
 
 
-# === 私有方法 ===
+# ========== 私有方法 ==========
+
 func _on_view_body_entered(body: Node2D) -> void:
 	view_body_entered.emit(body)
 
@@ -124,5 +151,5 @@ func _update_eyes() -> void:
 	else:
 		eyes.play("closed")
 		view_area.visible = false
-		view_area.collision_layer &= ~0b11 # 二进制运算：将一二位置一
+		view_area.collision_layer &= ~0b11 # 二进制运算：将一二位置零
 		view_area.collision_mask &= ~0b11

@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://ck5uoo21n4j14"]
 
-[ext_resource type="Script" uid="uid://5u7miv8gfec1" path="res://item/export/export.gd" id="1_gcmrs"]
+[ext_resource type="Script" uid="uid://5u7miv8gfec1" path="res://item/exit/exit.gd" id="1_gcmrs"]
 [ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="1_ij0ye"]
-[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="2_uc621"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="3_g1gbr"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="4_iq010"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="5_knyve"]
 
@@ -39,37 +39,38 @@ texture = ExtResource("1_ij0ye")
 2:5/0 = 0
 2:4/0 = 0
 3:4/0 = 0
+6:0/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+7:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_3yglx"]
 sources/0 = SubResource("TileSetAtlasSource_jltcj")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3yglx"]
-size = Vector2(48, 32)
+size = Vector2(64, 32)
 
-[node name="export" type="Area2D" unique_id=420995041]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j6twb"]
+size = Vector2(64, 32)
+
+[node name="exit" type="Area2D" unique_id=420995041]
 script = ExtResource("1_gcmrs")
+tooltip_content = "按F键进入下一关"
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1999610549]
-z_index = 3
-tile_map_data = PackedByteArray("AAD/////AAAAAAMAAAD//wAAAAABAAQAAAAAAAAAAAAFAAMAAAAAAP//AAABAAAAAAD+/wAAAAAEAAMAAAD+////AAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD/////AAAGAAAAAAD//wAAAAAGAAEAAAAAAP//AAAHAAAAAAAAAAAAAAAHAAEAAAD+////AAAAAAAAAAABAP//AAABAAAAAAD+/wAAAAAEAAMAAAABAAAAAAAFAAMAAAA=")
 tile_set = SubResource("TileSet_3yglx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=231783167]
 visible = false
-position = Vector2(-8, 0)
 shape = SubResource("RectangleShape2D_3yglx")
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=1719038091]
-scale = Vector2(0.5, 0.5)
-transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
-follow_viewport_enabled = true
+[node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("3_g1gbr")]
 
-[node name="Label" type="Label" parent="UI" unique_id=496043169]
-z_index = 20
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_fonts/font = ExtResource("2_uc621")
-theme_override_font_sizes/font_size = 36
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=1788579076]
+visible = false
+shape = SubResource("RectangleShape2D_j6twb")
+debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=566503673]
 stream = ExtResource("4_iq010")

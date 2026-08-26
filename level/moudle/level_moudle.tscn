@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="1_ikrek"]
 [ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="2_k6for"]
-[ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/export/export.tscn" id="3_wsu3r"]
+[ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="3_wsu3r"]
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="4_wf4p3"]
 [ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://level/items_contorl.gd" id="5_kvgxr"]
 [ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="6_7ul8m"]
@@ -73,16 +73,13 @@ unique_name_in_owner = true
 position = Vector2(-112, -112)
 eyes_open = false
 
-[node name="items_control" type="Node2D" parent="." unique_id=797278766 node_paths=PackedStringArray("green_item")]
+[node name="items_control" type="Node2D" parent="." unique_id=797278766]
 script = ExtResource("5_kvgxr")
-green_item = NodePath("green_item")
 
-[node name="green_item" type="Node2D" parent="items_control" unique_id=1543050604 node_paths=PackedStringArray("labels", "buttons", "walls") groups=["green"]]
+[node name="green_item" type="Node2D" parent="items_control" unique_id=1543050604 node_paths=PackedStringArray("buttons", "walls") groups=["green"]]
 z_index = 3
 position = Vector2(-112, -112)
 script = ExtResource("6_7ul8m")
-labels_offset = Vector2(0, -48)
-labels = [NodePath("../../UI/green_text")]
 buttons = [NodePath("green_button")]
 walls = [NodePath("green_wall")]
 size_on = Vector2(32, 96)

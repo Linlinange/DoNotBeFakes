@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cnfobqg3ren6p" path="res://item/button/button.tscn" id="1_rhe64"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_jwg2t"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uafvy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rhe64"]
 resource_local_to_scene = true
 shader = ExtResource("2_jwg2t")
 shader_parameter/color_base = Color(1, 1, 1, 1)
@@ -13,5 +13,8 @@ shader_parameter/cycle_speed = 2.0
 
 [node name="red_button" unique_id=1442932112 instance=ExtResource("1_rhe64")]
 
-[node name="AnimatedSprite2D" parent="." index="1" unique_id=255018214]
-material = SubResource("ShaderMaterial_uafvy")
+[node name="AnimatedSprite2D" parent="." index="2" unique_id=255018214]
+material = SubResource("ShaderMaterial_rhe64")
+
+[node name="CollisionShape2D" parent="." index="3" unique_id=1221668683]
+visible = false

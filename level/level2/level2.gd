@@ -20,14 +20,14 @@ func _ready() -> void:
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	dolos.chat._resize()
-	if t<1 and clue.get_interact_times()>1:
-		dolos.move_to(Vector2(-64, 32), 1.0)
+	if t<1 and clue.get_interact_times()>0:
+		dolos.move_to(Vector2(-48, 16), 1.4)
 		dolos.say("在那边干什么呢？\n往上再走两步就成功了", 8.0)
 		t += 1
-	elif t==1 and dolos.position == Vector2(-64, 32):
-		dolos.move_to(Vector2(48, 32), 1.0)
+	elif t==1 and dolos.position == Vector2(-48, 16):
+		dolos.move_to(Vector2(48, 16), 1.2)
 		t += 1
-	elif t==2 and dolos.position == Vector2(48, 32):
+	elif t==2 and dolos.position == Vector2(48, 16):
 		dolos.move_to(Vector2(48, 96), 2.0, Tween.TRANS_CUBIC)
 		t += 1
 	else:
