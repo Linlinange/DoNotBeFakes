@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cnfobqg3ren6p" path="res://item/button/button.tscn" id="1_wdx1d"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_qakn0"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nq38s"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdx1d"]
 resource_local_to_scene = true
 shader = ExtResource("2_qakn0")
 shader_parameter/color_base = Color(1, 1, 1, 1)
@@ -14,4 +14,4 @@ shader_parameter/cycle_speed = 2.0
 [node name="blue_button" unique_id=1442932112 instance=ExtResource("1_wdx1d")]
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=255018214]
-material = SubResource("ShaderMaterial_nq38s")
+material = SubResource("ShaderMaterial_wdx1d")

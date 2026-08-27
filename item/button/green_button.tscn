@@ -5,14 +5,12 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ghnlg"]
 shader = ExtResource("2_jeej7")
+shader_parameter/color_base = Color(1, 1, 1, 1)
 shader_parameter/color_a = Color(0.27450982, 0.4392157, 0.5137255, 1)
 shader_parameter/color_b = Color(0.37254903, 0.89411765, 0.6784314, 1)
 shader_parameter/cycle_speed = 2.0
 
 [node name="green_button" unique_id=1442932112 groups=["green"] instance=ExtResource("1_teyxi")]
 
-[node name="AnimatedSprite2D" parent="." index="1" unique_id=255018214]
+[node name="AnimatedSprite2D" parent="." index="2" unique_id=255018214]
 material = SubResource("ShaderMaterial_ghnlg")
-
-[node name="CollisionShape2D" parent="." index="2" unique_id=1221668683]
-visible = false

@@ -12,7 +12,7 @@ config_version=5
 
 config/name="DoNotBeFakes"
 config/version="1.0.0"
-run/main_scene="uid://df1cty7na2e4k"
+run/main_scene="uid://bjistfcfj1brx"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="DoNotBeFakes"
 config/features=PackedStringArray("4.7", "GL Compatibility")
@@ -26,6 +26,7 @@ config/stretch/mode="canvas_items"
 
 TransitionManager="*uid://dwtb2v8cjvoag"
 BgmManager="*uid://cmr8bwv1u2k4k"
+AudioManager="*uid://nq26iricyo6o"
 
 [display]
 

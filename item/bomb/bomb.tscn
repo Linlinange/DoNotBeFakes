@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cd2lortbvkwjr" path="res://item/bomb/bomb.gd" id="1_28rpd"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="2_1kl7e"]
-[ext_resource type="AudioStream" uid="uid://dfqqhqc3ubxs6" path="res://item/bomb/bomb.ogg" id="3_lyss1"]
+[ext_resource type="AudioStream" uid="uid://dfqqhqc3ubxs6" path="res://assets/sound/bomb.ogg" id="3_lyss1"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="4_qixii"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jqukr"]

@@ -6,6 +6,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ubi1n"]
 resource_local_to_scene = true
 shader = ExtResource("2_67xl3")
+shader_parameter/color_base = Color(1, 1, 1, 1)
 shader_parameter/color_a = Color(0.27450982, 0.4392157, 0.5137255, 1)
 shader_parameter/color_b = Color(0.37254903, 0.89411765, 0.6784314, 1)
 shader_parameter/cycle_speed = 2.0

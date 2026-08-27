@@ -1,5 +1,5 @@
 class_name SFX
-extends Node
+extends AudioStreamPlayer
 
 ## 播放音效并随机变调
 ## player: AudioStreamPlayer 或 AudioStreamPlayer2D
@@ -23,7 +23,7 @@ static func play_with_pitch(player: Node, pitch_range: float = 0.1) -> void:
 		push_warning("SFX.play_with_pitch: %s 不是有效的音频播放器" % player.name)
 
 ## 如果需要指定具体范围而不是浮动比例
-static func play(player: Node, pitch_min: float = 0.9, pitch_max: float = 1.1) -> void:
+static func play_with_range(player: Node, pitch_min: float = 0.9, pitch_max: float = 1.1) -> void:
 	if not player:
 		return
 	

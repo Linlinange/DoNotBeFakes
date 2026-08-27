@@ -2,14 +2,15 @@
 
 [ext_resource type="Script" uid="uid://duaxso6b1ajdx" path="res://ui/bar/menu_bar.gd" id="1_uof5y"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="2_6cjml"]
-[ext_resource type="Texture2D" uid="uid://dfw3pd2rvjv10" path="res://ui/restart.png" id="3_4t5p7"]
-[ext_resource type="Script" uid="uid://b5ojrxefy380p" path="res://ui/restart_button.gd" id="4_6tm81"]
-[ext_resource type="Texture2D" uid="uid://bhfdt35onsm33" path="res://ui/pause.png" id="5_05j43"]
-[ext_resource type="Script" uid="uid://b2bmg25ny4i37" path="res://ui/pause_button.gd" id="6_x1r01"]
-[ext_resource type="Texture2D" uid="uid://dfnmoat6yq4qh" path="res://ui/continue.png" id="7_yjg1s"]
-[ext_resource type="Script" uid="uid://chbcrnbgl1b57" path="res://ui/continue_button.gd" id="8_nmg7e"]
-[ext_resource type="Texture2D" uid="uid://dte55yvsdwwnr" path="res://ui/back.png" id="9_6cs2f"]
-[ext_resource type="Script" uid="uid://lrf3bc42hhxv" path="res://ui/back_button.gd" id="10_8an6u"]
+[ext_resource type="Texture2D" uid="uid://dfw3pd2rvjv10" path="res://ui/pause_menu/restart.png" id="3_4t5p7"]
+[ext_resource type="Script" uid="uid://b5ojrxefy380p" path="res://ui/pause_menu/restart_button.gd" id="4_6tm81"]
+[ext_resource type="Texture2D" uid="uid://bhfdt35onsm33" path="res://ui/pause_menu/pause.png" id="5_05j43"]
+[ext_resource type="Script" uid="uid://b2bmg25ny4i37" path="res://ui/pause_menu/pause_button.gd" id="6_x1r01"]
+[ext_resource type="Texture2D" uid="uid://dfnmoat6yq4qh" path="res://ui/pause_menu/continue.png" id="7_yjg1s"]
+[ext_resource type="Script" uid="uid://chbcrnbgl1b57" path="res://ui/pause_menu/continue_button.gd" id="8_nmg7e"]
+[ext_resource type="Texture2D" uid="uid://dte55yvsdwwnr" path="res://ui/pause_menu/back.png" id="9_6cs2f"]
+[ext_resource type="Script" uid="uid://lrf3bc42hhxv" path="res://ui/pause_menu/back_button.gd" id="10_8an6u"]
+[ext_resource type="PackedScene" uid="uid://bjistfcfj1brx" path="res://ui/main_menu/main_menu.tscn" id="11_b3ncv"]
 
 [node name="menu_bar" type="CanvasLayer" unique_id=1969657292]
 script = ExtResource("1_uof5y")
@@ -109,6 +110,7 @@ text = "返回主菜单"
 icon = ExtResource("9_6cs2f")
 expand_icon = true
 script = ExtResource("10_8an6u")
+scene = ExtResource("11_b3ncv")
 
 [connection signal="pressed" from="top_right/HBoxContainer/restart_button" to="top_right/HBoxContainer/restart_button" method="_on_pressed"]
 [connection signal="pressed" from="top_right/HBoxContainer/pause_button" to="top_right/HBoxContainer/pause_button" method="_on_pressed"]

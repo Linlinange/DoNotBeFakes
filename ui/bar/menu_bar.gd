@@ -6,12 +6,14 @@ extends CanvasLayer
 @onready var contin: Button = $center/CenterContainer/VBoxContainer/continue_button
 
 func _ready() -> void:
-	if not BgmManager.is_playing_bgm("res://assets/music/level.mp3"):
-		BgmManager.play_bgm("res://assets/music/level.mp3")
+	if BgmManager:
+		if not BgmManager.is_playing_bgm("res://assets/music/level.mp3"):
+			BgmManager.play_bgm("res://assets/music/level.mp3")
 	pause.pressed.connect(_on_pause)
 	contin.pressed.connect(_on_continue)
-	TransitionManager.add_exemption(tr_bar)
-	TransitionManager.add_exemption(center_bar)
+	if TransitionManager:
+		TransitionManager.add_exemption(tr_bar)
+		TransitionManager.add_exemption(center_bar)
 	return
 
 func _on_pause() -> void:

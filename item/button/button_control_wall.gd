@@ -11,17 +11,11 @@ extends Node2D
 ## 按钮关闭时墙的宽度和长度
 @export var size_off: Vector2 = Vector2(32, 96)
 
-var player_in_range: bool = false
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for i in len(buttons):
 		if not buttons[i]:
 			print("第%d个button 不存在" % i)
-		else:
-			#print("第%d个button 存在" % i)
-			buttons[i].body_entered.connect(_on_button_body_entered)
-			buttons[i].body_exited.connect(_on_button_body_exited)
 			
 	for i in len(walls):
 		if not walls[i]:
@@ -44,14 +38,3 @@ func _process(delta: float) -> void:
 			for wall in walls:
 				if wall:
 					wall.size = size_off
-
-
-# 信号回调，即信号触发时执行的函数，body为触发信号的实例
-func _on_button_body_entered(body: Node2D):
-	if body.is_in_group("player"):
-		player_in_range = true
-
-func _on_button_body_exited(body: Node2D):
-	if body.is_in_group("player"):
-		player_in_range = false
-			

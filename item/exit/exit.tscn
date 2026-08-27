@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://5u7miv8gfec1" path="res://item/exit/exit.gd" id="1_gcmrs"]
 [ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="1_ij0ye"]
 [ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="3_g1gbr"]
-[ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://item/button/逃离霸凌按钮音效[按下](试行).wav" id="4_iq010"]
+[ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://assets/sound/逃离霸凌按钮音效[按下](试行).wav" id="4_iq010"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="5_knyve"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jltcj"]

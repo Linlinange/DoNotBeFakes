@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="5_y60so"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="6_3b6yu"]
 [ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="6_d6t83"]
-[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://level/items_contorl.gd" id="7_3b6yu"]
+[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="7_3b6yu"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="9_68jak"]
 [ext_resource type="PackedScene" uid="uid://cojrs4v5ik1qr" path="res://item/walls/green_wall.tscn" id="9_fkhco"]
 [ext_resource type="PackedScene" uid="uid://cb0iui4ri07hm" path="res://item/clue/clue.tscn" id="9_ybuxc"]

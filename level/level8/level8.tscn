@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="3_060mp"]
 [ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="4_bf8q5"]
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="5_yj76h"]
-[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://level/items_contorl.gd" id="6_jmcc3"]
+[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="6_jmcc3"]
 [ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="7_0fmmt"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="7_raw1k"]
 [ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="10_5prng"]

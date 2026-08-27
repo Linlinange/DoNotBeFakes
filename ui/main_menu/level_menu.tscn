@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://ct45nmko267ie"]
+
+[ext_resource type="Script" uid="uid://clhoskp1rt6b7" path="res://ui/main_menu/level_menu.gd" id="1_cubhr"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="1_tndtp"]
+[ext_resource type="PackedScene" uid="uid://cc8kvidtnias4" path="res://ui/main_menu/level_chooser.tscn" id="2_40swp"]
+[ext_resource type="PackedScene" uid="uid://cfda121k15hvs" path="res://level/level1/level1.tscn" id="3_pwayw"]
+[ext_resource type="PackedScene" uid="uid://8wafggfm8fnu" path="res://level/level2/level2.tscn" id="4_3yk6w"]
+[ext_resource type="PackedScene" uid="uid://3u2o80wbpd01" path="res://level/level3/level3.tscn" id="5_2w6hg"]
+[ext_resource type="PackedScene" uid="uid://23em5cm4ocg7" path="res://level/level4/level4.tscn" id="6_tefdt"]
+[ext_resource type="PackedScene" uid="uid://cvnubfack753p" path="res://ui/main_menu/scene_jumper.tscn" id="7_0sqyv"]
+[ext_resource type="Texture2D" uid="uid://dte55yvsdwwnr" path="res://ui/pause_menu/back.png" id="8_cwskq"]
+[ext_resource type="PackedScene" uid="uid://sd1avb781rh2" path="res://level/level5/level5.tscn" id="8_wuawr"]
+[ext_resource type="PackedScene" uid="uid://3g3vqefvs52y" path="res://item/floor/floor.tscn" id="9_a0u8a"]
+[ext_resource type="PackedScene" uid="uid://c6ytjjws833ca" path="res://level/level6/level6.tscn" id="9_ux8gv"]
+[ext_resource type="PackedScene" uid="uid://i47e0yfbdn2x" path="res://level/level7/level7.tscn" id="10_p262h"]
+[ext_resource type="PackedScene" uid="uid://dniig8wrydpkw" path="res://level/level8/level8.tscn" id="11_p262h"]
+[ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="12_wuawr"]
+[ext_resource type="PackedScene" uid="uid://bjistfcfj1brx" path="res://ui/main_menu/main_menu.tscn" id="14_3x7sr"]
+
+[node name="level_choose" type="Control" unique_id=31535998]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_cubhr")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=552627457]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=476131348]
+offset_right = 1200.0
+offset_bottom = 208.0
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/CenterContainer" unique_id=1860446871]
+custom_minimum_size = Vector2(512, 128)
+layout_mode = 2
+mouse_filter = 1
+theme_override_fonts/normal_font = ExtResource("1_tndtp")
+theme_override_font_sizes/normal_font_size = 96
+text = "关卡选择"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer2" type="CenterContainer" parent="CanvasLayer" unique_id=417208357]
+offset_top = 220.0
+offset_right = 1200.0
+offset_bottom = 700.0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="CanvasLayer/CenterContainer2" unique_id=711039819]
+custom_minimum_size = Vector2(960, 480)
+layout_mode = 2
+theme_override_constants/h_separation = 48
+theme_override_constants/v_separation = 48
+
+[node name="1" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=957085456 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("3_pwayw")
+label_text = "1"
+
+[node name="2" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=1249177516 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("4_3yk6w")
+label_text = "2"
+
+[node name="3" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=1573373903 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("5_2w6hg")
+label_text = "3"
+
+[node name="4" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=1189056070 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("6_tefdt")
+label_text = "4"
+
+[node name="5" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=566272005 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("8_wuawr")
+label_text = "5"
+
+[node name="6" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=1495378190 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("9_ux8gv")
+label_text = "6"
+
+[node name="7" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=334708555 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("10_p262h")
+label_text = "7"
+
+[node name="8" parent="CanvasLayer/CenterContainer2/HFlowContainer" unique_id=877312504 instance=ExtResource("2_40swp")]
+layout_mode = 2
+scene = ExtResource("11_p262h")
+label_text = "8"
+
+[node name="back_button" parent="CanvasLayer" unique_id=417104301 instance=ExtResource("7_0sqyv")]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 112.0
+offset_bottom = 112.0
+icon = ExtResource("8_cwskq")
+flat = true
+icon_alignment = 1
+expand_icon = true
+scene = ExtResource("14_3x7sr")
+chat_offset = Vector2(256, 96)
+
+[node name="Timer" type="Timer" parent="." unique_id=1393400365]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=473823565]
+position = Vector2(896, 176)
+scale = Vector2(2, 2)
+zoom = Vector2(2, 2)
+
+[node name="floor" parent="." unique_id=1850046164 instance=ExtResource("9_a0u8a")]
+z_index = -1
+fill_rect = Rect2i(0, 0, 160, 120)
+
+[node name="Dolos_Black" parent="." unique_id=1654329773 instance=ExtResource("12_wuawr")]
+unique_name_in_owner = true
+position = Vector2(1096, 88)

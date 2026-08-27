@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="4_d54nu"]
 [ext_resource type="PackedScene" uid="uid://i47e0yfbdn2x" path="res://level/level7/level7.tscn" id="5_2crgc"]
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="6_xjmrf"]
-[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://level/items_contorl.gd" id="7_354hq"]
+[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="7_354hq"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="7_ypuxx"]
 [ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="8_x7vb4"]
 [ext_resource type="PackedScene" uid="uid://4g38ok11ixnl" path="res://item/button/orange_button.tscn" id="9_2ehn8"]
@@ -89,7 +89,7 @@ zoom = Vector2(2, 2)
 limit_left = -304
 limit_top = -368
 limit_right = 368
-limit_bottom = 176
+limit_bottom = 48
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true
 
