@@ -3,7 +3,7 @@ extends Node2D
 @onready var player: Player = %player
 
 func _ready() -> void:
-	player.control = true
+	player.movable= true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

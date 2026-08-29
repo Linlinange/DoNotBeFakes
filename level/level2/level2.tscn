@@ -85,7 +85,7 @@ tooltip_offset = Vector2(0, 32)
 [node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("4_rihjt")]
 unique_name_in_owner = true
 position = Vector2(-32, -96)
-control = false
+movable = false
 
 [node name="Dolos_Black" parent="." unique_id=227803853 node_paths=PackedStringArray("player") instance=ExtResource("6_3b6yu")]
 unique_name_in_owner = true

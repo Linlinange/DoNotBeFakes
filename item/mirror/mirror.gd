@@ -33,6 +33,7 @@ func _ready():
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
 
+@warning_ignore("unused_parameter")
 func _process(delta: float):
 	if player_in_range and Input.is_action_just_pressed("interact"):
 		interact()

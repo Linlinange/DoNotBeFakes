@@ -13,7 +13,7 @@ func _ready() -> void:
 	a2.body_exited.connect(_exit_a2)
 	await dolos.say("这里有一面映射镜\n它可以映射一些物体\n作为假副本，比如说你", 6.0)
 	await dolos.say("与之交互可以控制\n被映射出的另一个“你”", 5.0)
-	player.control = true
+	player.movable= true
 	await dolos.say("真实的你，无法通过实墙\n可以通过虚墙", 5.0)
 	await dolos.say("而假副本，可以通过实墙\n无法通过虚墙", 5.0)
 	await dolos.say("无论是你还是假副本\n都无法通过外墙", 5.0)

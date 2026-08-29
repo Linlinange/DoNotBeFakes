@@ -106,11 +106,6 @@ chat_offset = Vector2(256, 96)
 
 [node name="Timer" type="Timer" parent="." unique_id=1393400365]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=473823565]
-position = Vector2(896, 176)
-scale = Vector2(2, 2)
-zoom = Vector2(2, 2)
-
 [node name="floor" parent="." unique_id=1850046164 instance=ExtResource("9_a0u8a")]
 z_index = -1
 fill_rect = Rect2i(0, 0, 160, 120)
@@ -118,3 +113,7 @@ fill_rect = Rect2i(0, 0, 160, 120)
 [node name="Dolos_Black" parent="." unique_id=1654329773 instance=ExtResource("12_wuawr")]
 unique_name_in_owner = true
 position = Vector2(1096, 88)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1096101946]
+position = Vector2(896, 176)
+zoom = Vector2(2, 2)

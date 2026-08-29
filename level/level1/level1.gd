@@ -1,7 +1,7 @@
 extends Node2D
 
-@onready var player: CharacterBody2D = %player
-@onready var dolos: CharacterBody2D = %Dolos_Black
+@onready var player: Player = %player
+@onready var dolos: NPC = %Dolos_Black
 @onready var a1: Area2D = $area_open_door
 @onready var a2: Area2D = $area_exit
 
@@ -11,8 +11,11 @@ func _ready() -> void:
 	await dolos.say("你好\nAletheia White", 3.0)
 	await dolos.say("我是Dolos Black\n叫我Black就行", 5.0)
 	await dolos.say("我将引导你\n完成接下来的关卡", 5.0)
-	player.control = true
-	dolos.speak("使用WASD或↑↓←→\n进行移动吧", 5.0)
+	player.movable = true
+	if OS.has_feature("pc"):
+		dolos.speak("使用WASD或↑↓←→\n进行移动吧", 5.0)
+	else:
+		dolos.speak("使用游戏摇杆\n进行移动吧", 5.0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

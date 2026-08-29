@@ -16,6 +16,8 @@ extends Area2D
 # ========== 跟随目标 ==========
 ## 自动找 eyes；如果节点结构不同，在 Inspector 里改这个路径
 @export var eyes_path: NodePath = ".."
+## 眼睛看向的地方: 若为二维向量，则看向其表示的坐标; 若为节点，则看向节点; 若为null(空)，则看向鼠标
+@export var follow: Variant = null
 
 @onready var collision_poly: CollisionPolygon2D = $CollisionPolygon2D
 
@@ -39,16 +41,25 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	# 1. 位置 & 旋转同步
+	# 把全局坐标转成父节点（face）的局部坐标
+	var local: Vector2
+	if follow is Vector2:
+		local = follow
+	elif follow is Node2D:
+		local = follow.global_position
+	else:
+		local = get_global_mouse_position()
+	
+	# 位置 & 旋转同步
 	if eyes:
 		global_position = eyes.global_position
-		look_at(get_global_mouse_position())
+		look_at(local)
 	
-	# 2. 参数变化时重建碰撞和图形
+	# 参数变化时重建碰撞和图形
 	if radius != _last_radius or angle_deg != _last_angle or segments != _last_segments:
 		_update_polygon()
 	
-	# 3. 标记重绘（_draw 只在需要时执行，不耗性能）
+	# 标记重绘（_draw 只在需要时执行，不耗性能）
 	queue_redraw()
 
 

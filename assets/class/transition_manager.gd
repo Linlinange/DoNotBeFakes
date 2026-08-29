@@ -16,11 +16,6 @@ func _ready() -> void:
 	rect.modulate.a = 0.0
 
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		toggle_pause()
-
-
 ## 强制恢复（不播动画，用于切场景前清理状态）
 func _force_resume() -> void:
 	if not is_paused:

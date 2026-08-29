@@ -16,6 +16,17 @@ func _ready() -> void:
 		TransitionManager.add_exemption(center_bar)
 	return
 
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if tr_bar.visible == true:
+			_on_pause()
+			pause._on_pressed()
+		else:
+			_on_continue()
+			contin._on_pressed()
+
+
 func _on_pause() -> void:
 	tr_bar.visible =  false
 	center_bar.visible =  true

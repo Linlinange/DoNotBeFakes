@@ -4,7 +4,7 @@ extends Node2D
 @onready var dolos: NPC = %Dolos_Black
 
 func _ready() -> void:
-	player.control = true
+	player.movable= true
 	await dolos.say("你可以控制的物品不止一种", 4.0)
 	await dolos.say("尽管不是任意种类都会生效\n但你可以多试试", 6.0)
 

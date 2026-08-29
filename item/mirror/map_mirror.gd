@@ -77,12 +77,12 @@ func _ready():
 			mapped.global_position.y = 2*self.global_position.y - node.global_position.y
 		if node.is_in_group("player"):
 			control_target = node
+			node.control = true
+			mapped.control = false
 
 
 @warning_ignore("unused_parameter")
 func _process(delta: float):
-	if control_target:
-		queue_redraw()
 	
 	for i in len(nodes_mapped):
 		var node = nodes_tomap[i]
@@ -205,7 +205,8 @@ func _activate():
 		var mapped = nodes_mapped[i]
 		if node is Player:
 			node.control = false
-			mapped.control = true
+			mapped.movable = true
+			mapped.interactable = true
 			control_target = mapped
 			var camera = node.get_node_or_null("Camera2D")
 			if camera:
@@ -226,7 +227,8 @@ func _deactivate():
 		var node = nodes_tomap[i]
 		var mapped = nodes_mapped[i]
 		if node is Player:
-			node.control = true
+			node.movable = true
+			node.interactable = true
 			mapped.control = false
 			control_target = node
 			var camera = mapped.get_node_or_null("Camera2D")

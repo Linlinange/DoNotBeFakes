@@ -11,7 +11,7 @@ func _ready() -> void:
 	await dolos.say("你自己可以做到的", 3.0)
 	dolos.move_to(Vector2(168, -128), 0.5)
 	dolos.chat.bubble_offset += Vector2(-112, 32)
-	player.control = true
+	player.movable= true
 	await dolos.say("记得小心，别踩到炸弹\n否则会发生爆炸", 8.0)
 	dolos.move_to(Vector2(168, -256), 1.0)
 

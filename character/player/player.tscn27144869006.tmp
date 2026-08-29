@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bgfexs5l6af0j" path="res://character/player/player.gd" id="1_rkbax"]
 [ext_resource type="Texture2D" uid="uid://vte8bd36aom5" path="res://character/player/eyes.png" id="3_g1dw6"]
 [ext_resource type="Script" uid="uid://c257uiwodq5ag" path="res://character/player/eyes.gd" id="4_yw30f"]
-[ext_resource type="PackedScene" uid="uid://dm3wjgsvvo4yx" path="res://ui/touch_screen/screentouch_contorl.tscn" id="5_g20gq"]
+[ext_resource type="Script" uid="uid://cweyes801j7jk" path="res://character/player/ViewPoint.gd" id="5_g20gq"]
 [ext_resource type="Script" uid="uid://dkf1bxsli0wli" path="res://character/player/view_area.gd" id="5_qjkh3"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_rkbax"]
@@ -168,6 +168,9 @@ metadata/_aseprite_wizard_source_file_hash_ = "8b757a53a8cc191b3a87d3526c5266a3"
 sprite_frames = SubResource("SpriteFrames_x7c3f")
 animation = &"open"
 script = ExtResource("4_yw30f")
+max_radius = null
+smooth_speed = null
+centripetal = null
 
 [node name="view_area" type="Area2D" parent="sprite/eyes" unique_id=327839246]
 z_index = -1
@@ -180,9 +183,10 @@ angle_deg = 45.0
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="sprite/eyes/view_area" unique_id=528458364]
 polygon = PackedVector2Array(0, 0, 28, -16, 28, 16)
 
+[node name="view_point" type="Node2D" parent="sprite/eyes" unique_id=354494254]
+script = ExtResource("5_g20gq")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538396786]
 visible = false
 z_index = 5
 shape = SubResource("RectangleShape2D_16ol0")
-
-[node name="ScreenTouchContorl" parent="." unique_id=813508610 instance=ExtResource("5_g20gq")]

@@ -80,7 +80,6 @@ next_scene = ExtResource("5_2crgc")
 [node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("6_xjmrf")]
 unique_name_in_owner = true
 position = Vector2(-96, -304)
-control = false
 view_angle = 60.0
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=2051621602]

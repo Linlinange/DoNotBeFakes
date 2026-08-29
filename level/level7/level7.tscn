@@ -82,7 +82,6 @@ tooltip_offset = Vector2(96, 0)
 [node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("6_bpqdp")]
 unique_name_in_owner = true
 position = Vector2(-128, -314)
-control = false
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=2051621602]
 position = Vector2(-32, 96)

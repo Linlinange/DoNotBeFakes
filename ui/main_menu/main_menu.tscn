@@ -114,11 +114,10 @@ control = false
 view_radius = 96.0
 
 [node name="items_control" type="Node2D" parent="." unique_id=2088184606]
-position = Vector2(-104, -160)
 script = ExtResource("5_8gmgf")
 
 [node name="red_bomb" parent="items_control" unique_id=97648337 instance=ExtResource("6_4aijq")]
-position = Vector2(200, 256)
+position = Vector2(88, 96)
 scale = Vector2(3, 3)
 
 [connection signal="pressed" from="CenterContainer2/VBoxContainer/start_game" to="CenterContainer2/VBoxContainer/start_game" method="_on_pressed"]

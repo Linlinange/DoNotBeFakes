@@ -13,8 +13,11 @@ func _ready() -> void:
 	a1.body_entered.connect(_tip1)
 	a1.body_exited.connect(_shut_up)
 	await dolos.say("太过自信会被虚假欺骗\n眼见才为实", 5.0)
-	player.control = true
-	dolos.speak("你的视野会跟随鼠标指针\n借助视野可以化虚为实，试试吧", 15.0)
+	player.movable = true
+	if OS.has_feature("pc"):
+		dolos.speak("你的视野会跟随鼠标指针\n借助视野可以化虚为实，试试吧", 15.0)
+	else:
+		dolos.speak("你的视野会跟随手指按下的位置\n借助视野可以化虚为实，试试吧", 15.0)
 
 
 @warning_ignore("unused_parameter")

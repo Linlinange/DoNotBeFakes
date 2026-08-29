@@ -8,18 +8,36 @@ const _FILL = Color("ffdd1170")
 const _LINE = Color("ffdd11b3")
 const _LW = 1
 
-@export var speed: float = 180.0
-@export var eyes_open: bool = true
-@export var eyes_activity: bool = true
-@export var control: bool = true:
-	set(value):
-		control = value
-		queue_redraw()
-@export var view_radius: float = 128.0
-@export var view_angle: float = 45.0
 @onready var eyes: AnimatedSprite2D = $sprite/eyes
 @onready var face: AnimatedSprite2D = $sprite/face
 @onready var view_area: Area2D = $sprite/eyes/view_area
+@onready var v_contorler: Node = $ScreenTouchContorl
+
+@export var speed: float = 180.0
+@export var eyes_open: bool = true
+@export var eyes_activity: bool = true
+## 能否控制: 为false时，既无法进行移动，也无法进行交互; 赋值为false时具有副作用，会强制同步移动与交互的状态
+@export var control: bool = true:
+	set(value):
+		control = value
+		if value == false:
+			movable = false
+			interactable = false
+		queue_redraw()
+## 能否移动: 为false时，无法进行移动，移动设备也不会显示移动摇杆
+@export var movable: bool = true:
+	set(value):
+		movable = value
+		if value == true:
+			control = true
+## 能否交互: 为false时，无法进行交互，移动设备也不会显示交互按钮
+@export var interactable: bool = true:
+	set(value):
+		interactable = value
+		if value == true:
+			control = true
+@export var view_radius: float = 128.0
+@export var view_angle: float = 45.0
 
 var facing: String = "down"
 
@@ -31,6 +49,12 @@ signal view_area_exited(area: Area2D)
 
 
 func _ready() -> void:
+	# 移动端时，显示触屏控件
+	if OS.has_feature("mobile"):
+		v_contorler.visible = true
+	else:
+		v_contorler.visible = false
+	
 	if not eyes_activity:
 		eyes.set_process(false)
 	view_area.radius = view_radius
@@ -46,7 +70,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var direction := _get_input()
-	if control:
+	if movable:
 		
 		# 更新朝向并移动
 		if direction.length() > 0.1:
@@ -58,6 +82,16 @@ func _physics_process(_delta: float) -> void:
 
 
 func _process(_delta: float) -> void:
+	if movable:
+		v_contorler.v_joystick.visible = true
+	else:
+		v_contorler.v_joystick.visible = false
+	
+	if interactable:
+		v_contorler.v_interact.visible = true
+	else:
+		v_contorler.v_interact.visible = false
+	
 	var m_left = Input.is_action_just_pressed("switch")
 	if eyes_activity and m_left:
 		match eyes_open:
@@ -72,7 +106,7 @@ func _process(_delta: float) -> void:
 
 
 func _draw():
-	if control:
+	if movable:
 		# 目标在当前节点本地坐标系中的位置
 		
 		var tip   = _OFF + Vector2(0, _H * 0.6)
@@ -153,3 +187,27 @@ func _update_eyes() -> void:
 		view_area.visible = false
 		view_area.collision_layer &= ~0b11 # 二进制运算：将一二位置零
 		view_area.collision_mask &= ~0b11
+
+
+## 追踪触屏的手指
+var _touch_id: int = -1
+func _unhandled_input(event: InputEvent) -> void:
+	var follow: Variant
+	# 触屏点击/释放
+	if event is InputEventScreenTouch:
+		if _touch_id == -1 and event.pressed:
+			_touch_id = event.index
+			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			eyes.follow = follow
+			view_area.follow = follow
+			# print(follow)
+		elif _touch_id != -1 and not event.pressed:
+			_touch_id = -1
+
+	# 触屏拖动
+	if event is InputEventScreenDrag:
+		if _touch_id == event.index:
+			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			eyes.follow = follow
+			view_area.follow = follow
+			# print(follow)

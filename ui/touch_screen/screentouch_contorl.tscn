@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://dm3wjgsvvo4yx"]
+
+[ext_resource type="Texture2D" uid="uid://c3tkqj3lj6or1" path="res://ui/touch_screen/interact.png" id="1_auhk7"]
+[ext_resource type="Script" uid="uid://c24eqe1hejmrf" path="res://ui/touch_screen/screentouch_contorl.gd" id="1_peelg"]
+[ext_resource type="Script" uid="uid://b2l4augg7olsj" path="res://ui/touch_screen/VirtualActionButton.gd" id="2_8wj4r"]
+[ext_resource type="Texture2D" uid="uid://bsw75qcqwjppr" path="res://ui/touch_screen/switch_off.png" id="3_0t7sr"]
+[ext_resource type="Texture2D" uid="uid://bro11lbsggvc4" path="res://ui/touch_screen/switch_on.png" id="3_8wj4r"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xf4a"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0t7sr"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpk38"]
+bg_color = Color(0.22352941, 0.22352941, 0.22352941, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_auhk7"]
+bg_color = Color(0.3491902, 0.3491902, 0.3491902, 0.3)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxku5"]
+bg_color = Color(1, 1, 1, 0.7490196)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+corner_detail = 20
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_84il2"]
+radius = 20.0
+
+[node name="ScreenTouchContorl" type="CanvasLayer" unique_id=813508610]
+script = ExtResource("1_peelg")
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=631424257]
+offset_left = 176.0
+offset_top = 368.0
+offset_right = 400.0
+offset_bottom = 592.0
+joystick_size = 200.0
+tip_size = 120.0
+action_left = &"move_left"
+action_right = &"move_right"
+action_up = &"move_up"
+action_down = &"move_down"
+
+[node name="VirtualInteract" type="Button" parent="." unique_id=671768199]
+offset_left = 864.0
+offset_top = 416.0
+offset_right = 992.0
+offset_bottom = 544.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4xf4a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0t7sr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gpk38")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_auhk7")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dxku5")
+icon = ExtResource("1_auhk7")
+expand_icon = true
+script = ExtResource("2_8wj4r")
+action_name = &"interact"
+
+[node name="VirtualSwitch" type="Button" parent="." unique_id=1415145741]
+visible = false
+offset_left = 800.0
+offset_top = 288.0
+offset_right = 928.0
+offset_bottom = 416.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4xf4a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0t7sr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gpk38")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_auhk7")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dxku5")
+toggle_mode = true
+icon = ExtResource("3_8wj4r")
+expand_icon = true
+script = ExtResource("2_8wj4r")
+action_name = &"switch"
+icon_down = ExtResource("3_0t7sr")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="." unique_id=222181195]
+visible = false
+position = Vector2(864, 336)
+scale = Vector2(3.000001, 3.000001)
+texture_normal = ExtResource("1_auhk7")
+shape = SubResource("CircleShape2D_84il2")
+action = "switch"
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="." unique_id=1755628178]
+visible = false
+position = Vector2(976, 464)
+scale = Vector2(3.000001, 3.000001)
+texture_normal = ExtResource("1_auhk7")
+shape = SubResource("CircleShape2D_84il2")
+action = "switch"

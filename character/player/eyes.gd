@@ -1,13 +1,12 @@
 extends AnimatedSprite2D
-
 ## 眼睛能偏离中心的最大距离（像素）
 @export var max_radius: float = 5.0
 ## 平滑系数: 越大跟得越紧；填 0 或不填则瞬间到位
 @export var smooth_speed: float = 12.0
 ## 眼睛向心率: 值越大，越靠近中心。
 @export var centripetal: float = 64.0
-## 眼睛看向的节点: 若为null(空)，则看向鼠标
-@export var follow: Node2D = null
+## 眼睛看向的地方: 若为二维向量，则看向其表示的坐标; 若为节点，则看向节点; 若为null(空)，则看向鼠标
+@export var follow: Variant = null
 
 ## 记录编辑器里摆好的初始位置，作为"眼眶中心"
 var base_position: Vector2
@@ -16,9 +15,12 @@ func _ready() -> void:
 	base_position = position
 
 func _process(delta: float) -> void:
-	# 把鼠标全局坐标转成父节点（face）的局部坐标
+	
+	# 把全局坐标转成父节点（face）的局部坐标
 	var local: Vector2
-	if follow:
+	if follow is Vector2:
+		local = get_parent().to_local(follow)
+	elif follow is Node2D:
 		local = get_parent().to_local(follow.global_position)
 	else:
 		local = get_parent().to_local(get_global_mouse_position())
