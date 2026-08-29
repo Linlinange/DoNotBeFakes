@@ -15,7 +15,7 @@ extends Area2D
 		if interact_comp:
 			interact_comp.max_interact_times = value
 ## 提示内容
-@export var tooltip_content: String = "按 %s 交互" % get_key_name("interact"):
+@export var tooltip_content: String = "按%s进入一关" % InputManager.get_key_name("interact"):
 	set(value):
 		tooltip_content = value
 		if interact_comp:
@@ -52,17 +52,6 @@ func interact() -> void:
 			get_tree().change_scene_to_packed(next_scene)
 	else:
 		tooltip_content = "当前为最后一关"
-
-# 返回 action 绑定的第一个键盘按键的显示名称
-func get_key_name(action: String) -> String:
-	var events := InputMap.action_get_events(action)
-	for ev in events:
-		if ev is InputEventKey:
-			# Godot 4 返回如 "W", "Space", "Shift"
-			return ev.as_text()
-		if ev is InputEventMouseButton:
-			return "鼠标按键 %d" % ev.button_index
-	return "?"
 
 
 # ========== 私有方法 ==========

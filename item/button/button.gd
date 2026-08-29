@@ -22,7 +22,7 @@ signal turned_off
 		if interact_comp:
 			interact_comp.max_interact_times = value
 ## 提示内容
-@export var tooltip_content: String = "按F交互":
+@export var tooltip_content: String = "按%s交互" % InputManager.get_key_name("interact"):
 	set(value):
 		tooltip_content = value
 		if interact_comp:

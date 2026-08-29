@@ -1,0 +1,11 @@
+[gd_resource type="Theme" format=3 uid="uid://djxap6a4nyrwh"]
+
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="1_e0nnw"]
+
+[resource]
+Button/font_sizes/font_size = 24
+Button/fonts/font = ExtResource("1_e0nnw")
+Label/font_sizes/font_size = 32
+Label/fonts/font = ExtResource("1_e0nnw")
+RichTextLabel/font_sizes/bold_font_size = 32
+RichTextLabel/fonts/bold_font = ExtResource("1_e0nnw")

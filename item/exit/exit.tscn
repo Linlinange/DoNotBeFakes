@@ -55,7 +55,6 @@ size = Vector2(64, 32)
 
 [node name="exit" type="Area2D" unique_id=420995041]
 script = ExtResource("1_gcmrs")
-tooltip_content = "按F键进入下一关"
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1999610549]
 tile_map_data = PackedByteArray("AAD/////AAAGAAAAAAD//wAAAAAGAAEAAAAAAP//AAAHAAAAAAAAAAAAAAAHAAEAAAD+////AAAAAAAAAAABAP//AAABAAAAAAD+/wAAAAAEAAMAAAABAAAAAAAFAAMAAAA=")

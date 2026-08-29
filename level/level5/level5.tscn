@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dtwhf5buux3rn" path="res://item/walls/red_wall.tscn" id="10_pd1s4"]
 [ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="11_pxgm1"]
 [ext_resource type="PackedScene" uid="uid://b8svy736jaqvi" path="res://item/walls/fakable_external_wall.tscn" id="14_u5njl"]
-[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/bar/menu_bar.tscn" id="15_08015"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/pause_menu/menu_bar.tscn" id="15_08015"]
 [ext_resource type="PackedScene" uid="uid://c3irllqi3bbg4" path="res://item/walls/blue_wall.tscn" id="15_u5njl"]
 [ext_resource type="PackedScene" uid="uid://b0bej4kpe3812" path="res://character/player/clone_player.tscn" id="19_f6jil"]
 

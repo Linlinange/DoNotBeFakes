@@ -12,7 +12,7 @@ extends Area2D
 
 @export_group("提示配置")
 ## 提示内容
-@export var tooltip_content: String = "按F交互":
+@export var tooltip_content: String = "按%s交互" % InputManager.get_key_name("interact"):
 	set(value):
 		tooltip_content = value
 		if tooltip:

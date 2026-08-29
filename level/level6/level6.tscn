@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="15_oi1ju"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="16_i5qke"]
 [ext_resource type="PackedScene" uid="uid://xhnievw8yxbm" path="res://item/bomb/orange_bomb.tscn" id="16_ut8he"]
-[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/bar/menu_bar.tscn" id="17_5d200"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/pause_menu/menu_bar.tscn" id="17_5d200"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ypuxx"]
 texture = ExtResource("2_gygot")
@@ -92,9 +92,10 @@ limit_bottom = 48
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true
 
-[node name="Dolos_Black" parent="." unique_id=2120407071 instance=ExtResource("7_ypuxx")]
+[node name="Dolos_Black" parent="." unique_id=2120407071 node_paths=PackedStringArray("player") instance=ExtResource("7_ypuxx")]
 unique_name_in_owner = true
 position = Vector2(-96, -128)
+player = NodePath("../player")
 
 [node name="items_control" type="Node2D" parent="." unique_id=2098901336 node_paths=PackedStringArray("buttons")]
 script = ExtResource("7_354hq")

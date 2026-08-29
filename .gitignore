@@ -1,3 +1,6 @@
+# project
+*.tmp
+
 # Godot 4+ specific ignores
 .godot/
 /android/

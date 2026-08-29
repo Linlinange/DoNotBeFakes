@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cojrs4v5ik1qr" path="res://item/walls/green_wall.tscn" id="9_fkhco"]
 [ext_resource type="PackedScene" uid="uid://cb0iui4ri07hm" path="res://item/clue/clue.tscn" id="9_ybuxc"]
 [ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="10_fkhco"]
-[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/bar/menu_bar.tscn" id="14_n7lpc"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/pause_menu/menu_bar.tscn" id="14_n7lpc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yihe8"]
 texture = ExtResource("1_dsehf")

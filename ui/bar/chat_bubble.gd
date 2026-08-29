@@ -1,8 +1,9 @@
 class_name ChatBubble
 extends Node2D
 
-## 相机缩放: 这将影响CanvasLayer的缩放，以及字体的实际大小和实际位置
-@export var zoom: Vector2 = Vector2(1, 1)
+@onready var bubble: NinePatchRect = $NinePatchRect
+@onready var label: RichTextLabel = $RichTextLabel
+
 ## 文本内容
 @export_multiline var text: String = "请输入文本"
 ## 文本默认可见性
@@ -21,15 +22,10 @@ extends Node2D
 @export var default_duration: float = 2.0
 @export var fade_duration: float = 0.12
 
-@onready var bubble: NinePatchRect = $NinePatchRect
-@onready var layer: CanvasLayer = $CanvasLayer
-@onready var label: RichTextLabel = $CanvasLayer/RichTextLabel
-
 var _tween: Tween = null
 
 
 func _ready() -> void:
-	set_canvas_layer(zoom)
 	set_text_content(text)
 	if default_visible:
 		_set_alpha(1.0)
@@ -43,14 +39,14 @@ func _ready() -> void:
 func _resize() -> void:
 	label.reset_size()
 	var content_size = label.size
-	bubble.size.x = content_size.x / zoom.x + padding.x * 2
-	bubble.size.y = content_size.y / zoom.y + padding.y * 2
+	bubble.size.x = content_size.x * label.scale.x + padding.x * 2
+	bubble.size.y = content_size.y * label.scale.y + padding.y * 2
 	if bubble.size.x < min_size.x:
 		bubble.size.x = min_size.x
 	if bubble.size.y < min_size.y:
 		bubble.size.y = min_size.y
 	position = Vector2(-bubble.size.x / 2, -bubble.size.y) + bubble_offset
-	set_text_position(global_position)
+	set_text_position(Vector2(0,0))
 
 
 func _set_alpha(a: float) -> void:
@@ -116,16 +112,9 @@ func hide_immediate() -> void:
 	_set_alpha(0.0)
 	visible = false
 
-## 设置相机缩放: 这将影响CanvasLayer的缩放，以及字体的实际大小和实际位置
-func set_canvas_layer(new_zoom: Vector2) -> void:
-	zoom = new_zoom
-	layer.scale.x = 1.0 / zoom.x
-	layer.scale.y = 1.0 / zoom.y
-
-## 设置文字的位置: 通常不需要调用这个，但是发生意外时可以通过调用此函数调整文字预期的位置
+## 设置文字的位置: 通常外部不需要调用这个，但是发生意外时可以通过调用此函数调整文字预期的位置
 func set_text_position(new_pos: Vector2) -> void:
-	label.global_position.x = (new_pos + padding).x / layer.scale.x + label_offset.x
-	label.global_position.y = (new_pos + padding).y / layer.scale.y + label_offset.y
+	label.position = new_pos + padding + label_offset
 
 ## 设置气泡显示的内容
 func set_text_content(content: String) -> void:
@@ -139,18 +128,3 @@ func set_text_visible(visibility: bool) -> void:
 ## 切换文字可见性
 func toggle_text_visible() -> void:
 	label.visible = !label.visible
-
-## 返回 action 绑定的第一个键盘按键的显示名称
-func get_key_name(action: String) -> String:
-	var events := InputMap.action_get_events(action)
-	#if OS.has_feature("mobile"):
-	if action == "interact":
-		return "交互键"
-	elif action == "switch":
-		return "长按屏幕"
-	for ev in events:
-		if ev is InputEventKey:
-			return ev.as_text()
-		if ev is InputEventMouseButton:
-			return "鼠标按键%d" % ev.button_index
-	return "?"

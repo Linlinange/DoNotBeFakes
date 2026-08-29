@@ -33,20 +33,53 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_umht6")
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1940557399]
-layout_mode = 0
-offset_right = 1200.0
-offset_bottom = 432.0
-mouse_filter = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=467391332]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -64
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1905397632]
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer" unique_id=2102506147]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="VBoxContainer/CenterContainer" unique_id=1947481968]
+layout_mode = 2
+
+[node name="floor" parent="VBoxContainer/CenterContainer/Control" unique_id=1850046164 instance=ExtResource("2_gvx18")]
+z_index = -1
+position = Vector2(-600, -191)
+fill_rect = Rect2i(-60, -60, 200, 150)
+
+[node name="player" parent="VBoxContainer/CenterContainer/Control" unique_id=1654329773 instance=ExtResource("4_4gkdq")]
+unique_name_in_owner = true
+position = Vector2(-271, -95)
+scale = Vector2(3, 3)
+control = false
+view_radius = 96.0
+
+[node name="items_control" type="Node2D" parent="VBoxContainer/CenterContainer/Control" unique_id=2088184606]
+position = Vector2(-600, -191)
+script = ExtResource("5_8gmgf")
+
+[node name="red_bomb" parent="VBoxContainer/CenterContainer/Control/items_control" unique_id=97648337 instance=ExtResource("6_4aijq")]
+position = Vector2(88, 96)
+scale = Vector2(3, 3)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer" unique_id=1905397632]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = -32
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer" unique_id=9858340]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/CenterContainer/VBoxContainer" unique_id=9858340]
 material = SubResource("ShaderMaterial_h2671")
 custom_minimum_size = Vector2(1024, 208)
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
 mouse_filter = 1
 theme_override_fonts/normal_font = ExtResource("1_or6mk")
 theme_override_font_sizes/normal_font_size = 196
@@ -54,10 +87,11 @@ text = "眼见为实"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="CenterContainer/VBoxContainer" unique_id=681955029]
+[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer/CenterContainer/VBoxContainer" unique_id=681955029]
 material = SubResource("ShaderMaterial_umht6")
 custom_minimum_size = Vector2(512, 96)
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 1
 theme_override_fonts/normal_font = ExtResource("1_or6mk")
 theme_override_font_sizes/normal_font_size = 64
@@ -65,21 +99,22 @@ text = "Don't fake or be fakes"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CenterContainer2" type="CenterContainer" parent="." unique_id=852310592]
-layout_mode = 0
-offset_top = 288.0
-offset_right = 1200.0
-offset_bottom = 700.0
+[node name="CenterContainer2" type="CenterContainer" parent="VBoxContainer" unique_id=852310592]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer2" unique_id=1126764818]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer2" unique_id=1126764818]
 layout_mode = 2
 theme_override_constants/separation = 32
+alignment = 1
 
-[node name="start_game" type="Button" parent="CenterContainer2/VBoxContainer" unique_id=665123384]
+[node name="start_game" type="Button" parent="VBoxContainer/CenterContainer2/VBoxContainer" unique_id=665123384]
 z_index = 20
 custom_minimum_size = Vector2(384, 112)
 custom_maximum_size = Vector2(640, 320)
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
 theme_override_fonts/font = ExtResource("1_or6mk")
 theme_override_font_sizes/font_size = 64
 button_mask = 7
@@ -89,11 +124,13 @@ expand_icon = true
 script = ExtResource("2_4gkdq")
 resource = "res://ui/main_menu/level_menu.tscn"
 
-[node name="organize_clues" type="Button" parent="CenterContainer2/VBoxContainer" unique_id=806922063]
+[node name="organize_clues" type="Button" parent="VBoxContainer/CenterContainer2/VBoxContainer" unique_id=806922063]
 z_index = 20
 custom_minimum_size = Vector2(384, 112)
 custom_maximum_size = Vector2(640, 320)
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
 theme_override_fonts/font = ExtResource("1_or6mk")
 theme_override_font_sizes/font_size = 64
 button_mask = 7
@@ -102,23 +139,5 @@ expand_icon = true
 script = ExtResource("3_8gmgf")
 resource = "res://level/organization/organization.tscn"
 
-[node name="floor" parent="." unique_id=1850046164 instance=ExtResource("2_gvx18")]
-z_index = -1
-fill_rect = Rect2i(0, 0, 160, 120)
-
-[node name="player" parent="." unique_id=1654329773 instance=ExtResource("4_4gkdq")]
-unique_name_in_owner = true
-position = Vector2(329, 96.00001)
-scale = Vector2(3, 3)
-control = false
-view_radius = 96.0
-
-[node name="items_control" type="Node2D" parent="." unique_id=2088184606]
-script = ExtResource("5_8gmgf")
-
-[node name="red_bomb" parent="items_control" unique_id=97648337 instance=ExtResource("6_4aijq")]
-position = Vector2(88, 96)
-scale = Vector2(3, 3)
-
-[connection signal="pressed" from="CenterContainer2/VBoxContainer/start_game" to="CenterContainer2/VBoxContainer/start_game" method="_on_pressed"]
-[connection signal="pressed" from="CenterContainer2/VBoxContainer/organize_clues" to="CenterContainer2/VBoxContainer/organize_clues" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer2/VBoxContainer/start_game" to="VBoxContainer/CenterContainer2/VBoxContainer/start_game" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer2/VBoxContainer/organize_clues" to="VBoxContainer/CenterContainer2/VBoxContainer/organize_clues" method="_on_pressed"]

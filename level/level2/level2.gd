@@ -44,7 +44,10 @@ func _process(delta: float) -> void:
 
 func _tip1(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		dolos.speak("你的视野会跟随鼠标指针\n借助视野可以化虚为实，试试吧", 15.0)
+		if OS.has_feature("pc"):
+			dolos.speak("你的视野会跟随鼠标指针\n借助视野可以化虚为实，试试吧", 15.0)
+		else:
+			dolos.speak("你的视野会跟随手指按下的位置\n借助视野可以化虚为实，试试吧", 15.0)
 
 
 func _shut_up(body: Node2D) -> void:

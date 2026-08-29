@@ -1,9 +1,9 @@
 extends CanvasLayer
 
-@onready var tr_bar: CanvasLayer = $top_right
-@onready var center_bar: CanvasLayer = $center
-@onready var pause: Button = $top_right/HBoxContainer/pause_button
-@onready var contin: Button = $center/CenterContainer/VBoxContainer/continue_button
+@onready var tr_bar: Control = $top_right
+@onready var center_bar: Control = $center
+@onready var pause: Button = $top_right/pause_button
+@onready var contin: Button = $center/VBoxContainer/continue_button
 
 func _ready() -> void:
 	if BgmManager:
@@ -12,12 +12,21 @@ func _ready() -> void:
 	pause.pressed.connect(_on_pause)
 	contin.pressed.connect(_on_continue)
 	if TransitionManager:
+		TransitionManager.add_exemption(self)
 		TransitionManager.add_exemption(tr_bar)
 		TransitionManager.add_exemption(center_bar)
 	return
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_focus_next"):
+		if not get_viewport().gui_get_focus_owner():
+			if tr_bar.visible == true:
+				pause.grab_focus()
+			else:
+				contin.grab_focus()
+
+
 	if event.is_action_pressed("ui_cancel"):
 		if tr_bar.visible == true:
 			_on_pause()

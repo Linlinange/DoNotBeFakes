@@ -1,0 +1,21 @@
+[gd_resource type="Theme" format=3 uid="uid://jlhmm7ta6t66"]
+
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="1_1rpp0"]
+[ext_resource type="StyleBox" uid="uid://cr28kxuficcnv" path="res://assets/theme/VirtualAction_disabled.tres" id="2_f6qxt"]
+[ext_resource type="StyleBox" uid="uid://dc03bh4nxq7tg" path="res://assets/theme/VirtualAction_focus.tres" id="3_3gmfr"]
+[ext_resource type="StyleBox" uid="uid://dn2t8hojgjcnk" path="res://assets/theme/VirtualAction_hover.tres" id="4_erkhu"]
+[ext_resource type="StyleBox" uid="uid://cgv0gvw3lw4qa" path="res://assets/theme/VirtualAction_normal.tres" id="5_1hjcx"]
+[ext_resource type="StyleBox" uid="uid://dk0mdey7w6x0m" path="res://assets/theme/VirtualAction_pressed.tres" id="6_452cb"]
+
+[resource]
+Button/font_sizes/font_size = 24
+Button/fonts/font = ExtResource("1_1rpp0")
+Button/styles/disabled = ExtResource("2_f6qxt")
+Button/styles/focus = ExtResource("3_3gmfr")
+Button/styles/hover = ExtResource("4_erkhu")
+Button/styles/normal = ExtResource("5_1hjcx")
+Button/styles/pressed = ExtResource("6_452cb")
+Label/font_sizes/font_size = 32
+Label/fonts/font = ExtResource("1_1rpp0")
+RichTextLabel/font_sizes/bold_font_size = 32
+RichTextLabel/fonts/bold_font = ExtResource("1_1rpp0")

@@ -18,7 +18,7 @@ func _ready() -> void:
 	a3.body_exited.connect(_exit_a3)
 	await dolos.say("除了眼见为\"实\"\n还可以自欺欺人", 5.0)
 	player.movable= true
-	dolos.speak("使用%s\n睁开或闭上双眼" % dolos.chat.get_key_name("switch"), 5.0)
+	dolos.speak("使用%s\n睁开或闭上双眼" % InputManager.get_key_name("switch"), 5.0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 
 func _tip1(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		dolos.speak("使用%s\n睁开或闭上双眼" % dolos.chat.get_key_name("switch"), 5.0)
+		dolos.speak("使用%s\n睁开或闭上双眼" % InputManager.get_key_name("switch"), 5.0)
 
 func _enter_a2(body: Node2D) -> void:
 	if body.is_in_group("player"):

@@ -11,7 +11,7 @@
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="8_3f123"]
 [ext_resource type="PackedScene" uid="uid://cojrs4v5ik1qr" path="res://item/walls/green_wall.tscn" id="8_yn3su"]
 [ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="9_yn3su"]
-[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/bar/menu_bar.tscn" id="13_j77yt"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/pause_menu/menu_bar.tscn" id="13_j77yt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j77yt"]
 size = Vector2(160, 144)

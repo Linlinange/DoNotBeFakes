@@ -53,7 +53,7 @@ func say(content:String, speak_time:float = 5.0) -> void:
 	timer.start()
 	
 	# 说话直到倒计时结束
-	content += "\n[font_size=20](使用%s跳过)[/font_size]" % chat.get_key_name("interact")
+	content += "\n[font_size=20](使用%s跳过)[/font_size]" % InputManager.get_key_name("interact")
 	chat.say(content, speak_time)
 	mouth.play("speak")
 	await SignalManager.new().any([timer.timeout, finished])
