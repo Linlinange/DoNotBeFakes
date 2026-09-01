@@ -25,21 +25,21 @@ func _process(delta: float) -> void:
 	pass
 
 func _tip1(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		return
 
 func _shut_up(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		return
 
 func _enter_a2(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		wall.fakable = true
 		wall.fake = true
 		wall.fakable = false
 
 func _exit_a2(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		wall.fakable = true
 		wall.fake = false
 		wall.fakable = false

@@ -34,7 +34,8 @@ func _ready() -> void:
 	interact_comp.max_interact_times = self.max_interact_times
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
-	interact_comp.reset_rotation(false)
+	interact_comp.rotation -= self.rotation
+	
 	return
 
 

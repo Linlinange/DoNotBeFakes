@@ -36,7 +36,7 @@ position = Vector2(208, 160)
 rotation = 3.1415927
 next_scene = ExtResource("4_yn3su")
 
-[node name="player" parent="." unique_id=835658768 groups=["player"] instance=ExtResource("3_t0khj")]
+[node name="player" parent="." unique_id=835658768 instance=ExtResource("3_t0khj")]
 unique_name_in_owner = true
 position = Vector2(-240, -48)
 movable = false

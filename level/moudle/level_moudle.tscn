@@ -67,7 +67,7 @@ z_index = 3
 position = Vector2(112, -160)
 label_offset = Vector2(0, 160)
 
-[node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("4_wf4p3")]
+[node name="player" parent="." unique_id=1654329773 instance=ExtResource("4_wf4p3")]
 unique_name_in_owner = true
 position = Vector2(-112, -112)
 eyes_open = false

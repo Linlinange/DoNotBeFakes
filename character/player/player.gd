@@ -23,19 +23,22 @@ const _LW = 1
 		if value == false:
 			movable = false
 			interactable = false
-		queue_redraw()
 ## 能否移动: 为false时，无法进行移动，移动设备也不会显示移动摇杆
 @export var movable: bool = true:
 	set(value):
 		movable = value
 		if value == true:
 			control = true
+		queue_redraw()
 ## 能否交互: 为false时，无法进行交互，移动设备也不会显示交互按钮
 @export var interactable: bool = true:
 	set(value):
 		interactable = value
 		if value == true:
 			control = true
+			add_to_group("interactable")
+		else:
+			remove_from_group("interactable")
 @export var view_radius: float = 128.0
 @export var view_angle: float = 45.0
 

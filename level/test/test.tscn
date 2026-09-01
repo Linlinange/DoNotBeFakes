@@ -41,7 +41,7 @@ unique_name_in_owner = true
 position = Vector2(0, 96)
 player = NodePath("../player")
 
-[node name="player" parent="." unique_id=1288617477 groups=["player"] instance=ExtResource("1_dlp0f")]
+[node name="player" parent="." unique_id=1288617477 instance=ExtResource("1_dlp0f")]
 unique_name_in_owner = true
 position = Vector2(-128, -96)
 
@@ -54,7 +54,7 @@ position = Vector2(-104, -160)
 [node name="map_mirror" parent="items_control" unique_id=963879677 node_paths=PackedStringArray("nodes_tomap") instance=ExtResource("8_t3rog")]
 position = Vector2(152, 160)
 axis = 1
-nodes_tomap = [NodePath("../../player")]
+nodes_tomap = [NodePath("../../player"), NodePath("../../Dolos_Black")]
 
 [node name="blue_mirror" parent="items_control" unique_id=632546398 instance=ExtResource("7_kioxw")]
 position = Vector2(8, 160)

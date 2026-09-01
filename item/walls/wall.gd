@@ -158,7 +158,5 @@ func _on_fake_updated() -> void:
 				base.size.x,
 				base.size.y
 			)
-			collision_layer = fake_collision_layer
 		else:
 			atlas.region = base
-			collision_layer = normal_collision_layer

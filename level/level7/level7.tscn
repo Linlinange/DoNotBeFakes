@@ -79,7 +79,7 @@ rotation = -1.5707964
 next_scene = ExtResource("5_aif4c")
 tooltip_offset = Vector2(96, 0)
 
-[node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("6_bpqdp")]
+[node name="player" parent="." unique_id=1654329773 instance=ExtResource("6_bpqdp")]
 unique_name_in_owner = true
 position = Vector2(-128, -314)
 

@@ -24,9 +24,9 @@ func _process(delta: float) -> void:
 	pass
 
 func _open_door_tips(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		dolos.speak("你需要靠近按钮\n并按下交互键才能打开门", 12.0)
 
 func _next_level_tips(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		dolos.speak("继续前进，走至出口\n并按下交互键前往下一关", 12.0)

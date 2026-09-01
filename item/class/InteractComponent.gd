@@ -24,13 +24,12 @@ extends Area2D
 ## 是否同时检测 Area2D 类型的对象: 若为true，检测Body2D对象的同时，还检测Area2D对象
 @export var detect_area: bool = false
 ## 检测对象所属组名
-@export var detect_group: StringName = "player"
+@export var detect_group: StringName = "interactable"
 
 # ========== 状态 ==========
 var object_in_range: bool = false
 var interact_times: int = 0
 var _externally_enabled: bool = true  ## 外界通过 set_interactable() 控制
-@onready var _original_rotation: float = self.rotation	## 记录初始旋转角
 
 
 # ========== 信号 ==========
@@ -57,7 +56,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not tooltip:
 		return
-	tooltip.visible = object_in_range
+	tooltip.visible = object_in_range and can_interact()
 	tooltip.global_position = _calculate_tooltip_position()
 	
 	if Input.is_action_just_pressed(input_action):
@@ -69,7 +68,10 @@ func _process(_delta: float) -> void:
 ## 尝试交互（内部调用或外部手动触发）
 func try_interact() -> void:
 	if not can_interact():
-		interact_rejected.emit(_get_reject_reason())
+		var reason = _get_reject_reason()
+		interact_rejected.emit(reason)
+		if reason == "已达交互上限":
+			tooltip.text = reason
 		return
 	
 	if interact_times < 2**31-1:
@@ -106,16 +108,6 @@ func set_tooltip_content(content: String) -> void:
 	if tooltip:
 		tooltip.text = content
 
-## 恢复初始旋转: inherit 为true时, 忽略父节点
-func reset_rotation(inherit: bool) -> bool:
-	self.rotation = _original_rotation
-	if not inherit:
-		var parent = get_parent()
-		if is_instance_of(parent, Node2D):
-			self.rotation -= parent.rotation
-			return true
-	return false
-
 # ========== 私有方法 ==========
 
 func _calculate_tooltip_position() -> Vector2:
@@ -131,7 +123,6 @@ func _get_reject_reason() -> String:
 	if not object_in_range:
 		return "不在范围内"
 	if max_interact_times >= 0 and interact_times >= max_interact_times:
-		tooltip.text = "已达交互上限"
 		return "已达交互上限"
 	if not _externally_enabled:
 		return "当前不可用"

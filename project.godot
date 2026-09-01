@@ -44,7 +44,6 @@ enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
 
 [global_group]
 
-player="玩家角色"
 button=""
 wall=""
 green=""
@@ -52,6 +51,7 @@ orange=""
 red=""
 bomb=""
 blue=""
+interactable="可进行交互"
 
 [input]
 

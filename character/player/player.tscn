@@ -135,7 +135,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_16ol0"]
 size = Vector2(31, 31)
 
-[node name="player" type="CharacterBody2D" unique_id=1654329773]
+[node name="player" type="CharacterBody2D" unique_id=1654329773 groups=["interactable"]]
 z_index = 10
 script = ExtResource("1_rkbax")
 
@@ -186,3 +186,4 @@ z_index = 5
 shape = SubResource("RectangleShape2D_16ol0")
 
 [node name="ScreenTouchContorl" parent="." unique_id=813508610 instance=ExtResource("5_g20gq")]
+visible = false

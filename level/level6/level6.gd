@@ -15,9 +15,9 @@ func _process(delta: float) -> void:
 	pass
 
 func _tip1(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		return
 
 func _shut_up(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		return

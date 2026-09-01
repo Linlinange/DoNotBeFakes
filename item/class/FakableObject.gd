@@ -1,6 +1,9 @@
 class_name FakableObject
 extends CollisionObject2D
 
+signal faked	  ## 当虚假值由 false 变为 true 时发出
+signal unfaked	  ## 当虚假值由 true 变为 false 时发出
+
 ## 虚态时的视觉表现方式
 enum VisualMode {
 	TRANSPARENT,  ## 半透明: 修改 modulate.a
@@ -53,17 +56,18 @@ func _update_fake() -> void:
 		# -1值时，不切换碰撞层
 		if fake_collision_layer != -1:
 			collision_layer = fake_collision_layer
+		faked.emit()
 	else:
 		_apply_real_appearance()
 		# 实态时总是恢复为最初缓存的正常层
 		collision_layer = _normal_collision_layer
+		unfaked.emit()
 	
 	_on_fake_updated()
 
 
 ## 应用虚态视觉表现
 func _apply_fake_appearance() -> void:
-	# print("_apply_fake_appearance")
 	match visual_mode:
 		VisualMode.TRANSPARENT:
 			if self is CanvasItem:
@@ -77,7 +81,6 @@ func _apply_fake_appearance() -> void:
 
 ## 应用实态视觉表现
 func _apply_real_appearance() -> void:
-	# print("_apply_real_appearance")
 	match visual_mode:
 		VisualMode.TRANSPARENT:
 			if self is CanvasItem:

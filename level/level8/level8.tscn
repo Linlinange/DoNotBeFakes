@@ -89,13 +89,12 @@ tooltip_offset = Vector2(96, 0)
 position = Vector2(-64, 0)
 nodes_tomap = [NodePath("../player")]
 
-[node name="player" parent="." unique_id=1654329773 groups=["player"] instance=ExtResource("5_yj76h")]
+[node name="player" parent="." unique_id=1654329773 instance=ExtResource("5_yj76h")]
 unique_name_in_owner = true
 position = Vector2(224, -16)
 movable = false
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=2051621602]
-position = Vector2(-240, 16)
 zoom = Vector2(2, 2)
 limit_left = -304
 limit_top = -208

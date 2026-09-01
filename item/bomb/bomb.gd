@@ -42,9 +42,9 @@ func _process(delta: float) -> void:
 		TransitionManager.reload_current_scene()
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		player_in_range = true
 
 func _on_body_exited(body: Node2D):
-	if body.is_in_group("player"):
+	if body is Player:
 		player_in_range = false

@@ -4,12 +4,9 @@ extends Area2D
 enum State { INACTIVED, ACTIVED }
 enum Axis { X, Y }
 
-signal state_changed(new_state: State)
 signal activated
-@warning_ignore("unused_signal") signal deactivated
+signal deactivated
 
-
-@onready var control_target: Node2D = self
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var effect_area: Area2D = $EffectArea
 @onready var audio: AudioStreamPlayer = $AudioStreamPlayer
@@ -17,14 +14,10 @@ signal activated
 
 ## 镜子当前的状态
 @export var current_state: State = State.INACTIVED
-## >=0 则 N 秒后自动关闭，-1表示无限
-@export var effect_duration: float = -1.0
 ## 映射的轴: 轴为X时，映射后y坐标关于镜子的X轴翻转；轴为Y时，映射后坐标关于x坐标关于镜子Y轴翻转
 @export var axis: Axis = Axis.X
 ## 可映射的节点
 @export var nodes_tomap: Array[Node2D] = []
-## 控制映射的玩家节点：为true时控制映射节点而不控制本体，否则控制本体而不控制节点
-@export var control_mapped: bool = false
 
 ## 最大交互次数，-1 表示无限
 @export var max_interact_times: int = -1:
@@ -49,14 +42,8 @@ signal activated
 var nodes_mapped: Array[Node2D] = []	## 已被映射的节点
 var is_transitioning: bool = false		## 是否正在切换状态: 为true时, 拒绝交互
 
-var _timer: Timer
-
 
 func _ready():
-	_timer = Timer.new()
-	_timer.one_shot = true
-	_timer.timeout.connect(_deactivate)
-	add_child(_timer)
 	_update_visual()
 
 	interact_comp.interacted.connect(interact)
@@ -75,69 +62,61 @@ func _ready():
 			mapped.global_position.x = 2*self.global_position.x - node.global_position.x
 		else:
 			mapped.global_position.y = 2*self.global_position.y - node.global_position.y
-		if node.is_in_group("player"):
-			control_target = node
-			node.control = true
-			mapped.control = false
+		if node is Player:
+			mapped.movable = false
 
 
 @warning_ignore("unused_parameter")
 func _process(delta: float):
-	
 	for i in len(nodes_mapped):
 		var node = nodes_tomap[i]
 		var mapped = nodes_mapped[i]
-		if node.is_in_group("player") and control_mapped:
-			node.global_position = mapped.global_position
-			if axis == Axis.Y:
-				node.global_position.x = 2*self.global_position.x - mapped.global_position.x
-			else:
-				node.global_position.y = 2*self.global_position.y - mapped.global_position.y
+		var reverse = node is Player and not node.movable
+		var source  = mapped if reverse else node	## 源对象
+		var target  = node if reverse else mapped	## 映射目标(映射后的对象)
+		target.global_position = source.global_position
+		if axis == Axis.Y:
+			target.global_position.x = 2 * self.global_position.x - source.global_position.x
 		else:
-			mapped.global_position = node.global_position
-			if axis == Axis.Y:
-				mapped.global_position.x = 2*self.global_position.x - node.global_position.x
-			else:
-				mapped.global_position.y = 2*self.global_position.y - node.global_position.y
+			target.global_position.y = 2 * self.global_position.y - source.global_position.y
 
 
-# ========== 公共接口 ==========
+# ========== 公共方法 ==========
 
 ## 对节点进行特殊处理:
 ## ex_children为true时, 将会递归处理此节点及其所有子节点
 @warning_ignore("shadowed_variable")
 func make_reflection(node: Node, axis: int, alpha: float = 0.5, ex_children: bool = false, tint: Color = Color.WHITE) -> void:
-	## 1. 关碰撞
-	#print(node)
-	if node is Player:
-		node.set_physics_process(false)
-	#node.set_process_input(false)
-	#node.set_process_unhandled_input(false)
-	#node.set_process_shortcut_input(false)
-	#node.set_process_unhandled_key_input(false)
+	var camera = node.get_node_or_null("Camera2D")
+	if camera:
+		node.remove_child(camera)
+		camera.queue_free()
+	
+	# 关碰撞
+	# print(node)
 	if node is CollisionObject2D:
-		node.collision_layer = 0b10
-		node.collision_mask = 0b10
+		node.collision_layer ^= 0b11
+		node.collision_mask ^= 0b11
 	if node is Area2D:
 		node.monitoring = false
 		node.monitorable = false
 	if node is CollisionShape2D or node is CollisionPolygon2D:
 		node.set_deferred("disabled", true)
 	
-	## 2. 半透明
+	# 半透明
 	if node is CanvasItem:
 		var c = tint
 		c.a = alpha
 		node.modulate = c
 	
-	## 3. 翻转
+	# 翻转
 	if node is Sprite2D or node is AnimatedSprite2D:
 		if axis == Axis.Y:
 			node.scale.x *= -1
 		else:
 			node.scale.y *= -1
 	
-	## 递归
+	# 递归
 	if not ex_children:
 		return
 	for child in node.get_children():
@@ -190,57 +169,43 @@ func get_interact_times() -> int:
 
 # ========== 私有方法 ==========
 
+## 激活
 func _activate():
 	current_state = State.ACTIVED
 	activated.emit()
-	state_changed.emit(current_state)
-	
-	if effect_duration >= 0:
-		_timer.start(effect_duration)
 	
 	# 映射节点控制
-	control_mapped = true
 	for i in len(nodes_mapped):
 		var node = nodes_tomap[i]
 		var mapped = nodes_mapped[i]
 		if node is Player:
-			node.control = false
+			node.movable = false
 			mapped.movable = true
-			mapped.interactable = true
-			control_target = mapped
-			var camera = node.get_node_or_null("Camera2D")
+			var camera: Camera2D = node.get_node_or_null("Camera2D")
 			if camera:
-				camera.reparent(mapped)
-		#mapped.queue_free()
-	#nodes_mapped.clear()
-
+				node.remove_child(camera)
+				mapped.add_child(camera)
 	_update_visual()
 
-
+## 关闭
 func _deactivate():
 	current_state = State.INACTIVED
-	state_changed.emit(current_state)
+	deactivated.emit()
 	
 	# 映射节点控制
-	control_mapped = false
 	for i in len(nodes_mapped):
 		var node = nodes_tomap[i]
 		var mapped = nodes_mapped[i]
 		if node is Player:
 			node.movable = true
-			node.interactable = true
-			mapped.control = false
-			control_target = node
-			var camera = mapped.get_node_or_null("Camera2D")
+			mapped.movable = false
+			var camera: Camera2D = mapped.get_node_or_null("Camera2D")
 			if camera:
-				camera.reparent(node)
-		#mapped.queue_free()
-	#nodes_mapped.clear()
-	
-	_timer.stop()
+				mapped.remove_child(camera)
+				node.add_child(camera)
 	_update_visual()
 
-
+## 更新动画
 func _update_visual():
 	match current_state:
 		State.INACTIVED:

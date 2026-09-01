@@ -12,6 +12,7 @@ signal turned_off
 @onready var audio: AudioStreamPlayer = $AudioStreamPlayer
 @onready var interact_comp: InteractComponent = $InteractComponent
 
+
 ## 按钮当前的状态
 @export var current_state: State = State.OFF
 
@@ -34,11 +35,11 @@ signal turned_off
 		if interact_comp:
 			interact_comp.tooltip_offset = value
 
-
 var is_transitioning: bool = false   ## 是否正在切换状态: 为true时, 拒绝交互
 
+# ========== 继承方法 ==========
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	_play_idle()
 	interact_comp.interacted.connect(interact)
@@ -46,6 +47,11 @@ func _ready():
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
 
+func _on_fake_updated() -> void:
+	if fake:
+		interact_comp.set_interactable(false)
+	else:
+		interact_comp.set_interactable(true)
 
 # ========== 公共方法 ==========
 
@@ -93,7 +99,6 @@ func interact() -> void:
 	is_transitioning = false
 	interact_comp.set_interactable(true)
 	_play_idle()
-	super._ready()
 
 ## 获取交互次数
 func get_interact_times() -> int:

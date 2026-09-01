@@ -36,10 +36,10 @@ func _process(delta: float) -> void:
 
 
 func _tip1(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		pass
 
 
 func _shut_up(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		pass

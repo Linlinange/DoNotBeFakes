@@ -34,6 +34,7 @@ extends FakableObject
 		if interact_comp:
 			interact_comp.tooltip_offset = value
 
+# ========== 继承方法 ==========
 
 func _ready() -> void:
 	super._ready()
@@ -42,6 +43,13 @@ func _ready() -> void:
 	interact_comp.max_interact_times = self.max_interact_times
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
+
+func _on_fake_updated() -> void:
+	if fake:
+		interact_comp.set_interactable(false)
+		chat.hide_immediate()
+	else:
+		interact_comp.set_interactable(true)
 
 # ========== 公共方法 ==========
 
@@ -72,8 +80,3 @@ func get_interact_times() -> int:
 ## 播放对应状态的循环待机动画
 func _play_idle() -> void:
 	return
-
-# 更新虚假值带来的影响
-func _on_fake_updated() -> void:
-	if fake:
-		chat.hide_immediate()

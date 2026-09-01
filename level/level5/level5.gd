@@ -28,31 +28,31 @@ func _process(delta: float) -> void:
 	pass
 
 func _tip1(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		dolos.speak("使用%s\n睁开或闭上双眼" % InputManager.get_key_name("switch"), 5.0)
 
 func _enter_a2(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		wall.fakable = true
 		wall.fake = true
 		wall.fakable = false
 		camera.global_position = Vector2(0, 320)
 
 func _exit_a2(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		wall.fakable = true
 		wall.fake = false
 		wall.fakable = false
 		camera.global_position = Vector2(0, 0)
 
 func _enter_a3(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		label.visible = true
 
 func _exit_a3(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		label.visible = false
 
 func _shut_up(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body is Player:
 		dolos.shut_up()
