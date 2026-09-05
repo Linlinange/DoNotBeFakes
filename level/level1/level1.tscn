@@ -24,6 +24,7 @@ script = ExtResource("1_g4g7e")
 
 [node name="floor" parent="." unique_id=1850046164 instance=ExtResource("2_g4g7e")]
 tile_map_data = PackedByteArray("AADz/wAAAAABAAQAADD6/wQAAAABAAQAAFAAAAAAAAABAAQAAAAMAAAAAAABAAQAADAGAPv/AAABAAQAAFD+//j/AAAAAAAAAAD+//v/AAAAAAEAAAABAPj/AAABAAAAAAABAPv/AAABAAEAAAA=")
+seed_value = 1
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2051621602]
 zoom = Vector2(2, 2)
@@ -32,7 +33,7 @@ rotation_smoothing_enabled = true
 
 [node name="exit" parent="." unique_id=1735267967 instance=ExtResource("2_vscsl")]
 z_index = 3
-position = Vector2(208, 160)
+position = Vector2(224, 160)
 rotation = 3.1415927
 next_scene = ExtResource("4_yn3su")
 

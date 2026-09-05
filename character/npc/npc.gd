@@ -1,7 +1,7 @@
 class_name NPC
 extends CharacterBody2D
 
-@export var player: CharacterBody2D = null
+@export var player: Node2D = null
 @export var speed: float = 180.0
 @export var eyes_open: bool = true
 @export var speaking: bool = false
@@ -17,12 +17,13 @@ var facing: String = "down"
 var eyes_time: int = randi()%240
 
 
+# ========== 继承方法 ==========
+
 func _ready() -> void:
 	if "follow" in eyes:
 		eyes.follow = self.player
 	
 	_update_eyes()
-
 
 func _process(_delta: float) -> void:
 	var current_frame = Engine.get_process_frames() % 240
@@ -36,11 +37,11 @@ func _process(_delta: float) -> void:
 		while(eyes_time<120):
 			eyes_time = randi() % 240
 	
-	# 强制结束倒计时
-	if Input.is_action_just_pressed("interact"):
-		timer.stop()
-		shut_up()
-		finished.emit()  # 发射信号
+	# 强制结束倒计时	# 已转由 InputManager 管理
+	# if Input.is_action_just_pressed("interact"):
+	# 	timer.stop()
+	# 	shut_up()
+	# 	finished.emit()  # 发射信号
 	return
 
 
@@ -89,6 +90,7 @@ func move_to(
 		.set_trans(trans_type) \
 		.set_ease(ease_type) \
 		.tween_property(self, "position", pos, move_time)
+
 
 # ========== 私有方法 ==========
 ## 输入

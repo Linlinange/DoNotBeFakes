@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://dq44dsfx71dyj" path="res://assets/shader/outline.gdshader" id="2_5u1ki"]
 [ext_resource type="Texture2D" uid="uid://dh5cd8pc56jl4" path="res://item/mirror/outline_mask.png" id="3_vgayu"]
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="4_3m24g"]
-[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="5_3m24g"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/InteractComponent.tscn" id="5_3m24g"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://assets/sound/逃离霸凌按钮音效[按下](试行).wav" id="6_3m24g"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="7_nrn4y"]
 
@@ -155,11 +155,11 @@ visible = false
 shape = SubResource("RectangleShape2D_fa4ut")
 
 [node name="EffectArea" type="Area2D" parent="." unique_id=139695148]
+visible = false
 collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectArea" unique_id=487806591]
-visible = false
 shape = SubResource("RectangleShape2D_m1cpo")
 
 [node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("5_3m24g")]

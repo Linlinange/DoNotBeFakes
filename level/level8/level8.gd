@@ -34,12 +34,8 @@ func _shut_up(body: Node2D) -> void:
 
 func _enter_a2(body: Node2D) -> void:
 	if body is Player:
-		wall.fakable = true
-		wall.fake = true
-		wall.fakable = false
+		wall.set_fake(true)
 
 func _exit_a2(body: Node2D) -> void:
 	if body is Player:
-		wall.fakable = true
-		wall.fake = false
-		wall.fakable = false
+		wall.set_fake(false)

@@ -20,6 +20,8 @@ var is_transitioning: bool = false   # 正在播放切换动画，拒绝交互
 var _interact_times: int = 0 # 交互次数 
 
 
+# ========== 继承方法 ==========
+
 func _ready():
 	_update_visual()
 
@@ -28,6 +30,23 @@ func _process(delta: float):
 	if player_in_range and Input.is_action_just_pressed("interact"):
 		interact()
 
+
+# ========== 公共方法 ==========
+
+## 检查镜子是否激活
+func is_actived() -> bool:
+	return current_state == State.ACTIVED
+
+## 获取状态
+func get_state() -> State:
+	return current_state
+
+## 获取状态名
+func get_state_name() -> String:
+	if current_state == State.ACTIVED:
+		return "ACTIVED"
+	else:
+		return "INACTIVED"
 
 ## 交互: 切换镜子状态
 func interact():
@@ -48,6 +67,9 @@ func interact():
 			await sprite.animation_finished
 			_deactivate()
 
+
+# ========== 私有方法 ==========
+
 ## 激活
 func _activate():
 	current_state = State.ACTIVED
@@ -65,7 +87,7 @@ func _activate():
 func _deactivate():
 	current_state = State.INACTIVED
 	deactivated.emit()
-	
+
 	for body in effect_area.get_overlapping_bodies():
 		if "fakable" in body:
 			body.add_to_group("mirror_controlled")
@@ -79,27 +101,10 @@ func _deactivate():
 			body.remove_from_group("mirror_controlled")
 	_update_visual()
 
-
+## 更新状态
 func _update_visual():
 	match current_state:
 		State.INACTIVED:
 			sprite.play("inactived")
 		State.ACTIVED:
 			sprite.play("actived")
-
-# ========== 公共方法 ==========
-
-## 检查镜子是否激活
-func is_actived() -> bool:
-	return current_state == State.ACTIVED
-
-## 获取状态
-func get_state() -> State:
-	return current_state
-
-## 获取状态名
-func get_state_name() -> String:
-	if current_state == State.ACTIVED:
-		return "ACTIVED"
-	else:
-		return "INACTIVED"

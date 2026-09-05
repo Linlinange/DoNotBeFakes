@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dqjd6no7gngoc"]
+
+[ext_resource type="PackedScene" uid="uid://dhsluv7smft1b" path="res://ui/background.tscn" id="1_pv2tu"]
+[ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="1_qcjyo"]
+[ext_resource type="Script" uid="uid://c54axss721wg0" path="res://level/test/level_loader.gd" id="1_s4lfh"]
+[ext_resource type="PackedScene" uid="uid://cx6866pmguvkk" path="res://ui/pause_menu/menu_bar.tscn" id="2_idwi2"]
+[ext_resource type="Theme" uid="uid://djxap6a4nyrwh" path="res://assets/theme/base_menu.tres" id="5_h23b1"]
+
+[node name="LevelLoader" type="Node2D" unique_id=1783115374]
+script = ExtResource("1_s4lfh")
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=874493257]
+layer = -1
+
+[node name="background" parent="Background" unique_id=307221863 instance=ExtResource("1_pv2tu")]
+
+[node name="player" parent="." unique_id=1654329773 instance=ExtResource("1_qcjyo")]
+unique_name_in_owner = true
+position = Vector2(16, 16)
+
+[node name="Camera2D" type="Camera2D" parent="player" unique_id=1566341157]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+rotation_smoothing_enabled = true
+
+[node name="menu_bar" parent="." unique_id=1969657292 instance=ExtResource("2_idwi2")]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="menu_bar" unique_id=1416881953]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -624.0
+offset_top = 32.0
+offset_right = -256.0
+offset_bottom = 96.0
+grow_horizontal = 0
+mouse_filter = 2
+theme = ExtResource("5_h23b1")
+bbcode_enabled = true
+text = "关卡名
+[font_size=24\\n]关卡描述[/font_size]"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

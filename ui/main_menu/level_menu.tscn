@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://clhoskp1rt6b7" path="res://ui/main_menu/level_menu.gd" id="1_cubhr"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="1_tndtp"]
 [ext_resource type="PackedScene" uid="uid://cc8kvidtnias4" path="res://ui/main_menu/level_chooser.tscn" id="2_40swp"]
+[ext_resource type="PackedScene" uid="uid://dhsluv7smft1b" path="res://ui/background.tscn" id="2_i2pvy"]
 [ext_resource type="PackedScene" uid="uid://cfda121k15hvs" path="res://level/level1/level1.tscn" id="3_pwayw"]
 [ext_resource type="PackedScene" uid="uid://8wafggfm8fnu" path="res://level/level2/level2.tscn" id="4_3yk6w"]
 [ext_resource type="PackedScene" uid="uid://3u2o80wbpd01" path="res://level/level3/level3.tscn" id="5_2w6hg"]
@@ -27,6 +28,9 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_cubhr")
 
+[node name="background" parent="." unique_id=307221863 instance=ExtResource("2_i2pvy")]
+layout_mode = 1
+
 [node name="back_button" parent="." unique_id=417104301 instance=ExtResource("7_0sqyv")]
 layout_mode = 0
 offset_left = 16.0
@@ -50,6 +54,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="floor" parent="VBoxContainer" unique_id=1850046164 instance=ExtResource("9_a0u8a")]
+visible = false
 z_index = -1
 fill_rect = Rect2i(0, -60, 200, 150)
 

@@ -14,7 +14,7 @@ signal deactivated
 
 ## 镜子当前的状态
 @export var current_state: State = State.INACTIVED
-## 映射的轴: 轴为X时，映射后y坐标关于镜子的X轴翻转；轴为Y时，映射后坐标关于x坐标关于镜子Y轴翻转
+## 映射的轴: 轴为X时，映射后坐标关于镜子的水平轴翻转；轴为Y时，映射后坐标关于镜子垂直轴翻转
 @export var axis: Axis = Axis.X
 ## 可映射的节点
 @export var nodes_tomap: Array[Node2D] = []
@@ -39,46 +39,92 @@ signal deactivated
 			interact_comp.tooltip_offset = value
 
 
-var nodes_mapped: Array[Node2D] = []	## 已被映射的节点
+var nodes_mapped: Dictionary[Node2D, Node2D] = {}	## 已映射的节点: 键为原始节点，值为映射节点
 var is_transitioning: bool = false		## 是否正在切换状态: 为true时, 拒绝交互
+var last_positions: Dictionary = {}  # Node -> Vector2
 
+
+# ========== 继承方法 ==========
 
 func _ready():
 	_update_visual()
-
 	interact_comp.interacted.connect(interact)
 	interact_comp.max_interact_times = self.max_interact_times
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
 	
-	# 创建映射节点
-	for node in nodes_tomap:
-		var mapped = node.duplicate()
-		nodes_mapped.append(mapped)
-		get_tree().current_scene.add_child.call_deferred(mapped)
-		make_reflection(mapped, axis, 0.5)
-		mapped.global_position = node.global_position
-		if axis == Axis.Y:
-			mapped.global_position.x = 2*self.global_position.x - node.global_position.x
+	# 排除特殊元素，并创建映射节点
+	for tomap in nodes_tomap:
+		if tomap == null:
+			push_warning("不允许映射空元素，已跳过:%s" % tomap)
+			continue
+		if tomap is MapMirror:
+			push_warning("不允许映射映射镜，已跳过:%s" % tomap)
+			continue
+		if tomap in nodes_mapped:
+			push_warning("不允许重复映射，已跳过:%s" % tomap)
+			continue
+		
+		# 节点复制
+		var mapped: Node
+		if tomap is FakableObject:
+			mapped = SceneManager.copy(tomap)
+		elif tomap is ButtonController:
+			mapped = SceneManager.copy(tomap)
 		else:
-			mapped.global_position.y = 2*self.global_position.y - node.global_position.y
-		if node is Player:
+			mapped = tomap.duplicate()
+
+		# 复制失败过滤
+		if mapped == null:
+			push_warning("无法重复节点，已跳过:%s" % mapped)
+			continue
+		
+		# 通用节点设置
+		nodes_mapped[tomap] = mapped
+		get_tree().current_scene.add_child.call_deferred(mapped)
+		mapped.global_position = tomap.global_position
+		if axis == Axis.Y:
+			mapped.global_position.x = 2*self.global_position.x - tomap.global_position.x
+		else:
+			mapped.global_position.y = 2*self.global_position.y - tomap.global_position.y
+		
+		# 特殊节点设置
+		if tomap is Player:
 			mapped.movable = false
+			make_reflection(mapped, axis, 0.5)
+		elif tomap is FakableObject:
+			mapped.set_fake(!mapped.fake)
+		else:
+			make_reflection(mapped, axis, 0.5)
 
 
 @warning_ignore("unused_parameter")
 func _process(delta: float):
-	for i in len(nodes_mapped):
-		var node = nodes_tomap[i]
-		var mapped = nodes_mapped[i]
-		var reverse = node is Player and not node.movable
-		var source  = mapped if reverse else node	## 源对象
-		var target  = node if reverse else mapped	## 映射目标(映射后的对象)
+	for tomap in nodes_mapped.keys():
+		var mapped = nodes_mapped[tomap]
+		var t_moved = last_positions.has(tomap) and tomap.global_position != last_positions[tomap]
+		var m_moved = last_positions.has(mapped) and mapped.global_position != last_positions[mapped]
+
+		var source  = tomap if (t_moved or not m_moved) else mapped	## 源对象
+		var target  = mapped if (t_moved or not m_moved) else tomap	## 映射目标(映射后的对象)
+
+		# 映射坐标关于镜子对称轴翻转
 		target.global_position = source.global_position
 		if axis == Axis.Y:
 			target.global_position.x = 2 * self.global_position.x - source.global_position.x
 		else:
 			target.global_position.y = 2 * self.global_position.y - source.global_position.y
+
+		last_positions[tomap]   = tomap.global_position
+		last_positions[mapped]  = mapped.global_position
+
+		if tomap is Player:
+			if tomap.movable == mapped.movable and tomap.movable == false:
+				tooltip_content = "假副本只能通过\n所属映射镜切换对象"
+				interact_comp.set_interactable(false)
+			else:
+				tooltip_content = "按%s切换控制对象" % InputManager.get_key_name("interact")
+				interact_comp.set_interactable(true)
 
 
 # ========== 公共方法 ==========
@@ -87,21 +133,21 @@ func _process(delta: float):
 ## ex_children为true时, 将会递归处理此节点及其所有子节点
 @warning_ignore("shadowed_variable")
 func make_reflection(node: Node, axis: int, alpha: float = 0.5, ex_children: bool = false, tint: Color = Color.WHITE) -> void:
+	# 移除多余的摄影机
 	var camera = node.get_node_or_null("Camera2D")
 	if camera:
 		node.remove_child(camera)
 		camera.queue_free()
 	
-	# 关碰撞
+	# 深复制资源
+	if node is Sprite2D and node.texture:
+		node.texture = node.texture.duplicate()
+	
+	# 反转碰撞
 	# print(node)
 	if node is CollisionObject2D:
 		node.collision_layer ^= 0b11
 		node.collision_mask ^= 0b11
-	if node is Area2D:
-		node.monitoring = false
-		node.monitorable = false
-	if node is CollisionShape2D or node is CollisionPolygon2D:
-		node.set_deferred("disabled", true)
 	
 	# 半透明
 	if node is CanvasItem:
@@ -156,6 +202,28 @@ func interact():
 			sprite.play("inactive")
 			await sprite.animation_finished
 			_deactivate()
+
+	# 映射节点控制
+	for tomap in nodes_mapped.keys():
+		var mapped = nodes_mapped[tomap]
+		if tomap is Player:
+			if tomap.movable == mapped.movable:
+				continue
+			
+			if is_actived():
+				mapped.movable = true
+				tomap.movable = false
+				var camera: Camera2D = tomap.get_node_or_null("Camera2D")
+				if camera:
+					tomap.remove_child(camera)
+					mapped.add_child(camera)
+			else:
+				tomap.movable = true
+				mapped.movable = false
+				var camera: Camera2D = mapped.get_node_or_null("Camera2D")
+				if camera:
+					mapped.remove_child(camera)
+					tomap.add_child(camera)
 	
 	is_transitioning = false
 	interact_comp.set_interactable(true)
@@ -167,45 +235,22 @@ func get_interact_times() -> int:
 	else:
 		return -1
 
+
 # ========== 私有方法 ==========
 
 ## 激活
 func _activate():
 	current_state = State.ACTIVED
 	activated.emit()
-	
-	# 映射节点控制
-	for i in len(nodes_mapped):
-		var node = nodes_tomap[i]
-		var mapped = nodes_mapped[i]
-		if node is Player:
-			node.movable = false
-			mapped.movable = true
-			var camera: Camera2D = node.get_node_or_null("Camera2D")
-			if camera:
-				node.remove_child(camera)
-				mapped.add_child(camera)
 	_update_visual()
 
 ## 关闭
 func _deactivate():
 	current_state = State.INACTIVED
 	deactivated.emit()
-	
-	# 映射节点控制
-	for i in len(nodes_mapped):
-		var node = nodes_tomap[i]
-		var mapped = nodes_mapped[i]
-		if node is Player:
-			node.movable = true
-			mapped.movable = false
-			var camera: Camera2D = mapped.get_node_or_null("Camera2D")
-			if camera:
-				mapped.remove_child(camera)
-				node.add_child(camera)
 	_update_visual()
 
-## 更新动画
+## 更新状态
 func _update_visual():
 	match current_state:
 		State.INACTIVED:

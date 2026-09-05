@@ -20,9 +20,7 @@ func _ready() -> void:
 			continue
 		elif str(clue.id) in json:
 			if json[str(clue.id)] == true:
-				clue.fakable = true
-				clue.fake = false
-				clue.fakable = false
+				clue.set_fake(false)
 		else:
 			print("Clue的ID为%s 可能是配置有误 或 单纯存档无对应的记录" % clue.id)
 			json[str(clue.id)] = false

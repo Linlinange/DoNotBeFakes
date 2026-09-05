@@ -42,14 +42,29 @@ enum VisualMode {
 @onready var _normal_collision_layer: int = collision_layer
 
 
+# ========== 继承方法 ==========
+
 func _ready() -> void:
 	_update_fake()
 
+# ========== 公共方法 ==========
 
-# ========== 核心方法 ==========
+# 子类在交互前可以用这个判断，不用自己写 `if not fake`
+## 检查当前是否处于可用（实态）状态
+func is_functional() -> bool:
+	return not fake
 
-## 更新虚态/实态的视觉与物理表现
+## 设置虚假值: 此方法会忽略fakable带来的影响
+func set_fake(_fake: bool) -> void:
+	var tmp = fakable
+	fakable = true
+	fake = _fake
+	fakable = tmp
+	# _update_fake.call_deferred()
+
+# ========== 私有方法 ==========
 # 子类一般不需要重写这个，去重写下面的钩子
+## 更新虚态/实态的视觉与物理表现
 func _update_fake() -> void:
 	if fake:
 		_apply_fake_appearance()
@@ -65,7 +80,6 @@ func _update_fake() -> void:
 	
 	_on_fake_updated()
 
-
 ## 应用虚态视觉表现
 func _apply_fake_appearance() -> void:
 	match visual_mode:
@@ -77,7 +91,6 @@ func _apply_fake_appearance() -> void:
 				self.visible = false
 		VisualMode.CUSTOM:
 			_on_apply_fake()
-
 
 ## 应用实态视觉表现
 func _apply_real_appearance() -> void:
@@ -92,13 +105,7 @@ func _apply_real_appearance() -> void:
 			_on_apply_real()
 
 
-# 子类在交互前可以用这个判断，不用自己写 `if not fake`
-## 检查当前是否处于可用（实态）状态
-func is_functional() -> bool:
-	return not fake
-
-
-# ========== 子类可重写钩子 ==========
+# ----- 子类可重写钩子 -----
 
 # 例如 Wall 的纹理偏移
 ## CUSTOM 模式下的虚态表现

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="1_dlp0f"]
 [ext_resource type="Script" uid="uid://n6l7tndaobea" path="res://level/test/test.gd" id="1_omxvp"]
 [ext_resource type="PackedScene" uid="uid://3g3vqefvs52y" path="res://item/floor/floor.tscn" id="2_bdtrp"]
+[ext_resource type="PackedScene" uid="uid://dhsluv7smft1b" path="res://ui/background.tscn" id="2_m6bpw"]
 [ext_resource type="PackedScene" uid="uid://cfda121k15hvs" path="res://level/level1/level1.tscn" id="3_c2sbp"]
 [ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="3_sywkh"]
 [ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="3_wp51n"]
@@ -12,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://c8fwgsk3n81qg" path="res://item/bomb/bomb.tscn" id="7_jux7t"]
 [ext_resource type="PackedScene" uid="uid://bvfdrlka3d8kf" path="res://item/mirror/bule_mirror.tscn" id="7_kioxw"]
 [ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="7_wp51n"]
+[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="8_ardm5"]
 [ext_resource type="PackedScene" uid="uid://3a3l0jp15ifr" path="res://item/mirror/map_mirror.tscn" id="8_t3rog"]
 [ext_resource type="PackedScene" uid="uid://dtwhf5buux3rn" path="res://item/walls/red_wall.tscn" id="10_o28ph"]
 [ext_resource type="PackedScene" uid="uid://ct0nb3fjo7eko" path="res://item/walls/orange_wall.tscn" id="11_131x2"]
@@ -23,7 +25,13 @@
 [node name="test" type="Node2D" unique_id=860938987]
 script = ExtResource("1_omxvp")
 
+[node name="Background" type="CanvasLayer" parent="." unique_id=1710263471]
+layer = -1
+
+[node name="background" parent="Background" unique_id=307221863 instance=ExtResource("2_m6bpw")]
+
 [node name="floor" parent="." unique_id=1850046164 instance=ExtResource("2_bdtrp")]
+fill_rect = Rect2i(-5, -4, 10, 8)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2051621602]
 zoom = Vector2(2, 2)
@@ -32,7 +40,7 @@ rotation_smoothing_enabled = true
 
 [node name="exit" parent="." unique_id=1735267967 instance=ExtResource("3_sywkh")]
 z_index = 3
-position = Vector2(160, -80)
+position = Vector2(160, -96)
 rotation = 1.5707964
 next_scene = ExtResource("3_c2sbp")
 
@@ -46,15 +54,20 @@ unique_name_in_owner = true
 position = Vector2(-128, -96)
 
 [node name="bomb" parent="." unique_id=97648337 instance=ExtResource("7_jux7t")]
-position = Vector2(112, 80)
+position = Vector2(128, 99)
 
 [node name="items_control" type="Node2D" parent="." unique_id=408810981]
 position = Vector2(-104, -160)
+script = ExtResource("8_ardm5")
 
 [node name="map_mirror" parent="items_control" unique_id=963879677 node_paths=PackedStringArray("nodes_tomap") instance=ExtResource("8_t3rog")]
-position = Vector2(152, 160)
+position = Vector2(168, 128)
 axis = 1
-nodes_tomap = [NodePath("../../player"), NodePath("../../Dolos_Black")]
+nodes_tomap = [NodePath("../../player"), NodePath("../../Dolos_Black"), null, NodePath("../../player"), NodePath("."), NodePath("../green_item")]
+
+[node name="map_mirror2" parent="items_control" unique_id=48841346 node_paths=PackedStringArray("nodes_tomap") instance=ExtResource("8_t3rog")]
+position = Vector2(136, 224)
+nodes_tomap = [NodePath("../../player")]
 
 [node name="blue_mirror" parent="items_control" unique_id=632546398 instance=ExtResource("7_kioxw")]
 position = Vector2(8, 160)
@@ -70,12 +83,16 @@ walls = [NodePath("green_wall")]
 [node name="green_button" parent="items_control/green_item" unique_id=1442932112 instance=ExtResource("7_wp51n")]
 position = Vector2(-96, -96)
 max_interact_times = 1
+fake = true
+fakable = true
 
 [node name="green_wall" parent="items_control/green_item" unique_id=1183979035 groups=["green"] instance=ExtResource("6_dshje")]
-position = Vector2(0, -96)
+position = Vector2(32, -112)
+size = Vector2(32, 64)
+anchor = Vector2(0.5, 0)
 
 [node name="test_wall" parent="items_control" unique_id=295473202 instance=ExtResource("6_dshje")]
-position = Vector2(40, 96)
+position = Vector2(40, 80)
 size = Vector2(64, 64)
 fake = true
 fakable = true
@@ -92,7 +109,7 @@ size = Vector2(32, 32)
 tile_map_data = PackedByteArray("AAAMAPf/AAACAAAAAAAMAPj/AAACAAEAAAAMAPn/AAACAAEAAAAMAPr/AAACAAEAAAAMAPv/AAACAAEAAAAMAPz/AAACAAEAAAAMAP3/AAACAAEAAAAMAP7/AAACAAIAAAD///f/AAABAAAAAAD///j/AAABAAIAAAD//wcAAAABAAAAAAD//wgAAAABAAIAAAAAAPf/AAABAAAAAAAAAPj/AAABAAIAAAAAAAcAAAABAAAAAAAAAAgAAAABAAIAAAD1//f/AAAAAAAAAAD1//j/AAAAAAEAAAD1//n/AAAAAAEAAAD1//r/AAAAAAEAAAD1//v/AAAAAAEAAAD1//z/AAAAAAEAAAD1//3/AAAAAAEAAAD1//7/AAAAAAEAAAD1////AAAAAAEAAAD1/wAAAAAAAAEAAAD1/wEAAAAAAAEAAAD1/wIAAAAAAAEAAAD1/wMAAAAAAAEAAAD1/wQAAAAAAAEAAAD1/wUAAAAAAAEAAAD1/wYAAAAAAAEAAAD1/wcAAAAAAAEAAAD1/wgAAAAAAAIAAAD2//f/AAABAAAAAAD2//j/AAADAAAAAAD2//n/AAACAAEAAAD2//r/AAACAAEAAAD2//v/AAACAAEAAAD2//z/AAACAAEAAAD2//3/AAACAAEAAAD2//7/AAACAAEAAAD2////AAACAAEAAAD2/wAAAAACAAEAAAD2/wEAAAACAAEAAAD2/wIAAAACAAEAAAD2/wMAAAACAAEAAAD2/wQAAAACAAEAAAD2/wUAAAACAAEAAAD2/wYAAAACAAEAAAD2/wcAAAADAAEAAAD2/wgAAAABAAIAAAD3//f/AAABAAAAAAD3//j/AAABAAIAAAD3/wcAAAABAAAAAAD3/wgAAAABAAIAAAD4//f/AAABAAAAAAD4//j/AAABAAIAAAD4/wcAAAABAAAAAAD4/wgAAAABAAIAAAD5//f/AAABAAAAAAD5//j/AAABAAIAAAD5/wcAAAABAAAAAAD5/wgAAAABAAIAAAD6//f/AAABAAAAAAD6//j/AAABAAIAAAD6/wcAAAABAAAAAAD6/wgAAAABAAIAAAD7//f/AAABAAAAAAD7//j/AAABAAIAAAD7/wcAAAABAAAAAAD7/wgAAAABAAIAAAD8//f/AAABAAAAAAD8//j/AAABAAIAAAD8/wcAAAABAAAAAAD8/wgAAAABAAIAAAD9//f/AAABAAAAAAD9//j/AAABAAIAAAD9/wcAAAABAAAAAAD9/wgAAAABAAIAAAD+//f/AAABAAAAAAD+//j/AAABAAIAAAD+/wcAAAABAAAAAAD+/wgAAAABAAIAAAABAPf/AAABAAAAAAABAPj/AAABAAIAAAABAAcAAAABAAAAAAABAAgAAAABAAIAAAACAPf/AAABAAAAAAACAPj/AAABAAIAAAACAAcAAAABAAAAAAACAAgAAAABAAIAAAADAPf/AAABAAAAAAADAPj/AAABAAIAAAADAAcAAAABAAAAAAADAAgAAAABAAIAAAAEAPf/AAABAAAAAAAEAPj/AAABAAIAAAAEAAcAAAABAAAAAAAEAAgAAAABAAIAAAAFAPf/AAABAAAAAAAFAPj/AAABAAIAAAAFAAcAAAABAAAAAAAFAAgAAAABAAIAAAAGAPf/AAABAAAAAAAGAPj/AAABAAIAAAAGAAcAAAABAAAAAAAGAAgAAAABAAIAAAAHAPf/AAABAAAAAAAHAPj/AAABAAIAAAAHAAcAAAABAAAAAAAHAAgAAAABAAIAAAAIAPf/AAABAAAAAAAIAPj/AAABAAIAAAAIAAcAAAABAAAAAAAIAAgAAAABAAIAAAAJAPf/AAABAAAAAAAJAPj/AAABAAIAAAAJAAAAAAAAAAEAAAAJAAEAAAAAAAEAAAAJAAIAAAAAAAEAAAAJAAMAAAAAAAEAAAAJAAQAAAAAAAEAAAAJAAUAAAAAAAEAAAAJAAYAAAAAAAEAAAAJAAcAAAAEAAEAAAAJAAgAAAABAAIAAAAKAPf/AAABAAAAAAAKAPj/AAABAAIAAAAKAAAAAAACAAEAAAAKAAEAAAACAAEAAAAKAAIAAAACAAEAAAAKAAMAAAACAAEAAAAKAAQAAAACAAEAAAAKAAUAAAACAAEAAAAKAAYAAAACAAEAAAAKAAcAAAACAAEAAAAKAAgAAAACAAIAAAALAPf/AAABAAAAAAALAPj/AAAEAAAAAAAJAP3/AAAAAAAAAAAJAP7/AAAAAAEAAAAJAP//AAAAAAEAAAAKAP3/AAABAAAAAAAKAP7/AAADAAAAAAAKAP//AAACAAEAAAALAPr/AAAAAAEAAAALAPv/AAAAAAEAAAALAPz/AAAAAAEAAAALAP3/AAAEAAEAAAALAP7/AAABAAIAAAALAPn/AAAAAAEAAAA=")
 
 [node name="clue" parent="." unique_id=543636809 instance=ExtResource("16_cl8d2")]
-position = Vector2(-112, 80)
+position = Vector2(-128, 64)
 
 [node name="item_layer" type="CanvasLayer" parent="." unique_id=1064628789]
 scale = Vector2(0.5, 0.5)

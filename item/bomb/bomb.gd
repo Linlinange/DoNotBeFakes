@@ -14,6 +14,9 @@ extends FakableObject
 ## 爆炸后等待多久重开（秒）
 @export var restart_delay: float = 1.0
 
+
+# ========== 继承方法 ==========
+
 func _ready() -> void:
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
@@ -40,6 +43,9 @@ func _process(delta: float) -> void:
 		# 等待并重载当前场景
 		await get_tree().create_timer(restart_delay).timeout
 		TransitionManager.reload_current_scene()
+
+
+# ========== 私有方法 ==========
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:

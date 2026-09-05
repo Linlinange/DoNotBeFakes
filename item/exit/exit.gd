@@ -21,7 +21,7 @@ extends Area2D
 		if interact_comp:
 			interact_comp.tooltip_content = value
 ## 提示偏移
-@export var tooltip_offset: Vector2 = Vector2(0, -32):
+@export var tooltip_offset: Vector2 = Vector2(16, -32):
 	set(value):
 		tooltip_offset = value
 		if interact_comp:
@@ -34,7 +34,7 @@ func _ready() -> void:
 	interact_comp.max_interact_times = self.max_interact_times
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
-	interact_comp.rotation -= self.rotation
+	interact_comp.reset_rotation(false)
 	
 	return
 

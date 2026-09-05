@@ -27,8 +27,6 @@ extends FakableObject
 		
 		_start_size_tween(target)
 
-
-# ========== 动画参数 ==========
 @export_group("动画参数")
 @export var tween_duration: float = 0.3
 @export var tween_trans: Tween.TransitionType = Tween.TRANS_CUBIC
@@ -44,15 +42,14 @@ extends FakableObject
 
 # ========== 内部状态 ==========
 var _tween: Tween
-
 var _display_size: Vector2 = Vector2(48, 48):
 	set(v):
 		_display_size = v
 		if is_node_ready():
 			update_table()
+var _normal_regions: Dictionary = {}	## 缓存：节点名 → 正常状态的 region.x
 
-# 缓存：节点名 → 正常状态的 region.x
-var _normal_regions: Dictionary = {}
+# ========== 继承方法 ==========
 
 func _ready() -> void:
 	if collision_shape.shape:
@@ -68,17 +65,7 @@ func _ready() -> void:
 	super._ready()
 
 
-func _start_size_tween(target: Vector2) -> void:
-	if _tween and _tween.is_valid():
-		_tween.kill()
-	
-	_tween = create_tween()
-	_tween.set_trans(tween_trans)
-	_tween.set_ease(tween_ease)
-	
-	_tween.tween_property(self, "_display_size:x", target.x, tween_duration)
-	_tween.parallel().tween_property(self, "_display_size:y", target.y, tween_duration)
-
+# ========== 公共方法 ==========
 
 ## 更新尺寸
 func update_table() -> void:
@@ -130,6 +117,21 @@ func update_table() -> void:
 			(0.5 - anchor.x) * w,
 			(0.5 - anchor.y) * h
 		)
+
+
+# ========== 私有方法 ==========
+
+func _start_size_tween(target: Vector2) -> void:
+	if _tween and _tween.is_valid():
+		_tween.kill()
+	
+	_tween = create_tween()
+	_tween.set_trans(tween_trans)
+	_tween.set_ease(tween_ease)
+	
+	_tween.tween_property(self, "_display_size:x", target.x, tween_duration)
+	_tween.parallel().tween_property(self, "_display_size:y", target.y, tween_duration)
+
 
 # 通用定位：norm 是 0~1 网格位置，offset 是纹理中心微调
 func _set_piece(node: Sprite2D, norm: Vector2, offset: Vector2) -> void:

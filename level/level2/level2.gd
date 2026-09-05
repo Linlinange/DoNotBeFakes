@@ -36,9 +36,7 @@ func _process(delta: float) -> void:
 	else:
 		if t==3 and dolos.position == Vector2(48, 96):
 			t += 1
-			clue.fakable = true
-			clue.fake = true
-			clue.fakable = false
+			clue.set_fake(true)
 	pass
 
 

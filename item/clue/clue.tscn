@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="3_hvbrj"]
 [ext_resource type="Texture2D" uid="uid://dke1qth8brxuu" path="res://item/clue/clue.png" id="4_f5sfe"]
 [ext_resource type="PackedScene" uid="uid://g67oilwkae2p" path="res://ui/bar/chat_bubble.tscn" id="6_hvbrj"]
-[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="7_7ieuf"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/InteractComponent.tscn" id="7_7ieuf"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://assets/sound/逃离霸凌按钮音效[按下](试行).wav" id="8_7ieuf"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="9_ysi3q"]
 

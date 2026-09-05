@@ -3,8 +3,12 @@
 [ext_resource type="Script" uid="uid://bgfexs5l6af0j" path="res://character/player/player.gd" id="1_rkbax"]
 [ext_resource type="Texture2D" uid="uid://vte8bd36aom5" path="res://character/player/eyes.png" id="3_g1dw6"]
 [ext_resource type="Script" uid="uid://c257uiwodq5ag" path="res://character/player/eyes.gd" id="4_yw30f"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/InteractComponent.tscn" id="5_eu8pa"]
 [ext_resource type="PackedScene" uid="uid://dm3wjgsvvo4yx" path="res://ui/touch_screen/screentouch_contorl.tscn" id="5_g20gq"]
 [ext_resource type="Script" uid="uid://dkf1bxsli0wli" path="res://character/player/view_area.gd" id="5_qjkh3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eu8pa"]
+size = Vector2(48, 48)
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_rkbax"]
 _data = PackedByteArray("AAADAAUAAAABAAAAIAAAACAAAABIAAAAUklGRkAAAABXRUJQVlA4TDMAAAAvH8AHAA8w//M///MfeFASSZIzDk7ySjwJD49+gBEnARH9HweAtbc+05NWc60ILcsHPwAA")
@@ -138,6 +142,14 @@ size = Vector2(31, 31)
 [node name="player" type="CharacterBody2D" unique_id=1654329773 groups=["interactable"]]
 z_index = 10
 script = ExtResource("1_rkbax")
+
+[node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("5_eu8pa")]
+role = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=186407090]
+visible = false
+shape = SubResource("RectangleShape2D_eu8pa")
+debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
 
 [node name="sprite" type="Node2D" parent="." unique_id=488299800]
 

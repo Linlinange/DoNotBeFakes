@@ -1,51 +1,10 @@
-[gd_scene format=4 uid="uid://ck5uoo21n4j14"]
+[gd_scene format=3 uid="uid://ck5uoo21n4j14"]
 
 [ext_resource type="Script" uid="uid://5u7miv8gfec1" path="res://item/exit/exit.gd" id="1_gcmrs"]
-[ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="1_ij0ye"]
-[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/interact_component.tscn" id="3_g1gbr"]
+[ext_resource type="TileSet" uid="uid://bbe8dt7luira2" path="res://assets/tile/floor_tile_set.tres" id="2_g1gbr"]
+[ext_resource type="PackedScene" uid="uid://cuejqh807hjws" path="res://item/class/InteractComponent.tscn" id="3_g1gbr"]
 [ext_resource type="AudioStream" uid="uid://bu04hr0agueue" path="res://assets/sound/逃离霸凌按钮音效[按下](试行).wav" id="4_iq010"]
 [ext_resource type="Script" uid="uid://c4mpj4u6e3e88" path="res://assets/sound/SFX.gd" id="5_knyve"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jltcj"]
-texture = ExtResource("1_ij0ye")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-0:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-1:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:1/0 = 0
-4:0/size_in_atlas = Vector2i(2, 1)
-4:0/0 = 0
-5:1/0 = 0
-5:2/0 = 0
-4:2/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-2:3/0 = 0
-1:3/0 = 0
-0:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-6:0/0 = 0
-6:1/0 = 0
-7:1/0 = 0
-7:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_3yglx"]
-sources/0 = SubResource("TileSetAtlasSource_jltcj")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3yglx"]
 size = Vector2(64, 32)
@@ -57,17 +16,20 @@ size = Vector2(64, 32)
 script = ExtResource("1_gcmrs")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1999610549]
-tile_map_data = PackedByteArray("AAD/////AAAGAAAAAAD//wAAAAAGAAEAAAAAAP//AAAHAAAAAAAAAAAAAAAHAAEAAAD+////AAAAAAAAAAABAP//AAABAAAAAAD+/wAAAAAEAAMAAAABAAAAAAAFAAMAAAA=")
-tile_set = SubResource("TileSet_3yglx")
+position = Vector2(-16, -16)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0)
+tile_set = ExtResource("2_g1gbr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=231783167]
 visible = false
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_3yglx")
 
 [node name="InteractComponent" parent="." unique_id=1402056091 instance=ExtResource("3_g1gbr")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractComponent" unique_id=1788579076]
 visible = false
+position = Vector2(16, 0)
 shape = SubResource("RectangleShape2D_j6twb")
 debug_color = Color(0.23, 0.9085002, 0.92, 0.41960785)
 

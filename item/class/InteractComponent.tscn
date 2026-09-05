@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://cuejqh807hjws"]
 
-[ext_resource type="Script" uid="uid://brbfchtmpsec2" path="res://item/class/InteractComponent.gd" id="1_o8rw4"]
+[ext_resource type="Script" uid="uid://dstvg1y628bso" path="res://item/class/InteractComponent.gd" id="1_o8rw4"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="2_jitfi"]
+[ext_resource type="Theme" uid="uid://djxap6a4nyrwh" path="res://assets/theme/base_menu.tres" id="2_tkhkt"]
 
 [node name="InteractComponent" type="Area2D" unique_id=1402056091]
 z_index = 6
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_o8rw4")
-max_interact_times = 1
 
 [node name="tooltip" type="RichTextLabel" parent="." unique_id=1356528923]
 visible = false
@@ -16,6 +16,7 @@ offset_right = 140.0
 offset_bottom = 37.0
 scale = Vector2(0.5, 0.5)
 mouse_filter = 2
+theme = ExtResource("2_tkhkt")
 theme_override_fonts/normal_font = ExtResource("2_jitfi")
 theme_override_font_sizes/normal_font_size = 36
 bbcode_enabled = true

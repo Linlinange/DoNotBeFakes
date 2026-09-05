@@ -33,16 +33,12 @@ func _tip1(body: Node2D) -> void:
 
 func _enter_a2(body: Node2D) -> void:
 	if body is Player:
-		wall.fakable = true
-		wall.fake = true
-		wall.fakable = false
+		wall.set_fake(true)
 		camera.global_position = Vector2(0, 320)
 
 func _exit_a2(body: Node2D) -> void:
 	if body is Player:
-		wall.fakable = true
-		wall.fake = false
-		wall.fakable = false
+		wall.set_fake(false)
 		camera.global_position = Vector2(0, 0)
 
 func _enter_a3(body: Node2D) -> void:

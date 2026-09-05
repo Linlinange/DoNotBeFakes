@@ -30,6 +30,7 @@ run/emulate_touch_from_mouse=true
 TransitionManager="*uid://dwtb2v8cjvoag"
 BgmManager="*uid://cmr8bwv1u2k4k"
 AudioManager="*uid://nq26iricyo6o"
+InputManager="*uid://gclsfyndlck4"
 
 [display]
 
@@ -98,7 +99,6 @@ switch={
 [input_devices]
 
 pointing/android/enable_long_press_as_right_click=true
-pointing/emulate_touch_from_mouse=true
 
 [physics]
 

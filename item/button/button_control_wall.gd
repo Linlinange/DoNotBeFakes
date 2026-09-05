@@ -1,3 +1,4 @@
+class_name ButtonController
 extends Node2D
 
 

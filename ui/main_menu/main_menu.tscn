@@ -3,11 +3,10 @@
 [ext_resource type="Shader" uid="uid://bbuct2kvhktap" path="res://assets/shader/color.gdshader" id="1_8gmgf"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="1_or6mk"]
 [ext_resource type="Script" uid="uid://biwk4rtqfaxxm" path="res://ui/main_menu/main_menu.gd" id="1_umht6"]
+[ext_resource type="PackedScene" uid="uid://dhsluv7smft1b" path="res://ui/background.tscn" id="2_4e78x"]
 [ext_resource type="Script" uid="uid://dek5sqeqvajwh" path="res://ui/main_menu/start_game.gd" id="2_4gkdq"]
-[ext_resource type="PackedScene" uid="uid://3g3vqefvs52y" path="res://item/floor/floor.tscn" id="2_gvx18"]
 [ext_resource type="Script" uid="uid://bdn461s68cn85" path="res://ui/main_menu/organize_clues.gd" id="3_8gmgf"]
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="4_4gkdq"]
-[ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="5_8gmgf"]
 [ext_resource type="PackedScene" uid="uid://vtyopipr3o0h" path="res://item/bomb/red_bomb.tscn" id="6_4aijq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h2671"]
@@ -33,6 +32,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_umht6")
 
+[node name="background" parent="." unique_id=307221863 instance=ExtResource("2_4e78x")]
+layout_mode = 1
+
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=467391332]
 layout_mode = 1
 anchors_preset = 15
@@ -49,11 +51,6 @@ size_flags_vertical = 3
 [node name="Control" type="Control" parent="VBoxContainer/CenterContainer" unique_id=1947481968]
 layout_mode = 2
 
-[node name="floor" parent="VBoxContainer/CenterContainer/Control" unique_id=1850046164 instance=ExtResource("2_gvx18")]
-z_index = -1
-position = Vector2(-600, -191)
-fill_rect = Rect2i(-60, -60, 200, 150)
-
 [node name="player" parent="VBoxContainer/CenterContainer/Control" unique_id=1654329773 instance=ExtResource("4_4gkdq")]
 unique_name_in_owner = true
 position = Vector2(-271, -95)
@@ -61,12 +58,8 @@ scale = Vector2(3, 3)
 control = false
 view_radius = 96.0
 
-[node name="items_control" type="Node2D" parent="VBoxContainer/CenterContainer/Control" unique_id=2088184606]
-position = Vector2(-600, -191)
-script = ExtResource("5_8gmgf")
-
-[node name="red_bomb" parent="VBoxContainer/CenterContainer/Control/items_control" unique_id=97648337 instance=ExtResource("6_4aijq")]
-position = Vector2(88, 96)
+[node name="red_bomb" parent="VBoxContainer/CenterContainer/Control" unique_id=97648337 instance=ExtResource("6_4aijq")]
+position = Vector2(-512, -95)
 scale = Vector2(3, 3)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer" unique_id=1905397632]

@@ -1,41 +1,39 @@
+class_name Floor
 extends TileMapLayer
 
-# ========== 参数 ==========
+
 ## 随机种子。-1 表示每次自动生成随机种子，其他值固定生成
 @export var seed_value: int = -1
-
 ## 瓦片集里的 Source ID（通常第一个 Atlas 是 0）
 @export var source_id: int = 0
-
 ## 候选瓦片（Atlas 坐标）
 @export var tile_options: Array[Vector2i] = [
+	Vector2i(0, 0), 
+	Vector2i(0, 1), 
+	Vector2i(0, 2), 
+	Vector2i(0, 3), 
+	Vector2i(1, 2), 
+	Vector2i(1, 3), 
 	Vector2i(0, 4), 
-	Vector2i(2, 4), 
-	Vector2i(3, 4), 
-	Vector2i(0, 5), 
-	Vector2i(1, 5), 
-	Vector2i(2, 5)
+	Vector2i(0, 5)
 ]
-
 ## 与 tile_options 一一对应的权重，长度不足时自动补 1.0
 @export var tile_weights: Array[float] = [
-	15.0, 
-	5.0, 
-	5.0, 
+	50.0, 
+	10.0, 
+	4.0, 
+	1.0, 
+	4.0, 
 	1.0, 
 	1.0, 
-	1.0, 
+	1.0
 ]
-
 ## 填充区域（单元格坐标）
 @export var fill_rect: Rect2i = Rect2i(-60, -40, 120, 80)
-
 ## 生成前是否清空图层
 @export var clear_before_fill: bool = true
-
 ## 是否只铺空白格子（不覆盖已有瓦片）
 @export var only_fill_empty: bool = false
-
 ## 进入游戏时自动生成
 @export var auto_generate: bool = true
 

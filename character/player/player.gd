@@ -8,13 +8,22 @@ const _FILL = Color("ffdd1170")
 const _LINE = Color("ffdd11b3")
 const _LW = 1
 
+signal view_body_entered(body: Node2D)
+signal view_body_exited(body: Node2D)
+signal view_area_entered(area: Area2D)
+signal view_area_exited(area: Area2D)
+
 @onready var eyes: AnimatedSprite2D = $sprite/eyes
 @onready var face: AnimatedSprite2D = $sprite/face
 @onready var view_area: Area2D = $sprite/eyes/view_area
 @onready var v_contorler: Node = $ScreenTouchContorl
+@onready var interact_comp: InteractComponent = $InteractComponent
 
+## 移动速度
 @export var speed: float = 180.0
+## 是否睁眼
 @export var eyes_open: bool = true
+## 眼睛激活性: 为false时，眼睛无法睁眼或闭眼
 @export var eyes_activity: bool = true
 ## 能否控制: 为false时，既无法进行移动，也无法进行交互; 赋值为false时具有副作用，会强制同步移动与交互的状态
 @export var control: bool = true:
@@ -43,13 +52,10 @@ const _LW = 1
 @export var view_angle: float = 45.0
 
 var facing: String = "down"
+var _touch_id: int = -1		## 追踪触屏的手指
 
-# === 暴露给外界的信号 ===
-signal view_body_entered(body: Node2D)
-signal view_body_exited(body: Node2D)
-signal view_area_entered(area: Area2D)
-signal view_area_exited(area: Area2D)
 
+# ========== 继承方法 ==========
 
 func _ready() -> void:
 	# 移动端时，显示触屏控件
@@ -58,33 +64,33 @@ func _ready() -> void:
 	else:
 		v_contorler.visible = false
 	
+	# 眼睛和视野处理
 	if not eyes_activity:
 		eyes.set_process(false)
 	view_area.radius = view_radius
 	view_area.angle_deg = view_angle
-	# 将子节点 Area2D 的信号冒泡到父节点
 	view_area.body_entered.connect(_on_view_body_entered)
 	view_area.body_exited.connect(_on_view_body_exited)
 	view_area.area_entered.connect(_on_view_area_entered)
 	view_area.area_exited.connect(_on_view_area_exited)
-	
 	_update_eyes()
 
 
 func _physics_process(_delta: float) -> void:
+	# 更新朝向并移动
 	var direction := _get_input()
 	if movable:
-		
-		# 更新朝向并移动
 		if direction.length() > 0.1:
 			facing = _get_facing(direction)
 		velocity = direction * speed
 		move_and_slide()
-		
-	_update_animation(direction)	# 更新动画
+	
+	# 更新动画
+	_update_animation(direction)
 
 
 func _process(_delta: float) -> void:
+	# 触屏控件
 	if movable:
 		v_contorler.v_joystick.visible = true
 	else:
@@ -95,8 +101,9 @@ func _process(_delta: float) -> void:
 	else:
 		v_contorler.v_interact.visible = false
 	
-	var m_left = Input.is_action_just_pressed("switch")
-	if eyes_activity and m_left:
+	# 睁眼或闭眼
+	var m_right = Input.is_action_just_pressed("switch")
+	if eyes_activity and m_right:
 		match eyes_open:
 			true:
 				eyes.play("close")
@@ -106,7 +113,32 @@ func _process(_delta: float) -> void:
 		await eyes.animation_finished
 		eyes_open = !eyes_open
 		_update_eyes()
+	
+	# 交互	# 已转由 InputManager 管理
+	# var key_F = Input.is_action_just_pressed("interact")
+	# if interactable and key_F:
+	# 	interact_comp.try_interact()
 
+func _unhandled_input(event: InputEvent) -> void:
+	var follow: Variant
+	# 触屏点击/释放
+	if event is InputEventScreenTouch:
+		if _touch_id == -1 and event.pressed:
+			_touch_id = event.index
+			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			eyes.follow = follow
+			view_area.follow = follow
+			# print(follow)
+		elif _touch_id != -1 and not event.pressed:
+			_touch_id = -1
+
+	# 触屏拖动
+	if event is InputEventScreenDrag:
+		if _touch_id == event.index:
+			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			eyes.follow = follow
+			view_area.follow = follow
+			# print(follow)
 
 func _draw():
 	if movable:
@@ -143,24 +175,73 @@ func set_view_enabled(enabled: bool) -> void:
 
 
 # ========== 私有方法 ==========
-
 func _on_view_body_entered(body: Node2D) -> void:
 	view_body_entered.emit(body)
+	if body is FakableWall:
+		if body.is_in_group("red"):
+			body.fake = false
+		elif body.is_in_group("orange"):
+			body.fake = true
+		else:
+			body.fake = false
+	else:
+		if body is FakableObject:
+			if body.is_in_group("red"):
+				body.fake = false
+			elif body.is_in_group("orange"):
+				body.fake = true
+			else:
+				body.fake = false
 
 func _on_view_body_exited(body: Node2D) -> void:
 	view_body_exited.emit(body)
+	if body is FakableWall:
+		if body.is_in_group("red"):
+			body.fake = true
+		if body.is_in_group("orange"):
+			body.fake = false
+		else:
+			body.fake = true
+	else:
+		if body is FakableObject:
+			if body.is_in_group("red"):
+				body.fake = true
+			elif body.is_in_group("orange"):
+				body.fake = false
+			else:
+				body.fake = true
 
-func _on_view_area_entered(area: Area2D) -> void:
+func _on_view_area_entered(area: Node2D) -> void:
 	view_area_entered.emit(area)
+	if area is FakableButton:
+		area.fake = false
+	else:
+		if area is FakableObject:
+			if area.is_in_group("red"):
+				area.fake = false
+			elif area.is_in_group("orange"):
+				area.fake = true
+			else:
+				area.fake = false
 
-func _on_view_area_exited(area: Area2D) -> void:
+func _on_view_area_exited(area: Node2D) -> void:
 	view_area_exited.emit(area)
+	if area is FakableButton:
+		area.fake = true
+	else:
+		if area is FakableObject:
+			if area.is_in_group("red"):
+				area.fake = true
+			elif area.is_in_group("orange"):
+				area.fake = false
+			else:
+				area.fake = true
 
-# 输入
+## 输入
 func _get_input() -> Vector2:
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
-# 8向计算
+## 8向计算
 func _get_facing(dir: Vector2) -> String:
 	var angle := dir.angle()
 	var octant := int(round(angle / (PI / 4)))
@@ -173,11 +254,12 @@ func _get_facing(dir: Vector2) -> String:
 	]
 	return directions[octant]
 
-# 动画更新
+## 动画更新
 @warning_ignore("unused_parameter")
 func _update_animation(direction: Vector2) -> void:
 	pass
 
+## 眼睛更新
 func _update_eyes() -> void:
 	if eyes_open:
 		eyes.play("opened")
@@ -190,27 +272,3 @@ func _update_eyes() -> void:
 		view_area.visible = false
 		view_area.collision_layer &= ~0b11 # 二进制运算：将一二位置零
 		view_area.collision_mask &= ~0b11
-
-
-## 追踪触屏的手指
-var _touch_id: int = -1
-func _unhandled_input(event: InputEvent) -> void:
-	var follow: Variant
-	# 触屏点击/释放
-	if event is InputEventScreenTouch:
-		if _touch_id == -1 and event.pressed:
-			_touch_id = event.index
-			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
-			eyes.follow = follow
-			view_area.follow = follow
-			# print(follow)
-		elif _touch_id != -1 and not event.pressed:
-			_touch_id = -1
-
-	# 触屏拖动
-	if event is InputEventScreenDrag:
-		if _touch_id == event.index:
-			follow = get_viewport().get_canvas_transform().affine_inverse() * event.position
-			eyes.follow = follow
-			view_area.follow = follow
-			# print(follow)
