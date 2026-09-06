@@ -1,61 +1,69 @@
 {
-    "format_version": 1.0,
+    "format_version": 1,
     "meta": {
-        "id": 114514.0,
+        "id": 114514,
         "name": "关卡加载器",
         "description": "测试从文件加载关卡以实现自动化"
     },
     "map": {
         "cell_size": {
-            "width": 32.0,
-            "height": 32.0
+            "width": 32,
+            "height": 32
         },
         "exit": {
-            "X": 0.0,
-            "Y": 0.0,
-            "facing": "W"
+            "X": 3,
+            "Y": 3,
+            "facing": "W",
+            "tooltip_offset": [-16, -32]
         },
         "external_wall": [
-            {
-                "X": -1.0,
-                "Y": -1.0
-            },
-            {
-                "X": -1.0,
-                "Y": 2.0,
-                "dirs": {
-                    "S": false
-                }
-            },
-            {
-                "X": 2.0,
-                "Y": 2.0,
-                "dirs": {
-                    "W": false
-                }
-            },
-            {
-                "X": -1.0,
-                "Y": 8.0,
-                "dirs": {
-                    "N": false
-                }
-            },
-            {
-                "X": 8.0,
-                "Y": -1.0
-            },
-            {
-                "X": 8.0,
-                "Y": 8.0
-            }
+            { "X": -1, "Y": -1 },
+            { "X": -1, "Y": 2, "dirs": {"S": false} },
+            { "X": 2, "Y": 2, "dirs": {"W": false} },
+            { "X": -1, "Y": 16, "dirs": {"N": false} },
+            { "X": 16, "Y": -1 },
+            { "X": 16, "Y": 16 }
         ],
         "floor": {
-            "X": 0.0,
-            "Y": 0.0,
-            "W": 8.0,
-            "H": 8.0,
-            "seed": 114514.0
+            "X": 0,
+            "Y": 0,
+            "W": 16,
+            "H": 16,
+            "seed": 114514
         }
-    }
+    },
+    "items": [
+        {
+            "Class": "ButtonController",
+            "X": 3,
+            "Y": 2,
+            "buttons": [
+                { "X": 3, "Y": 2, "color": "blue", "tooltip_offset": [0, -16] },
+                { "X": 1, "Y": 1}
+            ],
+            "walls": [
+                { "X": 5, "Y": 2, "color": "blue", "facing": "N" }
+            ],
+            "size_on": [32, 32],
+            "size_off": [32, 96]
+        },
+        {
+            "Class": "FakableButton",
+            "X": 8,
+            "Y": 2,
+            "color": "green",
+            "tooltip_offset": { "x": 0, "y": -48 },
+            "fake": false,
+            "fakable": true
+        },
+        {
+            "Class": "FakableWall",
+            "X": 10,
+            "Y": 5,
+            "color": "red",
+            "facing": "S",
+            "fake": false,
+            "fakable": true
+        }
+    ]
 }

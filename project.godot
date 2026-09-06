@@ -36,8 +36,7 @@ InputManager="*uid://gclsfyndlck4"
 
 window/size/viewport_width=1200
 window/size/viewport_height=700
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/scale_mode="integer"
 
 [editor_plugins]
 

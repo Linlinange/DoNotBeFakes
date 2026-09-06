@@ -31,6 +31,7 @@ var cell_size := Vector2i(32, 32)  # 必要：每格像素宽高（瓦片统一 
 var floor_rect := Rect2i()         # 可选：X,Y,W,H（瓦片）
 var floor_seed := -1               # 可选：-1 随机，其他值固定（对应 floor 的 seed）
 var external_walls: Array = []     # 可选：[{X,Y,dirs:{N,S,W,E}}]
+var items: Array = []              # 可选：物体数组（ButtonController / FakableWall / FakableButton ...）
 var exit := {}                     # 可选：{X, Y, facing, next_scene?}
 
 # ---------- 便捷判断 ----------
@@ -80,6 +81,8 @@ func to_dict() -> Dictionary:
 		d["map"]["floor"] = floor_dict
 	if not external_walls.is_empty():
 		d["map"]["external_wall"] = external_walls.duplicate(true)
+	if not items.is_empty():
+		d["items"] = items.duplicate(true)
 	if has_exit():
 		d["map"]["exit"] = exit.duplicate(true)
 	return d
@@ -126,6 +129,11 @@ static func from_dict(d: Dictionary) -> LevelData:
 			if typeof(wall) == TYPE_DICTIONARY:
 				wall["X"] = int(wall.get("X", 0))  # JSON 数字是 float，规范化回 int
 				wall["Y"] = int(wall.get("Y", 0))
+
+	# items（可选，与 map 同级，无则不实例化）
+	var items_data: Variant = d.get("items", [])
+	if typeof(items_data) == TYPE_ARRAY:
+		level.items = items_data.duplicate(true)
 
 	# exit（可选，无则不实例化）
 	var exit_data: Variant = map_data.get("exit", {})

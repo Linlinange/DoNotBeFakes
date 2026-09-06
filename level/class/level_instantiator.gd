@@ -32,6 +32,8 @@ static func build_level(level: LevelData, parent: Node) -> bool:
 		ok = spawn_floor(level, parent) and ok
 	if not level.external_walls.is_empty():
 		ok = spawn_external_walls(level, parent) and ok
+	if not level.items.is_empty():
+		ok = spawn_items(level, parent) and ok
 	if level.has_exit():
 		ok = spawn_exit(level, parent) and ok
 	return ok
@@ -257,3 +259,176 @@ static func _pick_corner(vertical: bool, horizontal: bool,
 	if horizontal:
 		return h_only
 	return none_corner
+
+# ============================================================
+# items（通用物体实例化：ButtonController / FakableWall / FakableButton）
+# ============================================================
+## items 数组中的每个对象根据 Class 字段实例化对应场景。
+## 支持的 Class：ButtonController、FakableWall、FakableButton（大写优先匹配）。
+## 向量字段（tooltip_offset / size_on / size_off 等）统一支持 [x,y] 数组和 {"x":..,"y":..} 对象。
+
+## 按钮场景路径模板（${color} 替换为实际颜色，空 color 用基类）
+const BUTTON_SCENE_PATH := "res://item/button/${color}_button.tscn"
+const BUTTON_BASE_SCENE := "res://item/button/button.tscn"
+## 墙场景路径模板
+const WALL_SCENE_PATH := "res://item/walls/${color}_wall.tscn"
+const WALL_BASE_SCENE := "res://item/walls/wall.tscn"
+## ButtonController 脚本路径（只有代码，创建空 Node2D 挂载此脚本）
+const BUTTON_CONTROLLER_SCRIPT := "res://item/button/button_control_wall.gd"
+
+## 已知类名（大写优先匹配，小写也能匹配到对应大写类名）
+const KNOWN_CLASSES := ["ButtonController", "FakableWall", "FakableButton"]
+
+## 实例化所有 items
+static func spawn_items(level: LevelData, parent: Node) -> bool:
+	for item in level.items:
+		if typeof(item) == TYPE_DICTIONARY:
+			_spawn_single_item(item, level, parent)
+	return true
+
+## 根据 Class 字段分发到具体的实例化函数
+static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> void:
+	var item_class := _resolve_class_name(item)
+	match item_class:
+		"ButtonController":
+			_spawn_button_controller(item, level, parent)
+		"FakableWall":
+			_spawn_fakable_wall(item, level, parent)
+		"FakableButton":
+			_spawn_fakable_button(item, level, parent)
+		_:
+			push_warning("LevelInstantiator: 未知的 Class '%s'，跳过" % item_class)
+
+## 解析 Class 字段：大写优先，无大写再看小写（都匹配到已知类名）
+static func _resolve_class_name(item: Dictionary) -> String:
+	var raw := str(item.get("Class", item.get("class", "")))
+	if raw.is_empty():
+		return ""
+	for name in KNOWN_CLASSES:
+		if raw.to_lower() == name.to_lower():
+			return name
+	return raw
+
+## 解析 item 的格子坐标（X/Y 大写，整数）
+static func _item_grid_coord(item: Dictionary) -> Vector2i:
+	return Vector2i(int(item.get("X", 0)), int(item.get("Y", 0)))
+
+## 解析向量字段，支持 [x,y] 数组和 {"x":..,"y":..} 对象（大小写 x/y 都认）
+static func _parse_vector2(data: Variant, default: Vector2 = Vector2.ZERO) -> Vector2:
+	if typeof(data) == TYPE_ARRAY and data.size() >= 2:
+		return Vector2(float(data[0]), float(data[1]))
+	if typeof(data) == TYPE_DICTIONARY:
+		return Vector2(
+			float(data.get("x", data.get("X", default.x))),
+			float(data.get("y", data.get("Y", default.y)))
+		)
+	return default
+
+## 朝向 -> anchor 映射（伸缩朝向，非按钮 on/off 朝向）
+static func _facing_to_anchor(facing: String) -> Vector2:
+	match facing:
+		"N", "n": return Vector2(0.5, 0)
+		"S", "s": return Vector2(0.5, 1)
+		"W", "w": return Vector2(1, 0.5)
+		"E", "e": return Vector2(0, 0.5)
+	return Vector2(0.5, 0.5)
+
+## 应用 fake / fakable 到 FakableObject（用 set_fake 绕过 fakable 限制）
+static func _apply_fake(obj: Node, item: Dictionary) -> void:
+	if not (obj is FakableObject):
+		return
+	if item.has("fakable"):
+		obj.fakable = item["fakable"]
+	if item.has("fake"):
+		obj.set_fake(item["fake"])
+
+## 根据 color 生成按钮场景路径（空 color 用基类 button.tscn）
+static func _button_scene_path(color: String) -> String:
+	if color.is_empty():
+		return BUTTON_BASE_SCENE
+	return BUTTON_SCENE_PATH.replace("${color}", color)
+
+## 根据 color 生成墙场景路径（空 color 用基类 wall.tscn）
+static func _wall_scene_path(color: String) -> String:
+	if color.is_empty():
+		return WALL_BASE_SCENE
+	return WALL_SCENE_PATH.replace("${color}", color)
+
+## 实例化按钮（通用，被 ButtonController 和单独按钮共用）
+## 返回实例化后的按钮节点
+static func _instantiate_button(btn_data: Dictionary, level: LevelData, parent: Node) -> Node2D:
+	var color := str(btn_data.get("color", ""))
+	var scene := load(_button_scene_path(color)) as PackedScene
+	var btn := scene.instantiate() as Node2D
+	parent.add_child(btn)
+	btn.global_position = level.coord_to_world_center(_item_grid_coord(btn_data))
+
+	# tooltip_offset（支持 [x,y] 数组和 {"x":..,"y":..} 对象）
+	if btn_data.has("tooltip_offset"):
+		var offset := _parse_vector2(btn_data["tooltip_offset"])
+		var ic := btn.get_node_or_null("InteractComponent")
+		if ic:
+			ic.tooltip_offset = offset
+
+	# fake / fakable
+	_apply_fake(btn, btn_data)
+	return btn
+
+## 实例化墙（通用，被 ButtonController 和单独墙共用）
+## 返回实例化后的墙节点
+static func _instantiate_wall(wall_data: Dictionary, level: LevelData, parent: Node) -> Node2D:
+	var color := str(wall_data.get("color", ""))
+	var scene := load(_wall_scene_path(color)) as PackedScene
+	var wall := scene.instantiate() as Node2D
+	parent.add_child(wall)
+	wall.global_position = level.coord_to_world_center(_item_grid_coord(wall_data))
+
+	# 朝向 -> anchor（支持 "facing" 和 "朝向" 两种键名）
+	var facing := str(wall_data.get("facing", wall_data.get("朝向", "")))
+	if not facing.is_empty() and wall.has_method("set"):
+		wall.anchor = _facing_to_anchor(facing)
+
+	# fake / fakable
+	_apply_fake(wall, wall_data)
+	return wall
+
+## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下
+static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> void:
+	var bc := Node2D.new()
+	var script := load(BUTTON_CONTROLLER_SCRIPT) as Script
+	bc.set_script(script)
+	parent.add_child(bc)
+	var bc_pos := level.coord_to_world_center(_item_grid_coord(item))
+	bc.position = bc_pos
+
+	var buttons: Array[Node2D] = []
+	var walls: Array[Node2D] = []
+
+	# 实例化 buttons（挂载到 ButtonController 下，global_position 自动转相对坐标）
+	for btn_data in item.get("buttons", []):
+		if typeof(btn_data) == TYPE_DICTIONARY:
+			var btn := _instantiate_button(btn_data, level, bc)
+			buttons.append(btn)
+
+	# 实例化 walls（挂载到 ButtonController 下，global_position 自动转相对坐标）
+	for wall_data in item.get("walls", []):
+		if typeof(wall_data) == TYPE_DICTIONARY:
+			var wall := _instantiate_wall(wall_data, level, bc)
+			walls.append(wall)
+
+	bc.buttons = buttons
+	bc.walls = walls
+
+	# size_on / size_off（支持 [x,y] 数组和 {"x":..,"y":..} 对象）
+	if item.has("size_on"):
+		bc.size_on = _parse_vector2(item["size_on"], bc.size_on)
+	if item.has("size_off"):
+		bc.size_off = _parse_vector2(item["size_off"], bc.size_off)
+
+## 单独的 FakableWall
+static func _spawn_fakable_wall(item: Dictionary, level: LevelData, parent: Node) -> void:
+	_instantiate_wall(item, level, parent)
+
+## 单独的 FakableButton
+static func _spawn_fakable_button(item: Dictionary, level: LevelData, parent: Node) -> void:
+	_instantiate_button(item, level, parent)

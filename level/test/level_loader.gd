@@ -12,4 +12,5 @@ func _ready() -> void:
 	LevelInstantiator.build_level(level, self)       		# 实例化
 	level_info.text = level.name + "[font_size=24]\n" + level.description + "[/font_size]"
 	level_info.reset_size()
-	print(level_info.global_position)
+	# print(level.items[0])
+	
