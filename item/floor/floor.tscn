@@ -3,6 +3,7 @@
 [ext_resource type="TileSet" uid="uid://bbe8dt7luira2" path="res://assets/tile/floor_tile_set.tres" id="1_cydae"]
 [ext_resource type="Shader" uid="uid://cp1x7qsdb8y2v" path="res://item/floor/floor.gdshader" id="1_kbdea"]
 [ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="2_kbdea"]
+[ext_resource type="Texture2D" uid="uid://bmbarrwmaukkk" path="res://item/floor/floor_patern_map.png" id="2_uk34a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uk34a"]
 shader = ExtResource("1_kbdea")
@@ -11,12 +12,16 @@ shader_parameter/bevel_size = 1.0
 shader_parameter/highlight_strength = 0.3
 shader_parameter/shadow_strength = 0.4
 shader_parameter/light_direction = Vector2(-1, -1)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/detail_tex = ExtResource("2_uk34a")
 
 [node name="floor" type="TileMapLayer" unique_id=1850046164]
 z_index = -10
+texture_filter = 1
 material = SubResource("ShaderMaterial_uk34a")
 tile_set = ExtResource("1_cydae")
 physics_quadrant_size = 32
 script = ExtResource("2_kbdea")
+fill_rect = Rect2i(0, 0, 18, 10)
 clear_before_fill = false
 only_fill_empty = true

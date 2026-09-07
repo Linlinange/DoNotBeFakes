@@ -5,6 +5,14 @@ uniform vec4 color_a : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 color_b : source_color = vec4(1.0, 1.0, 0.2, 1.0);
 uniform float cycle_speed : hint_range(0.0, 5.0) = 2.0;
 
+varying vec4 modulate_color;
+
+void vertex() {
+	// vertex 阶段的 COLOR = 顶点色 × modulate × self_modulate
+	// 对 Sprite2D 来说顶点色通常是白色，所以这里拿到的大约就是 modulate
+	modulate_color = COLOR;
+}
+
 void fragment() {
 	vec4 tex_color = texture(TEXTURE, UV);
 	vec2 ps = TEXTURE_PIXEL_SIZE * outline_thickness;
@@ -26,12 +34,12 @@ void fragment() {
 	// 绘制逻辑
 	if (is_inside) {
 		// 遮罩内部：透明（挖空，显示下层）
-		COLOR = vec4(0.0);
+		COLOR = vec4(0.0) * modulate_color;
 	} else if (has_neighbor) {
 		// 遮罩外侧且邻接遮罩：描边（往外扩）
-		COLOR = final_color;
+		COLOR = final_color * modulate_color;
 	} else {
 		// 远离遮罩的区域：透明
-		COLOR = vec4(0.0);
+		COLOR = vec4(0.0) * modulate_color;
 	}
 }
