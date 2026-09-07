@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="2_vscsl"]
 [ext_resource type="PackedScene" uid="uid://18ryro2rrpgn" path="res://character/player/player.tscn" id="3_t0khj"]
 [ext_resource type="Script" uid="uid://c8d3bq0nskaep" path="res://item/button/button_control_wall.gd" id="4_xsfx6"]
+[ext_resource type="PackedScene" uid="uid://8wafggfm8fnu" path="res://level/level2/level2.tscn" id="4_yn3su"]
 [ext_resource type="PackedScene" uid="uid://brlpv6lmfx4a1" path="res://item/button/green_button.tscn" id="5_qae1c"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="6_j77yt"]
 [ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="8_3f123"]
@@ -39,6 +40,7 @@ rotation_smoothing_enabled = true
 [node name="exit" parent="." unique_id=420995041 instance=ExtResource("2_vscsl")]
 position = Vector2(528, 336)
 rotation = 3.1415927
+next_scene = ExtResource("4_yn3su")
 tooltip_offset = Vector2(-16, -32)
 
 [node name="player" parent="." unique_id=835658768 instance=ExtResource("3_t0khj")]

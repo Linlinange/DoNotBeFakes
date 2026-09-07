@@ -31,6 +31,7 @@ TransitionManager="*uid://dwtb2v8cjvoag"
 BgmManager="*uid://cmr8bwv1u2k4k"
 AudioManager="*uid://nq26iricyo6o"
 InputManager="*uid://gclsfyndlck4"
+EventSystem="*uid://oam4a67ffej8"
 
 [display]
 

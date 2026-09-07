@@ -42,6 +42,8 @@ func _process(delta: float) -> void:
 	
 		# 等待并重载当前场景
 		await get_tree().create_timer(restart_delay).timeout
+		if EventSystem:
+			EventSystem.reset()
 		TransitionManager.reload_current_scene()
 
 
