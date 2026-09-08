@@ -20,8 +20,7 @@ var eyes_time: int = randi()%240
 # ========== 继承方法 ==========
 
 func _ready() -> void:
-	if "follow" in eyes:
-		eyes.follow = self.player
+	set_follow(self.player)
 	
 	_update_eyes()
 
@@ -91,6 +90,10 @@ func move_to(
 		.set_ease(ease_type) \
 		.tween_property(self, "position", pos, move_time)
 
+
+func set_follow(node: Node2D) -> void:
+	if "follow" in eyes:
+		eyes.follow = node
 
 # ========== 私有方法 ==========
 ## 输入

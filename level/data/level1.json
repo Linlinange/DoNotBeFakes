@@ -1,0 +1,115 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": 1,
+        "name": "关卡 1",
+        "description": "基础教程"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 16, "Y": 10,
+            "facing": "W",
+            "tooltip_offset": [-16, -32]
+        },
+        "external_wall": [
+            { "X": 0,  "Y": 0  },
+            { "X": 0,  "Y": 10 },
+            { "X": 18, "Y": 0  },
+            { "X": 18, "Y": 10 },
+            { "X": 6,  "Y": 0  },
+            { "X": 6,  "Y": 5,  "dirs": {"E": false} },
+            { "X": 12, "Y": 5,  "dirs": {"W": false} },
+            { "X": 12, "Y": 10 },
+            { "X": 14, "Y": 10, "dirs": {"E": false} },
+            { "X": 14, "Y": 11 },
+            { "X": 17, "Y": 10, "dirs": {"W": false} },
+            { "X": 17, "Y": 11 }
+        ],
+        "floor": {
+            "X": 0, "Y": 0, 
+            "W": 19, "H": 10,
+            "seed": 1,
+            "preset_tiles": [
+                { "X": 8,  "Y": 1, "tile": [4, 0] },
+                { "X": 10, "Y": 1, "tile": [5, 0] },
+                { "X": 8,  "Y": 3, "tile": [4, 1] },
+                { "X": 10, "Y": 3, "tile": [5, 1] },
+                { "X": 3,  "Y": 5, "tile": [1, 0], "facing": "S" },
+                { "X": 6,  "Y": 7, "tile": [1, 0], "facing": "E" },
+                { "X": 9,  "Y": 5, "tile": [1, 0], "facing": "N" },
+                { "X": 12, "Y": 3, "tile": [1, 0], "facing": "E" },
+                { "X": 15, "Y": 5, "tile": [1, 0], "facing": "S" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "ButtonController",
+            "X": 0, "Y": 0,
+            "button": [
+                { "X": 9,  "Y": 2, "color": "blue" }
+            ],
+            "wall": [
+                { "X": 12, "Y": 1, "color": "blue", "facing": "S" }
+            ],
+            "size_on":  [32, 32],
+            "size_off": [32, 128]
+        }
+    ],
+    "characters": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 1.5, "Y": 3.5,
+            "movable": false
+        },
+        {
+            "type": "DolosBlack",
+            "name": "dolos",
+            "X": 3.5,  "Y": 3
+        }
+    ],
+    "event": [
+        [
+            {"type": "say", "actor": "dolos", "text": "你好\nAletheia White", "duration": 2.5},
+            {"type": "say", "actor": "dolos", "text": "我是Dolos Black\n叫我Black就行", "duration": 4.0},
+            {"type": "say", "actor": "dolos", "text": "我将引导你\n完成接下来的关卡", "duration": 4.0},
+            {"type": "set", "target": "player", "property": "movable", "value": true},
+            {
+                "type": "branch", "condition": {"op": "call", "method": "_is_pc"},
+                "target": "pc_tip", 
+                "else_target": "touch_tip"
+            },
+            {"type": "label", "name": "pc_tip"},
+                {"type": "speak", "actor": "dolos", "text": "使用WASD或↑↓←→\n进行移动吧", "duration": 5.0},
+                {"type": "jump", "target": "intro_end"},
+            {"type": "label", "name": "touch_tip"},
+                {"type": "speak", "actor": "dolos", "text": "使用游戏摇杆\n进行移动吧", "duration": 5.0},
+            {"type": "label", "name": "intro_end"},
+            {"type": "end"}
+        ],
+        [
+            {
+                "type": "branch", "condition": {"op": "flag", "key": "door_tipped"},
+                "target": "tipped", 
+                "else_target": "first"
+            },
+            {"type": "label", "name": "first"},
+                {"type": "speak", "actor": "dolos", "text": "你需要靠近按钮\n并按下交互键才能打开门", "duration": 8.0},
+                {"type": "set_flag", "key":"door_tipped"},
+                {"type": "jump", "target": "tip_end"},
+            {"type": "label", "name": "tipped"},
+                {"type": "speak", "actor": "dolos", "text": "你怎么回来了\n有什么问题吗", "duration": 4.0},
+            {"type": "label", "name": "tip_end"},
+            {"type": "end"}
+        ],
+        [
+            {"type": "speak", "actor": "dolos", "text": "继续前进，走至出口\n并按下交互键前往下一关", "duration": 8.0},
+            {"type": "end"}
+        ]
+    ]
+}

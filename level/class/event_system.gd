@@ -1,11 +1,11 @@
-
+extends Node
 ## ============================================================
 ## EventSystem —— 简单数据驱动剧情事件系统（Godot 4.x）
 ##
 ## 用法：
 ##   1. 项目设置 → 自动加载（Autoload）注册本脚本，名字叫 EventSystem
 ##   2. 关卡脚本里：await EventSystem.run(script, self)
-##   3. 关卡提供 actors 映射：var actors = {"dolos": %Dolos_Black, ...}
+##   3. 关卡提供 actors 映射：var actors = {"player": %player, "dolos": %Dolos_Black}
 ##
 ## 设计思路：
 ##   - 事件 = 数据（Array[Dictionary]），每步一个字典，不写死在代码逻辑里
@@ -13,9 +13,8 @@
 ##   - 分支 = branch（条件跳转）+ label（标记）+ jump（跳转）+ choice（玩家选择）
 ##   - 状态 = flags（布尔标记）/ variables（变量），跨关卡共享
 ## ============================================================
-extends Node2D
 
-# ---------- 全局剧情状态（跨关卡共享） ----------
+## ---------- 全局剧情状态（跨关卡共享） ----------
 var flags := {}          # 布尔标记：set_flag("level2_reacted")
 var variables := {}      # 数值/字符串变量：set_var("interacts", 3)
 
@@ -37,7 +36,7 @@ func reset() -> void:
 
 
 ## ---------- 事件执行 ----------
-## script: Array[Dictionary]，每个元素是一个步骤（见下表）
+## script: Array[Dictionary]，每个元素是一个步骤（见下）
 ## ctx:    执行上下文，通常是关卡根节点（提供 actors 映射 / 可调方法）
 ##
 ## 步骤类型：
@@ -213,13 +212,13 @@ func _goto(labels: Dictionary, target: String, ip: int) -> int:
 	return ip + 1
 
 ## 演员解析：先查 ctx.actors 映射 → 再试 %唯一名 → 再试普通路径
-func _actor(_name: String, ctx: Node) -> Node:
-	if _name == "" or ctx == null:
+func _actor(name_: String, ctx: Node) -> Node:
+	if name_ == "" or ctx == null:
 		return null
 	var mapping: Variant = ctx.get("actors")
-	if mapping is Dictionary and mapping.has(_name):
-		return mapping[_name]
-	var n: Node = ctx.get_node_or_null("%" + _name)
+	if mapping is Dictionary and mapping.has(name_):
+		return mapping[name_]
+	var n: Node = ctx.get_node_or_null("%" + name_)
 	if n:
 		return n
-	return ctx.get_node_or_null(_name)
+	return ctx.get_node_or_null(name_)

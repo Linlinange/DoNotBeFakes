@@ -11,32 +11,35 @@
             "height": 32
         },
         "exit": {
-            "X": 3,
-            "Y": 3,
+            "X": 3, "Y": 3,
             "facing": "W",
             "tooltip_offset": [-16, -32]
         },
         "external_wall": [
             { "X": -1, "Y": -1 },
-            { "X": -1, "Y": 2, "dirs": {"S": false} },
-            { "X": 2, "Y": 2, "dirs": {"W": false} },
+            { "X": -1, "Y": 2,  "dirs": {"S": false} },
+            { "X": 2,  "Y": 2,  "dirs": {"W": false} },
             { "X": -1, "Y": 16, "dirs": {"N": false} },
             { "X": 16, "Y": -1 },
             { "X": 16, "Y": 16 }
         ],
         "floor": {
-            "X": 0,
-            "Y": 0,
-            "W": 16,
-            "H": 16,
-            "seed": 114514
+            "X": 0, "Y": 0, 
+            "W": 16, "H": 16,
+            "seed": 114514,
+            "preset_tiles": [
+                { "X": 3,  "Y": 5, "tile": [1, 0], "facing": "S" },
+                { "X": 6,  "Y": 7, "tile": [1, 0], "facing": "E" },
+                { "X": 9,  "Y": 5, "tile": [1, 0], "facing": "N" },
+                { "X": 12, "Y": 3, "tile": [1, 0], "facing": "E" },
+                { "X": 15, "Y": 5, "tile": [1, 0], "facing": "S" }
+            ]
         }
     },
     "items": [
         {
             "Class": "ButtonController",
-            "X": 3,
-            "Y": 2,
+            "X": 3, "Y": 2,
             "buttons": [
                 { "X": 3, "Y": 2, "color": "blue", "tooltip_offset": [0, -16] },
                 { "X": 1, "Y": 1}
@@ -44,13 +47,12 @@
             "walls": [
                 { "X": 5, "Y": 2, "color": "blue", "facing": "N" }
             ],
-            "size_on": [32, 32],
+            "size_on":  [32, 32],
             "size_off": [32, 96]
         },
         {
             "Class": "FakableButton",
-            "X": 8,
-            "Y": 2,
+            "X": 8, "Y": 2,
             "color": "green",
             "tooltip_offset": { "x": 0, "y": -48 },
             "fake": false,
@@ -58,12 +60,18 @@
         },
         {
             "Class": "FakableWall",
-            "X": 10,
-            "Y": 5,
+            "X": 10, "Y": 5,
             "color": "red",
             "facing": "S",
             "fake": false,
             "fakable": true
+        }
+    ],
+    "characters": [
+        {
+            "type": "Player",
+            "X": 2, "Y": 7,
+            "movable": true
         }
     ]
 }

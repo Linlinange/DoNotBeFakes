@@ -61,9 +61,9 @@ func interact() -> void:
 	if is_functional():
 		chat.say(content, duration)
 		if id!=-1:
-			var json: Dictionary = SavesManager.json_read(SavesManager.Path.CLUES)
+			var json: Dictionary = FilesManager.json_read(FilesManager.Path.CLUES)
 			json[str(id)] = true
-			SavesManager.json_write(SavesManager.Path.CLUES, json)
+			FilesManager.json_write(FilesManager.Path.CLUES, json)
 	audio.pitch_scale = randf_range(0.4, 0.7)
 	audio.play()
 	return
