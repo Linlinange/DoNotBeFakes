@@ -43,6 +43,7 @@ func _ready() -> void:
 	interact_comp.max_interact_times = self.max_interact_times
 	interact_comp.tooltip_content = self.tooltip_content
 	interact_comp.tooltip_offset = self.tooltip_offset
+	interact_comp.reset_rotation(false)
 
 func _on_fake_updated() -> void:
 	if fake:
@@ -61,9 +62,9 @@ func interact() -> void:
 	if is_functional():
 		chat.say(content, duration)
 		if id!=-1:
-			var json: Dictionary = SavesManager.json_read(SavesManager.Path.CLUES)
+			var json: Dictionary = FilesManager.json_read(FilesManager.Path.CLUES)
 			json[str(id)] = true
-			SavesManager.json_write(SavesManager.Path.CLUES, json)
+			FilesManager.json_write(FilesManager.Path.CLUES, json)
 	audio.pitch_scale = randf_range(0.4, 0.7)
 	audio.play()
 	return

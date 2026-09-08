@@ -5,11 +5,11 @@ extends Node2D
 
 
 func _ready() -> void: 
-	var json: Dictionary = SavesManager.json_read(SavesManager.Path.CLUES)
+	var json: Dictionary = FilesManager.json_read(FilesManager.Path.CLUES)
 	if json == {}:
-		var sm = SavesManager.new()
+		var sm = FilesManager.new()
 		for i in len(sm.FormerlyPath.CLUES):
-			json = SavesManager.abs_json_read(sm.FormerlyPath.CLUES[i])	# 旧存档继承
+			json = FilesManager.abs_json_read(sm.FormerlyPath.CLUES[i])	# 旧存档继承
 			if json != {}:
 				print("从%s继承新存档" % sm.FormerlyPath.CLUES[i])
 				break
@@ -24,7 +24,7 @@ func _ready() -> void:
 		else:
 			print("Clue的ID为%s 可能是配置有误 或 单纯存档无对应的记录" % clue.id)
 			json[str(clue.id)] = false
-	SavesManager.json_write(SavesManager.Path.CLUES, json)
+	FilesManager.json_write(FilesManager.Path.CLUES, json)
 	pass
 
 

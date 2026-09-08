@@ -43,16 +43,16 @@ static func is_adjacent_in_line(a: Vector2i, b: Vector2i) -> bool:
 	var d := (b - a).abs()
 	return d == Vector2i(1, 0) or d == Vector2i(0, 1)
 
-## 格子坐标 -> 世界像素坐标（格子左上角）
-static func coord_to_world(coord: Vector2i, cell_size: Vector2 = DEFAULT_CELL_SIZE) -> Vector2:
+## 格子坐标 -> 世界像素坐标（格子左上角）。coord 允许浮点（如 1.5 格）。
+static func coord_to_world(coord: Vector2, cell_size: Vector2 = DEFAULT_CELL_SIZE) -> Vector2:
 	return Vector2(coord) * cell_size
 
 ## 世界像素坐标 -> 格子坐标（向下取整）
 static func world_to_coord(world: Vector2, cell_size: Vector2 = DEFAULT_CELL_SIZE) -> Vector2i:
 	return Vector2i((world / cell_size).floor())
 
-## 格子中心像素坐标（放精灵、做检测用）
-static func coord_to_world_center(coord: Vector2i, cell_size: Vector2 = DEFAULT_CELL_SIZE) -> Vector2:
+## 格子中心像素坐标（放精灵、做检测用）。coord 允许浮点（如 1.5 格）。
+static func coord_to_world_center(coord: Vector2, cell_size: Vector2 = DEFAULT_CELL_SIZE) -> Vector2:
 	return coord_to_world(coord, cell_size) + cell_size * 0.5
 
 ## 坐标 key："x,y" <-> Vector2i

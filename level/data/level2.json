@@ -1,0 +1,126 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": 2,
+        "name": "关卡 2",
+        "description": "化虚为实"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 12, "Y": 0,
+            "facing": "E",
+            "tooltip_offset": [16, 32]
+        },
+        "external_wall": [
+            { "X": 2,  "Y": 0  },
+            { "X": 2,  "Y": 10 },
+            { "X": 16, "Y": 0  },
+            { "X": 16, "Y": 10 },
+            { "X": 4,  "Y": 0,  "dirs": {"E": false} },
+            { "X": 7,  "Y": 0,  "dirs": {"W": false} },
+            { "X": 11, "Y": 0,  "dirs": {"E": false} },
+            { "X": 14, "Y": 0,  "dirs": {"W": false} },
+            { "X": 4,  "Y": -1 },
+            { "X": 7,  "Y": -1, "dirs": {"E": false} },
+            { "X": 11, "Y": -1, "dirs": {"W": false} },
+            { "X": 14, "Y": -1 },
+            { "X": 9,  "Y": 0  },
+            { "X": 9,  "Y": 3, "dirs": {"S": false} },
+            { "X": 9,  "Y": 7, "dirs": {"N": false} },
+            { "X": 9,  "Y": 10 }
+        ],
+        "floor": {
+            "X": 2, "Y": 0, 
+            "W": 14, "H": 10,
+            "seed": 1,
+            "preset_tiles": [
+                { "X": 3,  "Y": 7, "tile": [4, 0] },
+                { "X": 5,  "Y": 7, "tile": [5, 0] },
+                { "X": 3,  "Y": 9, "tile": [4, 1] },
+                { "X": 5,  "Y": 9, "tile": [5, 1] },
+                { "X": 5,  "Y": 0, "tile": [3, 0], "facing": "W" },
+                { "X": 6,  "Y": 0, "tile": [2, 0], "facing": "W" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "ButtonController",
+            "X": 0, "Y": 0,
+            "button": [
+                {
+                    "X": 4,  "Y": 8, 
+                    "color": "green", 
+                    "fake": true, 
+                    "fakable": true
+                }
+            ],
+            "wall": [
+                {
+                    "X": 9,  "Y": 4, 
+                    "color": "green", 
+                    "facing": "S",
+                    "size": { "W": 1,  "H": 3 }
+                }
+            ],
+            "size_on":  { "W": 1,  "H": 1 },
+            "size_off": { "W": 1,  "H": 3 }
+        },
+        {
+            "Class": "Clue",
+            "name": "clue",
+            "X": 11, "Y": 8.5,
+            "content": "[font_size=42]实验记录[font_size=24]\n[left]批次: 第13次\n克隆体化虚为实的\n能力首次成功[/left][/font_size]",
+            "duration": 2.8,
+            "id": 2
+        }
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 7,  "Y": 3,
+            "movable": false
+        },
+        {
+            "type": "DolosBlack",
+            "name": "dolos",
+            "X": 4,  "Y": 2
+        }
+    ],
+    "event": [
+        [
+            {"type": "say", "actor": "dolos", "text": "太过自信会被虚假欺骗\n眼见才为实", "duration": 5.0},
+            {"type": "set", "target": "player", "property": "movable", "value": true},
+            {
+                "type": "branch", "condition": {"op": "call", "method": "_is_pc"},
+                "target": "pc_tip", 
+                "else_target": "touch_tip"
+            },
+            {"type": "label", "name": "pc_tip"},
+                {"type": "speak", "actor": "dolos", "text": "你的视野会跟随鼠标指针\n借助视野可以化虚为实，试试吧", "duration": 12.0},
+                {"type": "jump", "target": "intro_end"},
+            {"type": "label", "name": "touch_tip"},
+                {"type": "speak", "actor": "dolos", "text": "你的视野会跟随手指按下的位置\n借助视野可以化虚为实，试试吧", "duration": 12.0},
+            {"type": "label", "name": "intro_end"},
+            {"type": "end"}
+        ],
+        [
+            {"type": "end"}
+        ],
+        [
+            {"type": "move_to", "actor": "dolos", "target": {"x": 272, "y": 208}, "duration": 1.4},
+            {"type": "say", "actor": "dolos", "text": "在那边干什么呢？\n往上再走两步就成功了", "duration": 8.0},
+            {"type": "wait", "duration": 1.4},
+            {"type": "move_to", "actor": "dolos", "target": {"x": 368, "y": 208}, "duration": 1.2},
+            {"type": "wait", "duration": 1.2},
+            {"type": "move_to", "actor": "dolos", "target": {"x": 368, "y": 272}, "duration": 2.0, "trans": 7},
+            {"type": "wait", "duration": 2.0},
+            {"type": "end"}
+        ]
+    ]
+}

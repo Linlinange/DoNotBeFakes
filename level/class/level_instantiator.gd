@@ -3,15 +3,20 @@ class_name LevelInstantiator
 ##   floor         -> 实例化 floor.tscn，按 fill_rect 铺地板
 ##   exit          -> 实例化 exit.tscn，摆坐标 + 朝向 + 可选 next_scene / tooltip_offset
 ##   external_wall -> TileMapLayer，按 dirs 连通性用 16x16 小格拼 32x32 墙节点
+##   characters    -> 实例化对应角色场景，支持 Player / Dolos_Black
 ##
 ## 依赖场景（路径不同改下面常量即可）：
 ##   res://item/floor/floor.tscn
 ##   res://item/exit/exit.tscn
 ##   res://item/walls/external_wall.tscn
+##   res://character/player/player.tscn
+##   res://character/npc/Dolos_Black.tscn
 
 const FLOOR_SCENE := preload("res://item/floor/floor.tscn")
 const EXIT_SCENE := preload("res://item/exit/exit.tscn")
 const EXTERNAL_WALL_SCENE := preload("res://item/walls/external_wall.tscn")
+const PLAYER_SCENE := preload("res://character/player/player.tscn")
+const DOLOS_BLACK_SCENE := preload("res://character/npc/Dolos_Black.tscn")
 
 const WALL_SOURCE_ID := 0
 ## 外墙节点自动连接的最大距离（格子单位）。
@@ -27,45 +32,151 @@ const _DIR_E := Vector2i(1, 0)
 
 ## 把整个关卡实例化到 parent 下。返回是否全部成功。
 static func build_level(level: LevelData, parent: Node) -> bool:
-	var ok := true
+	return build_level_with_refs(level, parent).get("ok", true)
+
+## 把整个关卡实例化到 parent 下，返回所有关键节点的引用表。
+## 这样关卡加载后不用靠 get_node 猜名字，直接拿引用：
+##   var refs := LevelInstantiator.build_level_with_refs(level, self)
+##   refs["floor"]          -> Floor | null
+##   refs["external_wall"]  -> TileMapLayer | null
+##   refs["exit"]           -> Exit | null
+##   refs["items"]          -> Array[Node]（所有物品节点）
+##   refs["characters"]     -> Array[Node]（所有角色节点）
+##   refs["player"]         -> 第一个 Player 节点 | null（便捷）
+##   refs["ok"]             -> 是否全部成功
+## 另外：可实例化场景（floor / exit / 每个 item / 每个 character）的 JSON 数据里
+## 写可选字段 name 时，会以该 name 作为额外引用键加入 refs（见 _register_named_ref）。
+static func build_level_with_refs(level: LevelData, parent: Node) -> Dictionary:
+	var refs := {
+		"ok": true,
+		"floor": null,
+		"external_wall": null,
+		"exit": null,
+		"items": [],
+		"characters": [],
+		"player": null,
+	}
 	if level.has_floor():
-		ok = spawn_floor(level, parent) and ok
+		refs["floor"] = spawn_floor(level, parent, refs)
 	if not level.external_walls.is_empty():
-		ok = spawn_external_walls(level, parent) and ok
+		refs["external_wall"] = spawn_external_walls(level, parent)
 	if not level.items.is_empty():
-		ok = spawn_items(level, parent) and ok
+		refs["items"] = spawn_items(level, parent, refs)
+	if not level.characters.is_empty():
+		refs["characters"] = spawn_characters(level, parent, refs)
+		for node in refs["characters"]:
+			if refs["player"] == null and node.name == "Player":
+				refs["player"] = node
+	# mirror 依赖 items/characters 的 name 引用（tomap），在所有节点实例化后统一处理
+	var mirrors := spawn_mirrors(level, parent, refs)
+	if not mirrors.is_empty():
+		for m in mirrors:
+			(refs["items"] as Array).append(m)
 	if level.has_exit():
-		ok = spawn_exit(level, parent) and ok
-	return ok
+		refs["exit"] = spawn_exit(level, parent, refs)
+	return refs
+
+## 若数据里写了可选字段 name，把实例化出的节点注册进引用表：refs[name] = node。
+## name 要求唯一；若重复，后实例化的覆盖先实例化的（与 Dictionary 行为一致）。
+static func _register_named_ref(refs: Dictionary, node: Node, data: Dictionary) -> void:
+	if refs.is_empty():
+		return
+	var n := str(data.get("name", ""))
+	if not n.is_empty():
+		refs[n] = node
 
 # ============================================================
 # floor
 # ============================================================
 
-## 地板：JSON {X,Y,W,H,seed?} -> 瓦片矩形
-static func spawn_floor(level: LevelData, parent: Node) -> bool:
+## 地板：JSON {X,Y,W,H,seed?,preset_tile?,name?} -> 瓦片矩形，返回实例化出的 Floor 节点
+static func spawn_floor(level: LevelData, parent: Node, refs: Dictionary = {}) -> Floor:
 	var floor_node := FLOOR_SCENE.instantiate() as Floor
+	floor_node.name = "Floor"  # 稳定节点名，方便 get_node("Floor")
 	floor_node.auto_generate = false   # 关掉默认矩形，避免先铺一遍再覆盖
+	floor_node.clear_before_fill = false  # 不先清空，保留预制瓦片
+	floor_node.only_fill_empty = true     # 只铺空白格，不覆盖预制瓦片
 	if level.floor_seed != -1:
 		floor_node.seed_value = level.floor_seed  # 固定种子，关卡可复现
 	parent.add_child(floor_node)
+	_place_preset_tiles(floor_node, level.floor_preset_tiles)
 	floor_node.generate_area(level.floor_rect)
-	return true
+	_register_named_ref(refs, floor_node, {"name": level.floor_name})
+	return floor_node
+
+## 铺设预制瓦片：先摆指定位置的瓦片（可带朝向/旋转），
+## generate_area 因 only_fill_empty=true 不会覆盖这些格子。
+static func _place_preset_tiles(floor_node: Floor, presets: Array) -> void:
+	if presets.is_empty():
+		return
+	var source := floor_node.tile_set.get_source(floor_node.source_id) as TileSetAtlasSource
+	if source == null:
+		push_warning("LevelInstantiator: floor TileSet 找不到 source_id=%d" % floor_node.source_id)
+		return
+	for preset in presets:
+		if typeof(preset) != TYPE_DICTIONARY:
+			continue
+		var coord := Vector2i(int(preset.get("X", 0)), int(preset.get("Y", 0)))
+		var tile_data: Variant = preset.get("tile", [0, 0])
+		if typeof(tile_data) != TYPE_ARRAY or tile_data.size() < 2:
+			push_warning("LevelInstantiator: 预制瓦片 tile 格式应为 [x,y]，跳过")
+			continue
+		var atlas := Vector2i(int(tile_data[0]), int(tile_data[1]))
+		var facing := str(preset.get("facing", "E"))
+		var alt := _preset_alternative_tile(source, atlas, facing)
+		floor_node.set_cell(coord, floor_node.source_id, atlas, alt)
+
+## 为预制瓦片获取/创建 alternative tile（实现旋转）。
+## 朝向复用 CoordinateSystem 语义：E=0°、S=90°、W=180°、N=-90°。
+## 旋转通过 TileData 的 transpose/flip 组合表达（TileMapLayer 无直接旋转参数）。
+static func _preset_alternative_tile(source: TileSetAtlasSource, atlas: Vector2i, facing: String) -> int:
+	# 先看该瓦片是否已有同朝向的 alternative（共享 TileSet 时避免重复创建）
+	var alt_count := source.get_alternative_tiles_count(atlas)
+	for i in alt_count:
+		var alt_id := source.get_alternative_tile_id(atlas, i)
+		var td := source.get_tile_data(atlas, alt_id)
+		if _facing_matches_tile_data(td, facing):
+			return alt_id
+	# 没有则创建一个
+	var new_alt := source.create_alternative_tile(atlas)
+	var new_td := source.get_tile_data(atlas, new_alt)
+	_apply_facing_to_tile_data(new_td, facing)
+	return new_alt
+
+## TileData 是否已是指定朝向（N/S/W/E；E=无旋转）
+static func _facing_matches_tile_data(td: TileData, facing: String) -> bool:
+	match facing:
+		"N": return td.transpose and td.flip_v and not td.flip_h
+		"S": return td.transpose and td.flip_h and not td.flip_v
+		"W": return td.flip_h and td.flip_v and not td.transpose
+		_: return not td.transpose and not td.flip_h and not td.flip_v
+
+## 把朝向应用到 TileData 的旋转（transpose/flip 组合）：
+##   E=0° 不旋转；S=90°；W=180°；N=-90°（与 facing_to_rotation 一致）
+static func _apply_facing_to_tile_data(td: TileData, facing: String) -> void:
+	match facing:
+		"S":
+			td.transpose = true
+			td.flip_h = true
+		"W":
+			td.flip_h = true
+			td.flip_v = true
+		"N":
+			td.transpose = true
+			td.flip_v = true
+		_: # E 或未知：不旋转
+			pass
 
 # ============================================================
 # exit
 # ============================================================
 
-## 出口：JSON {X,Y,facing,next_scene?,tooltip_offset?} -> 坐标 + 朝向 + 可选属性
-static func spawn_exit(level: LevelData, parent: Node) -> bool:
+## 出口：JSON {X,Y,facing,next_scene?,tooltip_offset?} -> 坐标 + 朝向 + 可选属性，返回 Exit 节点
+static func spawn_exit(level: LevelData, parent: Node, refs: Dictionary = {}) -> Exit:
 	var exit_node := EXIT_SCENE.instantiate() as Exit
+	exit_node.name = "Exit"  # 稳定节点名，方便 get_node("Exit")
 	parent.add_child(exit_node)
-
-	var coord := Vector2i(
-		int(level.exit.get("X", 0)),
-		int(level.exit.get("Y", 0))
-	)
-	exit_node.position = level.coord_to_world_center(coord)
+	exit_node.position = world_coord_to_vector2(level.exit, level)
 	exit_node.rotation_degrees = CoordinateSystem.facing_to_rotation(str(level.exit.get("facing", "E")))
 	# exit._ready() 里的 reset_rotation 在 add_child 时就执行了（此时旋转还是 0），
 	# 所以设置完朝向后需要再调一次，让交互组件基于正确朝向重置
@@ -89,7 +200,8 @@ static func spawn_exit(level: LevelData, parent: Node) -> bool:
 			float(offset_data[1])
 		)
 
-	return true
+	_register_named_ref(refs, exit_node, level.exit)
+	return exit_node
 
 # ============================================================
 # external_wall（TileMapLayer）
@@ -105,12 +217,13 @@ static func spawn_exit(level: LevelData, parent: Node) -> bool:
 ## 相邻检测：同一行/列上距离 <= WALL_CONNECT_MAX_DISTANCE 的节点认为连接，
 ## 中间自动铺直墙连接段。节点显式写了 dirs 则直接用，没写则自动推导。
 
-## 外墙：节点数组 -> TileMapLayer 铺设（含自动连接段）
-static func spawn_external_walls(level: LevelData, parent: Node) -> bool:
+## 外墙：节点数组 -> TileMapLayer 铺设（含自动连接段），返回 TileMapLayer 节点
+static func spawn_external_walls(level: LevelData, parent: Node) -> TileMapLayer:
 	if level.external_walls.is_empty():
-		return true
+		return null
 
 	var tile_map := EXTERNAL_WALL_SCENE.instantiate() as TileMapLayer
+	tile_map.name = "ExternalWall"  # 稳定节点名，方便 get_node("ExternalWall")
 	parent.add_child(tile_map)
 	tile_map.clear()  # 场景默认带瓦片，生成前先清空
 
@@ -125,7 +238,7 @@ static func spawn_external_walls(level: LevelData, parent: Node) -> bool:
 		var coord := Vector2i(int(node.get("X", 0)), int(node.get("Y", 0)))
 		var dirs: Dictionary = node.get("dirs", {})
 		_paint_wall_node(tile_map, coord, dirs)
-	return true
+	return tile_map
 
 ## 推导所有节点的 dirs：
 ##   - dirs 中写了的方向，用写的值
@@ -275,29 +388,52 @@ const WALL_SCENE_PATH := "res://item/walls/${color}_wall.tscn"
 const WALL_BASE_SCENE := "res://item/walls/wall.tscn"
 ## ButtonController 脚本路径（只有代码，创建空 Node2D 挂载此脚本）
 const BUTTON_CONTROLLER_SCRIPT := "res://item/button/button_control_wall.gd"
+## Clue（线索）场景路径（路径不同改这里即可）
+const CLUE_SCENE := preload("res://item/clue/clue.tscn")
+## Bomb（炸弹）场景路径模板（${color} 替换为实际颜色，空 color 用基类）
+const BOMB_SCENE_PATH := "res://item/bomb/${color}_bomb.tscn"
+const BOMB_BASE_SCENE := "res://item/bomb/bomb.tscn"
+## MapMirror（映射镜）场景路径
+const MIRROR_SCENE := preload("res://item/mirror/map_mirror.tscn")
 
 ## 已知类名（大写优先匹配，小写也能匹配到对应大写类名）
-const KNOWN_CLASSES := ["ButtonController", "FakableWall", "FakableButton"]
+const KNOWN_CLASSES := ["ButtonController", "FakableWall", "FakableButton", "Clue", "FakableBomb", "MapMirror"]
 
-## 实例化所有 items
-static func spawn_items(level: LevelData, parent: Node) -> bool:
+## 实例化所有 items，返回实例化出的节点数组（无则空数组）
+static func spawn_items(level: LevelData, parent: Node, refs: Dictionary = {}) -> Array[Node]:
+	var spawned: Array[Node] = []
 	for item in level.items:
 		if typeof(item) == TYPE_DICTIONARY:
-			_spawn_single_item(item, level, parent)
-	return true
+			# MapMirror 依赖 items/characters 的 name 引用（tomap），
+			# 由 spawn_mirrors 在所有节点实例化后统一处理，这里跳过
+			if _resolve_class_name(item) == "MapMirror":
+				continue
+			var node := _spawn_single_item(item, level, parent)
+			if node:
+				spawned.append(node)
+				_register_named_ref(refs, node, item)
+	return spawned
 
-## 根据 Class 字段分发到具体的实例化函数
-static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> void:
+## 根据 Class 字段分发到具体的实例化函数，返回实例化出的节点（未知类型返回 null）
+static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> Node:
 	var item_class := _resolve_class_name(item)
 	match item_class:
 		"ButtonController":
-			_spawn_button_controller(item, level, parent)
+			return _spawn_button_controller(item, level, parent)
 		"FakableWall":
-			_spawn_fakable_wall(item, level, parent)
+			return _spawn_fakable_wall(item, level, parent)
 		"FakableButton":
-			_spawn_fakable_button(item, level, parent)
+			return _spawn_fakable_button(item, level, parent)
+		"Clue":
+			return _spawn_clue(item, level, parent)
+		"FakableBomb":
+			return _spawn_fakable_bomb(item, level, parent)
+		"MapMirror":
+			# mirror 由 spawn_mirrors 在 items/characters 之后统一实例化（tomap 依赖 name 引用），这里不处理
+			return null
 		_:
 			push_warning("LevelInstantiator: 未知的 Class '%s'，跳过" % item_class)
+			return null
 
 ## 解析 Class 字段：大写优先，无大写再看小写（都匹配到已知类名）
 static func _resolve_class_name(item: Dictionary) -> String:
@@ -309,9 +445,17 @@ static func _resolve_class_name(item: Dictionary) -> String:
 			return name
 	return raw
 
-## 解析 item 的格子坐标（X/Y 大写，整数）
-static func _item_grid_coord(item: Dictionary) -> Vector2i:
-	return Vector2i(int(item.get("X", 0)), int(item.get("Y", 0)))
+## 解析 item 的世界坐标（X/Y 大写，允许浮点）-> 实际坐标 Vector2（像素，格子中心）
+static func world_coord_to_vector2(world: Dictionary, level: LevelData) -> Vector2:
+	return level.coord_to_world_center(Vector2(
+		float(world.get("X", 0)),
+		float(world.get("Y", 0))
+	))
+
+## 世界坐标 {X, Y}（允许浮点）-> 实际坐标 {x, y}（像素）
+static func world_coord_to_xy(world: Dictionary, level: LevelData) -> Dictionary:
+	var v := world_coord_to_vector2(world, level)
+	return {"x": v.x, "y": v.y}
 
 ## 解析向量字段，支持 [x,y] 数组和 {"x":..,"y":..} 对象（大小写 x/y 都认）
 static func _parse_vector2(data: Variant, default: Vector2 = Vector2.ZERO) -> Vector2:
@@ -324,11 +468,21 @@ static func _parse_vector2(data: Variant, default: Vector2 = Vector2.ZERO) -> Ve
 		)
 	return default
 
+## 解析尺寸字段：支持 [x,y] 数组、{"x":..,"y":..} 对象、{"W":..,"H":..} 格子单位。
+## 格子单位（W/H）通过 level.coord_to_world 转成像素 Vector2。
+static func _parse_size(data: Variant, level: LevelData, default: Vector2) -> Vector2:
+	if typeof(data) == TYPE_DICTIONARY and data.has("W") and data.has("H"):
+		return level.coord_to_world(Vector2(
+			float(data["W"]),
+			float(data["H"])
+		))
+	return _parse_vector2(data, default)
+
 ## 朝向 -> anchor 映射（伸缩朝向，非按钮 on/off 朝向）
 static func _facing_to_anchor(facing: String) -> Vector2:
 	match facing:
-		"N", "n": return Vector2(0.5, 0)
-		"S", "s": return Vector2(0.5, 1)
+		"N", "n": return Vector2(0.5, 1)
+		"S", "s": return Vector2(0.5, 0)
 		"W", "w": return Vector2(1, 0.5)
 		"E", "e": return Vector2(0, 0.5)
 	return Vector2(0.5, 0.5)
@@ -361,8 +515,7 @@ static func _instantiate_button(btn_data: Dictionary, level: LevelData, parent: 
 	var scene := load(_button_scene_path(color)) as PackedScene
 	var btn := scene.instantiate() as Node2D
 	parent.add_child(btn)
-	btn.global_position = level.coord_to_world_center(_item_grid_coord(btn_data))
-
+	btn.global_position = world_coord_to_vector2(btn_data, level)
 	# tooltip_offset（支持 [x,y] 数组和 {"x":..,"y":..} 对象）
 	if btn_data.has("tooltip_offset"):
 		var offset := _parse_vector2(btn_data["tooltip_offset"])
@@ -380,38 +533,62 @@ static func _instantiate_wall(wall_data: Dictionary, level: LevelData, parent: N
 	var color := str(wall_data.get("color", ""))
 	var scene := load(_wall_scene_path(color)) as PackedScene
 	var wall := scene.instantiate() as Node2D
-	parent.add_child(wall)
-	wall.global_position = level.coord_to_world_center(_item_grid_coord(wall_data))
 
+	# 尺寸（支持 [x,y] 数组、{"x":..,"y":..} 对象和 {"W":..,"H":..} 格子单位）
+	# 尺寸赋值需早于 add_child（早于 ready 阶段），否则会出现动画异常
+	if wall_data.has("size"):
+		wall.size = _parse_size(wall_data["size"], level, wall.size)
+
+	parent.add_child(wall)
+	wall.global_position = world_coord_to_vector2(wall_data, level)
 	# 朝向 -> anchor（支持 "facing" 和 "朝向" 两种键名）
 	var facing := str(wall_data.get("facing", wall_data.get("朝向", "")))
 	if not facing.is_empty() and wall.has_method("set"):
 		wall.anchor = _facing_to_anchor(facing)
+		# auto_offset：可选字段，默认开——坐标向 facing 反方向偏移半格，
+		# 修正墙从格子中心向一侧伸缩导致的半格错位；无 facing 不处理
+		if bool(wall_data.get("auto_offset", true)):
+			wall.global_position += _facing_opposite_half_cell(facing, level.cell_size)
 
 	# fake / fakable
 	_apply_fake(wall, wall_data)
 	return wall
 
-## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下
-static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> void:
+## facing 反方向的半格偏移量（FakableWall auto_offset 用）。
+## N/S/W/E：向伸缩方向的反方向移半格（Y 向下：N 的反方向=下 +y，S=上 -y，W=右 +x，E=左 -x）
+static func _facing_opposite_half_cell(facing: String, cell_size: Vector2i) -> Vector2:
+	var half := Vector2(cell_size) * 0.5
+	match facing:
+		"N", "n": return Vector2(0, half.y)
+		"S", "s": return Vector2(0, -half.y)
+		"W", "w": return Vector2(half.x, 0)
+		"E", "e": return Vector2(-half.x, 0)
+	return Vector2.ZERO
+
+## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下。
+## 返回 ButtonController 节点。
+static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> Node:
 	var bc := Node2D.new()
+	bc.name = "ButtonController"
 	var script := load(BUTTON_CONTROLLER_SCRIPT) as Script
 	bc.set_script(script)
 	parent.add_child(bc)
-	var bc_pos := level.coord_to_world_center(_item_grid_coord(item))
+	var bc_pos := world_coord_to_vector2(item, level)
 	bc.position = bc_pos
 
 	var buttons: Array[Node2D] = []
 	var walls: Array[Node2D] = []
 
 	# 实例化 buttons（挂载到 ButtonController 下，global_position 自动转相对坐标）
-	for btn_data in item.get("buttons", []):
+	# JSON 键名单数 button 优先，复数 buttons 兼容
+	for btn_data in item.get("button", item.get("buttons", [])):
 		if typeof(btn_data) == TYPE_DICTIONARY:
 			var btn := _instantiate_button(btn_data, level, bc)
 			buttons.append(btn)
 
 	# 实例化 walls（挂载到 ButtonController 下，global_position 自动转相对坐标）
-	for wall_data in item.get("walls", []):
+	# JSON 键名单数 wall 优先，复数 walls 兼容
+	for wall_data in item.get("wall", item.get("walls", [])):
 		if typeof(wall_data) == TYPE_DICTIONARY:
 			var wall := _instantiate_wall(wall_data, level, bc)
 			walls.append(wall)
@@ -419,16 +596,217 @@ static func _spawn_button_controller(item: Dictionary, level: LevelData, parent:
 	bc.buttons = buttons
 	bc.walls = walls
 
-	# size_on / size_off（支持 [x,y] 数组和 {"x":..,"y":..} 对象）
+	# size_on / size_off（支持 [x,y] 数组、{"x":..,"y":..} 对象、{"W":..,"H":..} 格子单位）
 	if item.has("size_on"):
-		bc.size_on = _parse_vector2(item["size_on"], bc.size_on)
+		bc.size_on = _parse_size(item["size_on"], level, bc.size_on)
 	if item.has("size_off"):
-		bc.size_off = _parse_vector2(item["size_off"], bc.size_off)
+		bc.size_off = _parse_size(item["size_off"], level, bc.size_off)
+	return bc
 
 ## 单独的 FakableWall
-static func _spawn_fakable_wall(item: Dictionary, level: LevelData, parent: Node) -> void:
-	_instantiate_wall(item, level, parent)
+static func _spawn_fakable_wall(item: Dictionary, level: LevelData, parent: Node) -> Node:
+	return _instantiate_wall(item, level, parent)
 
 ## 单独的 FakableButton
-static func _spawn_fakable_button(item: Dictionary, level: LevelData, parent: Node) -> void:
-	_instantiate_button(item, level, parent)
+static func _spawn_fakable_button(item: Dictionary, level: LevelData, parent: Node) -> Node:
+	return _instantiate_button(item, level, parent)
+
+## 单独的 Clue（线索）：必需字段只有坐标，可选 content / duration / id / facing
+## 与 exit 同理，实例化设完旋转后要再调一次 interact_comp.reset_rotation(false)，
+## 因为 _ready() 里的 reset_rotation 在 add_child 时就执行了（那时旋转还是 0）。
+static func _spawn_clue(item: Dictionary, level: LevelData, parent: Node) -> Node:
+	var clue := CLUE_SCENE.instantiate() as Node2D
+	parent.add_child(clue)
+	clue.global_position = world_coord_to_vector2(item, level)
+
+	# 朝向（缺省 E=不旋转），复用 CoordinateSystem 公式
+	var facing := str(item.get("facing", "E"))
+	clue.rotation_degrees = CoordinateSystem.facing_to_rotation(facing)
+	var ic := clue.get_node_or_null("InteractComponent")
+	if ic and ic.has_method("reset_rotation"):
+		ic.reset_rotation(false)
+
+	# 可选字段：content / duration / id
+	if item.has("content"):
+		clue.content = str(item["content"])
+	if item.has("duration"):
+		clue.duration = float(item["duration"])
+	if item.has("id"):
+		clue.id = int(item["id"])
+
+	# fake / fakable
+	_apply_fake(clue, item)
+	return clue
+
+## 单独的 Bomb（炸弹）：color 可选（对应 ${color}_bomb.tscn，缺省用基类 bomb.tscn）
+static func _spawn_fakable_bomb(item: Dictionary, level: LevelData, parent: Node) -> Node:
+	var color := str(item.get("color", ""))
+	var scene := load(_bomb_scene_path(color)) as PackedScene
+	var bomb := scene.instantiate() as Node2D
+	parent.add_child(bomb)
+	bomb.global_position = world_coord_to_vector2(item, level)
+	# fake / fakable
+	_apply_fake(bomb, item)
+	return bomb
+
+## 根据 color 生成炸弹场景路径（空 color 用基类 bomb.tscn）
+static func _bomb_scene_path(color: String) -> String:
+	if color.is_empty():
+		return BOMB_BASE_SCENE
+	return BOMB_SCENE_PATH.replace("${color}", color)
+
+# ============================================================
+# mirror（映射镜 MapMirror）：axis + tomap
+# ============================================================
+## 实例化所有 MapMirror。必须在 items 和 characters 实例化完成后调用，
+## 因为 mirror 的 tomap 按 name 引用那些节点，且 mirror._ready() 会遍历 nodes_tomap
+## 创建映射节点，所以 nodes_tomap 需在 add_child（触发 _ready）前填好。
+## 返回实例化出的 mirror 节点数组。
+static func spawn_mirrors(level: LevelData, parent: Node, refs: Dictionary = {}) -> Array[Node]:
+	var mirrors: Array[Node] = []
+	for item in level.items:
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+		if _resolve_class_name(item) != "MapMirror":
+			continue
+		var mirror := _spawn_mirror(item, level, parent, refs)
+		if mirror:
+			mirrors.append(mirror)
+			_register_named_ref(refs, mirror, item)
+	return mirrors
+
+## 实例化单个 MapMirror。JSON 特有字段：
+##   axis: 可选，X / Y（或 0 / 1），对应 MapMirror.axis，缺省 X
+##   tomap: 可选，数组，值为 item / character 的 name（须已有 name 引用）
+static func _spawn_mirror(item: Dictionary, level: LevelData, parent: Node, refs: Dictionary) -> MapMirror:
+	var mirror := MIRROR_SCENE.instantiate() as MapMirror
+
+	# axis（可选，缺省 X）
+	mirror.axis = _parse_mirror_axis(item.get("axis", "X")) as MapMirror.Axis
+	# tomap（可选，name 数组 -> 节点；此时 refs 已含全部 item/character 的 name 引用）
+	mirror.nodes_tomap = _resolve_tomap(item.get("tomap", []), refs)
+
+	# 位置需在 add_child 前设置：mirror._ready() 创建映射节点时基于 self 位置计算对称轴
+	mirror.global_position = world_coord_to_vector2(item, level)
+	parent.add_child(mirror)  # 触发 _ready()，此时 nodes_tomap 已就位
+
+	# tooltip_offset（可选，支持 [x,y] 数组和 {"x":..,"y":..} 对象）
+	if item.has("tooltip_offset"):
+		var offset := _parse_vector2(item["tooltip_offset"])
+		var ic := mirror.get_node_or_null("InteractComponent")
+		if ic:
+			ic.tooltip_offset = offset
+	return mirror
+
+## 解析 axis 字段：X / Y 字符串，或 0 / 1 整数
+static func _parse_mirror_axis(data: Variant) -> int:
+	match str(data).to_lower():
+		"y", "1":
+			return MapMirror.Axis.Y
+		_:
+			return MapMirror.Axis.X
+
+## 把 tomap 的 name 数组解析成节点数组（从 refs 引用表取，未找到则警告跳过）
+static func _resolve_tomap(names: Variant, refs: Dictionary) -> Array[Node2D]:
+	var list: Array[Node2D] = []
+	if typeof(names) != TYPE_ARRAY:
+		return list
+	for name in names:
+		var target: Variant = refs.get(str(name))
+		if target is Node2D:
+			list.append(target)
+		else:
+			push_warning("LevelInstantiator: mirror 的 tomap 引用 '%s' 未找到（需为 item/character 的 name）" % name)
+	return list
+
+# ============================================================
+# characters（角色实例化：Player / Dolos_Black）
+# ============================================================
+
+## 实例化所有角色，返回实例化出的节点数组（无则空数组）
+static func spawn_characters(level: LevelData, parent: Node, refs: Dictionary = {}) -> Array[Node]:
+	var spawned: Array[Node] = []
+	for char_data in level.characters:
+		if typeof(char_data) == TYPE_DICTIONARY:
+			var node := _spawn_single_character(char_data, level, parent)
+			if node:
+				spawned.append(node)
+				_register_named_ref(refs, node, char_data)
+
+				# 注册演员表，服务于事件系统
+				var n := str(char_data.get("name", ""))
+				if not n.is_empty() and "actors" in parent:
+					parent.actors[n] = node
+	return spawned
+
+## 根据 type 字段分发到具体角色的实例化函数，返回实例化出的节点（未知类型返回 null）
+static func _spawn_single_character(char_data: Dictionary, level: LevelData, parent: Node) -> Node:
+	var char_type := str(char_data.get("type", char_data.get("Type", char_data.get("class", ""))))
+	match char_type.to_lower():
+		"player":
+			return _spawn_player(char_data, level, parent)
+		"dolos_black", "dolosblack":
+			return _spawn_dolos_black(char_data, level, parent)
+		_:
+			push_warning("LevelInstantiator: 未知角色类型 '%s'，跳过" % char_type)
+			return null
+
+## 应用角色朝向（facing: N/S/W/E，缺省 E=不旋转）
+static func _apply_character_facing(node: Node2D, char_data: Dictionary) -> void:
+	var facing := str(char_data.get("facing", "E"))
+	if not facing.is_empty():
+		node.rotation_degrees = CoordinateSystem.facing_to_rotation(facing)
+
+## 实例化 Player 角色
+static func _spawn_player(char_data: Dictionary, level: LevelData, parent: Node) -> CharacterBody2D:
+	var player := PLAYER_SCENE.instantiate() as CharacterBody2D
+	player.name = "Player"  # 稳定节点名，方便 get_node / 场景树里找
+	parent.add_child(player)
+
+	# 基础坐标（格子中心对齐）
+	player.position = level.coord_to_world_center(Vector2(
+		float(char_data.get("X", 0)),
+		float(char_data.get("Y", 0))
+	))
+
+	# 朝向（缺省 E）
+	_apply_character_facing(player, char_data)
+
+	# 可选：是否可移动（依赖 player.gd 有 movable 属性）
+	if char_data.has("movable"):
+		if "movable" in player:
+			player.movable = char_data["movable"]
+
+	# 可选：是否可交互（控制分组 + 交互组件）
+	if char_data.has("interactable"):
+		var interactable = char_data["interactable"]
+		if interactable:
+			player.add_to_group("interactable")
+		else:
+			player.remove_from_group("interactable")
+		var interact_comp := player.get_node_or_null("InteractComponent")
+		if interact_comp and interact_comp.has("disabled"):
+			interact_comp.disabled = not interactable
+
+	# 可选：视野角度（设置 view_area 组件的 angle_deg）
+	if char_data.has("view_angle"):
+		var view_area := player.get_node_or_null("sprite/eyes/view_area")
+		if view_area:
+			view_area.angle_deg = float(char_data["view_angle"])
+	return player
+
+## 实例化 Dolos_Black 角色
+static func _spawn_dolos_black(char_data: Dictionary, level: LevelData, parent: Node) -> Node2D:
+	var npc := DOLOS_BLACK_SCENE.instantiate() as Node2D
+	npc.name = "Dolos_Black"  # 稳定节点名（多个时会自动加 @ 后缀区分）
+	parent.add_child(npc)
+
+	# 基础坐标（格子中心对齐）
+	npc.position = level.coord_to_world_center(Vector2(
+		float(char_data.get("X", 0)),
+		float(char_data.get("Y", 0))
+	))
+
+	# 朝向（缺省 E）
+	_apply_character_facing(npc, char_data)
+	return npc

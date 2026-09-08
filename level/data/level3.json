@@ -1,0 +1,112 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": 3,
+        "name": "关卡 3",
+        "description": "小心炸弹"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 4,  "Y": 10,
+            "facing": "W",
+            "tooltip_offset": [-16, -32]
+        },
+        "external_wall": [
+            { "X": 2,  "Y": 0  },
+            { "X": 12, "Y": 0,  "dirs": {"S": false} },
+            { "X": 12, "Y": -1 },
+            { "X": 15, "Y": -1 },
+            { "X": 15, "Y": 10 },
+            { "X": 5,  "Y": 10 },
+            { "X": 5,  "Y": 11 },
+            { "X": 2,  "Y": 11 },
+            { "X": 6,  "Y": 3,  "dirs": {"S": false} },
+            { "X": 12, "Y": 3,  "dirs": {"S": false, "N": false} },
+            { "X": 6,  "Y": 6,  "dirs": {"N": false} },
+            { "X": 12, "Y": 6,  "dirs": {"N": false} },
+            { "X": 9,  "Y": 6  },
+            { "X": 9,  "Y": 10 }
+        ],
+        "floor": {
+            "X": 2, "Y": 0, 
+            "W": 14, "H": 10,
+            "seed": 1,
+            "preset_tiles": [
+                { "X": 13,  "Y": 0, "tile": [3, 0], "facing": "W" },
+                { "X": 14,  "Y": 0, "tile": [2, 0], "facing": "W" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "ButtonController",
+            "X": 0, "Y": 0,
+            "button": [
+                {
+                    "X": 11, "Y": 8, 
+                    "color": "green", 
+                    "fake": true, 
+                    "fakable": true
+                }
+            ],
+            "wall": [
+                {
+                    "X": 3,  "Y": 6, 
+                    "color": "green", 
+                    "facing": "E",
+                    "size": { "W": 3,  "H": 1 }
+                }
+            ],
+            "size_on":  { "W": 1,  "H": 1 },
+            "size_off": { "W": 3,  "H": 1 }
+        },
+        {
+            "Class": "Clue",
+            "X": 7,  "Y": 8,
+            "content": "[left][font_size=24]他离开了\n我才有机会写下这些。\n我不清楚我做过什么，\n也不清楚怎么会在这。\n总之我想离开这里[/font_size][/left]",
+            "duration": 2.8,
+            "id": 2
+        },
+        { "Class": "FakableBomb", "X": 6,  "Y": 1,  "color": "red"  },
+        { "Class": "FakableBomb", "X": 7,  "Y": 1,  "color": "green"},
+        { "Class": "FakableBomb", "X": 11, "Y": 1,  "color": "green"},
+        { "Class": "FakableBomb", "X": 11, "Y": 2,  "color": "green"},
+        { "Class": "FakableBomb", "X": 3,  "Y": 2,  "color": "red"  },
+        { "Class": "FakableBomb", "X": 5,  "Y": 3,  "color": "green"},
+        { "Class": "FakableBomb", "X": 13, "Y": 3,  "color": "red" },
+        { "Class": "FakableBomb", "X": 14, "Y": 3,  "color": "red" },
+        { "Class": "FakableBomb", "X": 7,  "Y": 5,  "color": "green"},
+        { "Class": "FakableBomb", "X": 8,  "Y": 5,  "color": "red"  },
+        { "Class": "FakableBomb", "X": 9,  "Y": 5,  "color": "red"  }
+
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 9,  "Y": 2,
+            "movable": false
+        },
+        {
+            "type": "DolosBlack",
+            "name": "dolos",
+            "X": 12, "Y": 2
+        }
+    ],
+    "event": [
+        [
+            {"type": "say", "actor": "dolos", "text": "我有时会有事\n会暂时离开一会", "duration": 3.0},
+            {"type": "say", "actor": "dolos", "text": "你自己可以做到的", "duration": 3.0},
+            {"type": "set", "target": "player", "property": "movable", "value": true},
+            {"type": "comment", "content": "dolos.chat.bubble_offset += Vector2(-112, 32); 暂无法以事件表示"},
+            {"type": "move_to", "actor": "dolos", "target": {"x": 432, "y": 80}, "duration": 0.5},
+            {"type": "say", "actor": "dolos", "text": "记得小心，别踩到炸弹\n否则会发生爆炸", "duration": 5.0},
+            {"type": "move_to", "actor": "dolos", "target": {"x": 432, "y": -128}, "duration": 1.0},
+            {"type": "end"}
+        ]
+    ]
+}

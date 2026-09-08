@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cj75wya85fyea"]
+
+[ext_resource type="PackedScene" uid="uid://dqjd6no7gngoc" path="res://level/scence/level_loader.tscn" id="1_nf8wc"]
+
+[node name="level3" unique_id=1783115374 instance=ExtResource("1_nf8wc")]
+Level_id = 3
+
+[node name="Node2D" type="Node2D" parent="." index="1" unique_id=111785908]
+
+[node name="Camera2D" parent="." index="2" unique_id=1566341157]
+position = Vector2(288, 176)
+
+[node name="RichTextLabel" parent="menu_bar" parent_id_path=PackedInt32Array(1969657292) index="2" unique_id=1416881953]
+offset_right = 80.0
+offset_bottom = 68.0

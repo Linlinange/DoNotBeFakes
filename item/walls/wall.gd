@@ -15,9 +15,9 @@ extends FakableObject
 @onready var normal_collision_layer = collision_layer
 
 ## 尺寸: 墙体的宽度和长度
-@export var size: Vector2 = Vector2(48, 48):
+@export var size: Vector2 = Vector2(32, 32):
 	set(v):
-		var min_v = Vector2(16, 16)
+		var min_v = Vector2(32, 32)
 		var target = v.max(min_v)
 		size = target
 		

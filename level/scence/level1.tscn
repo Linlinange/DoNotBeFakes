@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://ct7dsuuetixp5"]
+
+[ext_resource type="PackedScene" uid="uid://dqjd6no7gngoc" path="res://level/scence/level_loader.tscn" id="1_un6df"]
+[ext_resource type="Script" uid="uid://8nxqla0j3trn" path="res://level/script/level1.gd" id="2_y7bbx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_un6df"]
+size = Vector2(160, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7bbx"]
+size = Vector2(160, 352)
+
+[node name="level1" unique_id=1783115374 instance=ExtResource("1_un6df")]
+Level_id = 1
+
+[node name="Node2D" type="Node2D" parent="." index="1" unique_id=111785908]
+script = ExtResource("2_y7bbx")
+
+[node name="a1" type="Area2D" parent="Node2D" index="0" unique_id=1448944546]
+position = Vector2(224, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/a1" index="0" unique_id=95602599]
+position = Vector2(80, 96)
+shape = SubResource("RectangleShape2D_un6df")
+debug_color = Color(1, 1, 0.7019608, 0.41960785)
+
+[node name="a2" type="Area2D" parent="Node2D" index="1" unique_id=1251004618]
+position = Vector2(416, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/a2" index="0" unique_id=632007510]
+position = Vector2(80, 176)
+shape = SubResource("RectangleShape2D_y7bbx")
+debug_color = Color(1, 1, 0.7019608, 0.41960785)
