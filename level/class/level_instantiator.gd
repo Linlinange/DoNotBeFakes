@@ -402,6 +402,9 @@ const KNOWN_CLASSES := ["ButtonController", "FakableWall", "FakableButton", "Clu
 ## 实例化所有 items，返回实例化出的节点数组（无则空数组）
 static func spawn_items(level: LevelData, parent: Node, refs: Dictionary = {}) -> Array[Node]:
 	var spawned: Array[Node] = []
+## 实例化所有 items，返回实例化出的节点数组（无则空数组）
+static func spawn_items(level: LevelData, parent: Node, refs: Dictionary = {}) -> Array[Node]:
+	var spawned: Array[Node] = []
 	for item in level.items:
 		if typeof(item) == TYPE_DICTIONARY:
 			# MapMirror 依赖 items/characters 的 name 引用（tomap），
@@ -416,11 +419,15 @@ static func spawn_items(level: LevelData, parent: Node, refs: Dictionary = {}) -
 
 ## 根据 Class 字段分发到具体的实例化函数，返回实例化出的节点（未知类型返回 null）
 static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> Node:
+## 根据 Class 字段分发到具体的实例化函数，返回实例化出的节点（未知类型返回 null）
+static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> Node:
 	var item_class := _resolve_class_name(item)
 	match item_class:
 		"ButtonController":
 			return _spawn_button_controller(item, level, parent)
+			return _spawn_button_controller(item, level, parent)
 		"FakableWall":
+			return _spawn_fakable_wall(item, level, parent)
 			return _spawn_fakable_wall(item, level, parent)
 		"FakableButton":
 			return _spawn_fakable_button(item, level, parent)
@@ -434,6 +441,7 @@ static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node)
 		_:
 			push_warning("LevelInstantiator: 未知的 Class '%s'，跳过" % item_class)
 			return null
+			return null
 
 ## 解析 Class 字段：大写优先，无大写再看小写（都匹配到已知类名）
 static func _resolve_class_name(item: Dictionary) -> String:
@@ -445,6 +453,17 @@ static func _resolve_class_name(item: Dictionary) -> String:
 			return name
 	return raw
 
+## 解析 item 的世界坐标（X/Y 大写，允许浮点）-> 实际坐标 Vector2（像素，格子中心）
+static func world_coord_to_vector2(world: Dictionary, level: LevelData) -> Vector2:
+	return level.coord_to_world_center(Vector2(
+		float(world.get("X", 0)),
+		float(world.get("Y", 0))
+	))
+
+## 世界坐标 {X, Y}（允许浮点）-> 实际坐标 {x, y}（像素）
+static func world_coord_to_xy(world: Dictionary, level: LevelData) -> Dictionary:
+	var v := world_coord_to_vector2(world, level)
+	return {"x": v.x, "y": v.y}
 ## 解析 item 的世界坐标（X/Y 大写，允许浮点）-> 实际坐标 Vector2（像素，格子中心）
 static func world_coord_to_vector2(world: Dictionary, level: LevelData) -> Vector2:
 	return level.coord_to_world_center(Vector2(
@@ -483,6 +502,8 @@ static func _facing_to_anchor(facing: String) -> Vector2:
 	match facing:
 		"N", "n": return Vector2(0.5, 1)
 		"S", "s": return Vector2(0.5, 0)
+		"N", "n": return Vector2(0.5, 1)
+		"S", "s": return Vector2(0.5, 0)
 		"W", "w": return Vector2(1, 0.5)
 		"E", "e": return Vector2(0, 0.5)
 	return Vector2(0.5, 0.5)
@@ -516,6 +537,7 @@ static func _instantiate_button(btn_data: Dictionary, level: LevelData, parent: 
 	var btn := scene.instantiate() as Node2D
 	parent.add_child(btn)
 	btn.global_position = world_coord_to_vector2(btn_data, level)
+	btn.global_position = world_coord_to_vector2(btn_data, level)
 	# tooltip_offset（支持 [x,y] 数组和 {"x":..,"y":..} 对象）
 	if btn_data.has("tooltip_offset"):
 		var offset := _parse_vector2(btn_data["tooltip_offset"])
@@ -541,10 +563,15 @@ static func _instantiate_wall(wall_data: Dictionary, level: LevelData, parent: N
 
 	parent.add_child(wall)
 	wall.global_position = world_coord_to_vector2(wall_data, level)
+	wall.global_position = world_coord_to_vector2(wall_data, level)
 	# 朝向 -> anchor（支持 "facing" 和 "朝向" 两种键名）
 	var facing := str(wall_data.get("facing", wall_data.get("朝向", "")))
 	if not facing.is_empty() and wall.has_method("set"):
 		wall.anchor = _facing_to_anchor(facing)
+		# auto_offset：可选字段，默认开——坐标向 facing 反方向偏移半格，
+		# 修正墙从格子中心向一侧伸缩导致的半格错位；无 facing 不处理
+		if bool(wall_data.get("auto_offset", true)):
+			wall.global_position += _facing_opposite_half_cell(facing, level.cell_size)
 		# auto_offset：可选字段，默认开——坐标向 facing 反方向偏移半格，
 		# 修正墙从格子中心向一侧伸缩导致的半格错位；无 facing 不处理
 		if bool(wall_data.get("auto_offset", true)):
@@ -568,11 +595,27 @@ static func _facing_opposite_half_cell(facing: String, cell_size: Vector2i) -> V
 ## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下。
 ## 返回 ButtonController 节点。
 static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> Node:
+## facing 反方向的半格偏移量（FakableWall auto_offset 用）。
+## N/S/W/E：向伸缩方向的反方向移半格（Y 向下：N 的反方向=下 +y，S=上 -y，W=右 +x，E=左 -x）
+static func _facing_opposite_half_cell(facing: String, cell_size: Vector2i) -> Vector2:
+	var half := Vector2(cell_size) * 0.5
+	match facing:
+		"N", "n": return Vector2(0, half.y)
+		"S", "s": return Vector2(0, -half.y)
+		"W", "w": return Vector2(half.x, 0)
+		"E", "e": return Vector2(-half.x, 0)
+	return Vector2.ZERO
+
+## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下。
+## 返回 ButtonController 节点。
+static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> Node:
 	var bc := Node2D.new()
+	bc.name = "ButtonController"
 	bc.name = "ButtonController"
 	var script := load(BUTTON_CONTROLLER_SCRIPT) as Script
 	bc.set_script(script)
 	parent.add_child(bc)
+	var bc_pos := world_coord_to_vector2(item, level)
 	var bc_pos := world_coord_to_vector2(item, level)
 	bc.position = bc_pos
 
@@ -582,11 +625,15 @@ static func _spawn_button_controller(item: Dictionary, level: LevelData, parent:
 	# 实例化 buttons（挂载到 ButtonController 下，global_position 自动转相对坐标）
 	# JSON 键名单数 button 优先，复数 buttons 兼容
 	for btn_data in item.get("button", item.get("buttons", [])):
+	# JSON 键名单数 button 优先，复数 buttons 兼容
+	for btn_data in item.get("button", item.get("buttons", [])):
 		if typeof(btn_data) == TYPE_DICTIONARY:
 			var btn := _instantiate_button(btn_data, level, bc)
 			buttons.append(btn)
 
 	# 实例化 walls（挂载到 ButtonController 下，global_position 自动转相对坐标）
+	# JSON 键名单数 wall 优先，复数 walls 兼容
+	for wall_data in item.get("wall", item.get("walls", [])):
 	# JSON 键名单数 wall 优先，复数 walls 兼容
 	for wall_data in item.get("wall", item.get("walls", [])):
 		if typeof(wall_data) == TYPE_DICTIONARY:
@@ -604,6 +651,8 @@ static func _spawn_button_controller(item: Dictionary, level: LevelData, parent:
 	return bc
 
 ## 单独的 FakableWall
+static func _spawn_fakable_wall(item: Dictionary, level: LevelData, parent: Node) -> Node:
+	return _instantiate_wall(item, level, parent)
 static func _spawn_fakable_wall(item: Dictionary, level: LevelData, parent: Node) -> Node:
 	return _instantiate_wall(item, level, parent)
 
