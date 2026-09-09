@@ -77,8 +77,8 @@
         { "Class": "FakableBomb", "X": 11, "Y": 2,  "color": "green"},
         { "Class": "FakableBomb", "X": 3,  "Y": 2,  "color": "red"  },
         { "Class": "FakableBomb", "X": 5,  "Y": 3,  "color": "green"},
-        { "Class": "FakableBomb", "X": 13, "Y": 3,  "color": "red" },
-        { "Class": "FakableBomb", "X": 14, "Y": 3,  "color": "red" },
+        { "Class": "FakableBomb", "X": 13, "Y": 3,  "color": "green"},
+        { "Class": "FakableBomb", "X": 14, "Y": 3,  "color": "green"},
         { "Class": "FakableBomb", "X": 7,  "Y": 5,  "color": "green"},
         { "Class": "FakableBomb", "X": 8,  "Y": 5,  "color": "red"  },
         { "Class": "FakableBomb", "X": 9,  "Y": 5,  "color": "red"  }

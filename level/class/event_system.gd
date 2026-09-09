@@ -1,5 +1,4 @@
 extends Node
-extends Node
 ## ============================================================
 ## EventSystem —— 简单数据驱动剧情事件系统（Godot 4.x）
 ## 精简版 + 剧本体检：
@@ -9,7 +8,6 @@ extends Node
 ## 用法：
 ##   1. 项目设置 → 自动加载（Autoload）注册本脚本，名字叫 EventSystem
 ##   2. 关卡脚本里：await EventSystem.run(script, self)
-##   3. 关卡提供 actors 映射：var actors = {"player": %player, "dolos": %Dolos_Black}
 ##   3. 关卡提供 actors 映射：var actors = {"player": %player, "dolos": %Dolos_Black}
 ##
 ## 设计思路：
@@ -50,7 +48,6 @@ func reset() -> void:
 
 
 ## ---------- 事件执行 ----------
-## script: Array[Dictionary]，每个元素是一个步骤（见下）
 ## script: Array[Dictionary]，每个元素是一个步骤（见下）
 ## ctx:    执行上下文，通常是关卡根节点（提供 actors 映射 / 可调方法）
 ##
@@ -376,9 +373,6 @@ func _actor(name_: String, ctx: Node) -> Node:
 	if name_ == "" or ctx == null:
 		return null
 	var mapping: Variant = ctx.get("actors")
-	if mapping is Dictionary and mapping.has(name_):
-		return mapping[name_]
-	var n: Node = ctx.get_node_or_null("%" + name_)
 	if mapping is Dictionary and mapping.has(name_):
 		return mapping[name_]
 	var n: Node = ctx.get_node_or_null("%" + name_)

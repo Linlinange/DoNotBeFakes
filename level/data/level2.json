@@ -13,6 +13,7 @@
         "exit": {
             "X": 12, "Y": 0,
             "facing": "E",
+            "next_scene": "res://level/scence/level3.tscn",
             "tooltip_offset": [16, 32]
         },
         "external_wall": [
@@ -110,11 +111,11 @@
             {"type": "end"}
         ],
         [
+            {"type": "say", "actor": "dolos", "text": "在那边干什么呢？\n往上再走两步就成功了", "duration": 8.0},
             {"type": "end"}
         ],
         [
             {"type": "move_to", "actor": "dolos", "target": {"x": 272, "y": 208}, "duration": 1.4},
-            {"type": "say", "actor": "dolos", "text": "在那边干什么呢？\n往上再走两步就成功了", "duration": 8.0},
             {"type": "wait", "duration": 1.4},
             {"type": "move_to", "actor": "dolos", "target": {"x": 368, "y": 208}, "duration": 1.2},
             {"type": "wait", "duration": 1.2},
