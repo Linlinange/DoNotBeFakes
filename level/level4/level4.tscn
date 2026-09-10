@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://23em5cm4ocg7"]
 
 [ext_resource type="Script" uid="uid://dxyedb416c38d" path="res://item/class/items_contorl.gd" id="1_pd1s4"]
-[ext_resource type="Script" uid="uid://dbtlwhwr20y7d" path="res://level/level4/level4.gd" id="1_pxgm1"]
 [ext_resource type="Texture2D" uid="uid://dy5ar440jyc51" path="res://item/floor/floor.png" id="2_i3mxp"]
 [ext_resource type="Script" uid="uid://dkkfsj20ysugf" path="res://item/floor/floor.gd" id="3_dkj4g"]
 [ext_resource type="PackedScene" uid="uid://ck5uoo21n4j14" path="res://item/exit/exit.tscn" id="4_cqv1u"]
@@ -60,7 +59,6 @@ texture = ExtResource("2_i3mxp")
 sources/0 = SubResource("TileSetAtlasSource_p2rti")
 
 [node name="level4" type="Node2D" unique_id=860938987]
-script = ExtResource("1_pxgm1")
 
 [node name="floor" type="TileMapLayer" parent="." unique_id=1230317466]
 tile_map_data = PackedByteArray("AAD5/+n/AAABAAMAAAD5/+r/AAAAAAEAAAD6/+n/AAAHAAEAADD6/+r/AAAHAAAAADD7/+n/AAAGAAEAADD7/+r/AAAGAAAAADD8/+n/AAAAAAIAAAD8/+r/AAABAAEAAAA=")

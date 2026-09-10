@@ -14,7 +14,7 @@ layer = -1
 [node name="background" parent="Background" unique_id=307221863 instance=ExtResource("1_pv2tu")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1566341157]
-position = Vector2(304, 176)
+position = Vector2(300, 175)
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true

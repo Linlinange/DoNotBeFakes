@@ -13,7 +13,8 @@
         "exit": {
             "X": 4,  "Y": 10,
             "facing": "W",
-            "tooltip_offset": [-16, -32]
+            "tooltip_offset": [-16, -32],
+            "next_scene": "res://level/scence/level4.tscn"
         },
         "external_wall": [
             { "X": 2,  "Y": 0  },
@@ -32,9 +33,9 @@
             { "X": 9,  "Y": 10 }
         ],
         "floor": {
-            "X": 2, "Y": 0, 
+            "X": 2,  "Y": 0, 
             "W": 14, "H": 10,
-            "seed": 1,
+            "seed": 3,
             "preset_tiles": [
                 { "X": 13,  "Y": 0, "tile": [3, 0], "facing": "W" },
                 { "X": 14,  "Y": 0, "tile": [2, 0], "facing": "W" }
@@ -88,8 +89,7 @@
         {
             "type": "Player",
             "name": "player",
-            "X": 9,  "Y": 2,
-            "movable": false
+            "X": 9,  "Y": 2
         },
         {
             "type": "DolosBlack",
@@ -99,6 +99,7 @@
     ],
     "event": [
         [
+            {"type": "set", "target": "player", "property": "movable", "value": false},
             {"type": "say", "actor": "dolos", "text": "我有时会有事\n会暂时离开一会", "duration": 3.0},
             {"type": "say", "actor": "dolos", "text": "你自己可以做到的", "duration": 3.0},
             {"type": "set", "target": "player", "property": "movable", "value": true},

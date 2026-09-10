@@ -688,7 +688,7 @@ static func _spawn_clue(item: Dictionary, level: LevelData, parent: Node) -> Nod
 	if item.has("duration"):
 		clue.duration = float(item["duration"])
 	if item.has("id"):
-		clue.id = int(item["id"])
+		clue.id = str(item["id"])
 
 	# fake / fakable
 	_apply_fake(clue, item)

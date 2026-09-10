@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b2i42v7n1q40d"]
+
+[ext_resource type="PackedScene" uid="uid://dqjd6no7gngoc" path="res://level/scence/level_loader.tscn" id="1_3tm8n"]
+[ext_resource type="Script" uid="uid://bv7nplmt2pqsi" path="res://level/script/camera_follow.gd" id="2_8mkay"]
+
+[node name="level4" unique_id=1783115374 instance=ExtResource("1_3tm8n")]
+Level_id = 4
+
+[node name="Node2D" type="Node2D" parent="." index="1" unique_id=365742211]
+position = Vector2(304, 176)
+
+[node name="Camera2D" parent="." index="2" unique_id=1566341157]
+limit_left = 0
+limit_top = 0
+limit_right = 672
+limit_bottom = 544
+script = ExtResource("2_8mkay")

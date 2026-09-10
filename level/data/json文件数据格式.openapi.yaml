@@ -1,0 +1,736 @@
+openapi: 3.0.1
+info:
+  title: json文件数据格式
+  description: ''
+  version: 1.0.0
+tags: []
+paths: {}
+components:
+  schemas:
+    ButtonController:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: ButtonController
+        name:
+          type: string
+          description: 自定义引用键名
+        button:
+          type: array
+          description: |-
+            按钮数组
+            字段名可为复数
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/FakableButton'
+              - type: object
+                properties:
+                  bind:
+                    type: string
+                    description: 自定义引用键名
+                required:
+                  - bind
+              - type: string
+                description: 自定义引用键名
+        wall:
+          type: array
+          description: |-
+            墙数组
+            字段名可为复数
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/FakableWall'
+              - type: object
+                properties:
+                  bind:
+                    type: string
+                    description: 自定义引用键名
+                required:
+                  - bind
+              - type: string
+                description: 自定义引用键名
+        size_on:
+          anyOf:
+            - type: array
+              items:
+                type: integer
+              minItems: 2
+              maxItems: 2
+              description: '[x,y] 单位：像素'
+            - type: object
+              properties:
+                x:
+                  type: string
+                  description: 水平方向的长度
+                'y':
+                  type: string
+                  description: 垂直方向的长度
+              required:
+                - x
+                - 'y'
+              description: 单位：像素
+            - type: object
+              properties:
+                W:
+                  type: string
+                  description: 水平方向的长度
+                H:
+                  type: string
+                  description: 垂直方向的长度
+              description: 单位：格
+              required:
+                - W
+                - H
+          description: 按钮开启时，墙的尺寸
+        size_off:
+          anyOf:
+            - type: array
+              items:
+                type: integer
+              minItems: 2
+              maxItems: 2
+              description: '[x,y] 单位：像素'
+            - type: object
+              properties:
+                x:
+                  type: string
+                  description: 水平方向的长度
+                'y':
+                  type: string
+                  description: 垂直方向的长度
+              required:
+                - x
+                - 'y'
+              description: 单位：像素
+            - type: object
+              properties:
+                W:
+                  type: string
+                  description: 水平方向的长度
+                H:
+                  type: string
+                  description: 垂直方向的长度
+              description: 单位：格
+              required:
+                - W
+                - H
+          description: 按钮关闭时，墙的尺寸
+    FakableButton:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: FakableButton
+        name:
+          type: string
+          description: 自定义引用键名
+        fake:
+          type: boolean
+          description: 是否为假
+        fakable:
+          type: boolean
+          description: 是否可变假
+        color:
+          type: string
+          description: 颜色变体
+          enum:
+            - blue
+            - green
+            - red
+            - orange
+        tooltip_offset:
+          anyOf:
+            - type: array
+              items:
+                type: integer
+              minItems: 2
+              maxItems: 2
+            - type: object
+              properties:
+                x:
+                  type: string
+                'y':
+                  type: string
+              required:
+                - x
+                - 'y'
+          description: 提示偏移（单位：像素）
+    FakableWall:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+        - size
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: FakableWall
+        name:
+          type: string
+          description: 自定义引用键名
+        fake:
+          type: boolean
+          description: 是否为假
+        fakable:
+          type: boolean
+          description: 是否可变假
+        color:
+          type: string
+          description: 颜色变体
+          enum:
+            - blue
+            - green
+            - red
+            - orange
+        facing:
+          type: string
+          description: |-
+            伸缩时的朝向
+            会影响anchor
+          enum:
+            - 'N'
+            - S
+            - W
+            - E
+        size:
+          anyOf:
+            - type: array
+              items:
+                type: integer
+              minItems: 2
+              maxItems: 2
+              description: '[x,y] 单位：像素'
+            - type: object
+              properties:
+                x:
+                  type: string
+                  description: 水平方向的长度
+                'y':
+                  type: string
+                  description: 垂直方向的长度
+              required:
+                - x
+                - 'y'
+              description: 单位：像素
+            - type: object
+              properties:
+                W:
+                  type: string
+                  description: 水平方向的长度
+                H:
+                  type: string
+                  description: 垂直方向的长度
+              description: 单位：格
+              required:
+                - W
+                - H
+          description: 尺寸
+        auto_offset:
+          type: boolean
+          description: 坐标是否按 facing 反方向偏移半格
+          default: true
+    FakableBomb:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: FakableBomb
+        name:
+          type: string
+          description: 自定义引用键名
+        fake:
+          type: boolean
+          description: 是否为假
+        fakable:
+          type: boolean
+          description: 是否可变假
+        color:
+          type: string
+          description: 颜色变体
+          enum:
+            - blue
+            - green
+            - red
+            - orange
+    Clue:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: Clue
+        name:
+          type: string
+          description: 自定义引用键名
+        fake:
+          type: boolean
+          description: 是否为假
+        fakable:
+          type: boolean
+          description: 是否可变假
+        facing:
+          type: string
+          description: 朝向
+          enum:
+            - 'N'
+            - S
+            - W
+            - E
+          default: E
+        content:
+          type: string
+          description: 线索显示内容
+          default: 线索……
+        duration:
+          type: number
+          description: 线索显示时长（秒）
+          default: 5
+        id:
+          type: integer
+          description: |-
+            线索唯一标识
+            -1=交互不写入存档
+          default: -1
+    MapMirror:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - Class
+      properties:
+        X:
+          type: number
+          description: 世界坐标X（格）
+        'Y':
+          type: number
+          description: 世界坐标Y（格）
+        Class:
+          type: string
+          description: 物体类型
+          const: MapMirror
+        name:
+          type: string
+          description: 自定义引用键名
+        axis:
+          anyOf:
+            - type: string
+              enum:
+                - X
+                - 'Y'
+                - x
+                - 'y'
+              default: X
+            - type: integer
+              enum:
+                - 0
+                - 1
+              default: 0
+          description: 映射轴
+        tomap:
+          type: array
+          items:
+            anyOf:
+              - type: object
+                properties:
+                  bind:
+                    type: string
+                    description: 自定义引用键名
+                required:
+                  - bind
+              - type: string
+                description: 自定义引用键名
+          description: 可映射节点
+        tooltip_offset:
+          anyOf:
+            - type: array
+              items:
+                type: integer
+              minItems: 2
+              maxItems: 2
+            - type: object
+              properties:
+                x:
+                  type: string
+                'y':
+                  type: string
+              required:
+                - x
+                - 'y'
+          description: 提示偏移（单位：像素）
+    Player:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - type
+      properties:
+        X:
+          type: number
+          description: 坐标X（格）
+        'Y':
+          type: number
+          description: 坐标Y（格）
+        type:
+          type: string
+          description: 角色类型
+          const: Player
+        name:
+          type: string
+          description: 自定义引用键名
+        facing:
+          type: string
+          description: 朝向
+          enum:
+            - 'N'
+            - S
+            - W
+            - E
+          default: E
+        movable:
+          type: boolean
+          description: 是否可移动
+          default: true
+        interactable:
+          type: boolean
+          description: 是否可交互
+          default: true
+        view_angle:
+          type: number
+          description: 视野角度（度）
+          default: 45
+      description: 玩家
+    DolosBlack:
+      type: object
+      required:
+        - X
+        - 'Y'
+        - type
+      properties:
+        X:
+          type: number
+          description: 坐标X（格）
+        'Y':
+          type: number
+          description: 坐标Y（格）
+        type:
+          type: string
+          description: 角色类型
+          enum:
+            - DolosBlack
+            - Dolos_Black
+        name:
+          type: string
+          description: 自定义引用键名
+        facing:
+          type: string
+          description: 朝向
+          enum:
+            - 'N'
+            - S
+            - W
+            - E
+          default: E
+      description: |-
+        关卡向导
+        NPC之一
+    LevelData:
+      title: 关卡数据
+      description: >-
+        关卡 JSON 字段的格式
+
+        数组字段中，单数优先，复数兼容（item/items, character/characters, event/events,
+        external_wall/external_walls, preset_tile/preset_tiles, button/buttons,
+        wall/walls）
+
+        世界坐标 X/Y 为格单位
+
+        实际坐标 x/y 为像素单位
+
+        瓦片与世界单元格要求尺寸统一，默认值32px
+
+        表示实际坐标的向量字段支持 [x,y] 数组或 {x:..,y:..} 对象
+
+        Class类型中，大写字段优先，小写兼容
+      type: object
+      required:
+        - format_version
+        - meta
+        - map
+      properties:
+        format_version:
+          anyOf:
+            - type: integer
+              description: 确切的版本号
+            - type: array
+              items:
+                type: integer
+              maxItems: 2
+              minItems: 2
+              description: 兼容范围
+          description: 格式版本
+        meta:
+          type: object
+          description: 元数据（id/name/description）
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: 关卡唯一标识
+            name:
+              type: string
+              description: |-
+                关卡名
+                加载数据时缺省则用 id
+            description:
+              type: string
+              description: 关卡描述
+        map:
+          type: object
+          description: 地图（cell_size/floor/external_wall/exit）
+          required:
+            - cell_size
+          properties:
+            cell_size:
+              type: object
+              description: 单元格尺寸（像素）
+              required:
+                - width
+                - height
+              properties:
+                width:
+                  type: integer
+                  description: 宽度
+                  default: 32
+                height:
+                  type: integer
+                  description: 高度
+                  default: 32
+            floor:
+              type: object
+              description: 地板
+              required:
+                - X
+                - 'Y'
+                - W
+                - H
+              properties:
+                X:
+                  type: integer
+                  description: 坐标X（格）
+                'Y':
+                  type: integer
+                  description: 坐标Y（格）
+                W:
+                  type: integer
+                  description: 水平方向瓦片数量（格）
+                H:
+                  type: integer
+                  description: 垂直方向瓦片数量（格）
+                seed:
+                  type: integer
+                  description: |-
+                    随机种子
+                    -1=每次随机
+                  default: -1
+                preset_tile:
+                  type: array
+                  description: |-
+                    预制瓦片
+                    字段名可为复数
+                  items:
+                    type: object
+                    required:
+                      - X
+                      - 'Y'
+                      - tile
+                    properties:
+                      X:
+                        type: integer
+                        description: 坐标X（格）
+                      'Y':
+                        type: integer
+                        description: 坐标Y（格）
+                      tile:
+                        type: array
+                        items:
+                          type: integer
+                        description: Atlas 图集坐标 [x,y]
+                      facing:
+                        type: string
+                        description: 朝向
+                        enum:
+                          - 'N'
+                          - S
+                          - W
+                          - E
+                        default: E
+                name:
+                  type: string
+                  description: |-
+                    自定义引用键名
+                    floor 专属
+            external_wall:
+              type: array
+              description: |-
+                外墙节点数组
+                字段名可为复数
+                实例化TileMapLayer
+              items:
+                type: object
+                required:
+                  - X
+                  - 'Y'
+                properties:
+                  X:
+                    type: integer
+                    description: 坐标X（格）
+                  'Y':
+                    type: integer
+                    description: 坐标Y（格）
+                  dirs:
+                    type: object
+                    description: |-
+                      允许相连的方向
+                      相邻节点双方相对方向均为true则相连
+                      无则自动推导值，相邻距离 ≤ 50 格。
+                    properties:
+                      'N':
+                        type: boolean
+                      S:
+                        type: boolean
+                      W:
+                        type: boolean
+                      E:
+                        type: boolean
+            exit:
+              type: object
+              description: 出口
+              required:
+                - X
+                - 'Y'
+                - facing
+              properties:
+                X:
+                  type: number
+                  description: 坐标X（格）
+                'Y':
+                  type: number
+                  description: 坐标Y（格）
+                facing:
+                  type: string
+                  description: 朝向
+                  enum:
+                    - 'N'
+                    - S
+                    - W
+                    - E
+                  default: E
+                next_scene:
+                  type: string
+                  description: 下一关场景路径 .tscn
+                  nullable: true
+                tooltip_offset:
+                  anyOf:
+                    - type: array
+                      items:
+                        type: integer
+                      minItems: 2
+                      maxItems: 2
+                      description: '[x,y]'
+                    - type: object
+                      properties:
+                        x:
+                          type: string
+                        'y':
+                          type: string
+                      required:
+                        - x
+                        - 'y'
+                  description: 提示偏移（单位：像素）
+        item:
+          type: array
+          description: |-
+            物体数组
+            字段名可为复数
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ButtonController'
+              - $ref: '#/components/schemas/FakableButton'
+              - $ref: '#/components/schemas/FakableWall'
+              - $ref: '#/components/schemas/FakableBomb'
+              - $ref: '#/components/schemas/Clue'
+              - $ref: '#/components/schemas/MapMirror'
+        character:
+          type: array
+          description: |-
+            角色数组
+            字段名可为复数
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Player'
+              - $ref: '#/components/schemas/DolosBlack'
+        event:
+          type: array
+          description: |-
+            事件数组
+            字段名可为复数
+          items:
+            type: object
+            properties: {}
+  responses: {}
+  securitySchemes: {}
+servers: []
+security: []

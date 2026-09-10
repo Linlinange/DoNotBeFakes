@@ -31,7 +31,7 @@
             { "X": 17, "Y": 11 }
         ],
         "floor": {
-            "X": 0, "Y": 0, 
+            "X": 0,  "Y": 0, 
             "W": 19, "H": 10,
             "seed": 1,
             "preset_tiles": [
@@ -73,8 +73,7 @@
         {
             "type": "Player",
             "name": "player",
-            "X": 1.5, "Y": 3.5,
-            "movable": false
+            "X": 1.5, "Y": 3.5
         },
         {
             "type": "DolosBlack",
@@ -84,6 +83,7 @@
     ],
     "event": [
         [
+            {"type": "set", "target": "player", "property": "movable", "value": false},
             {"type": "say", "actor": "dolos", "text": "你好\nAletheia White", "duration": 2.5},
             {"type": "say", "actor": "dolos", "text": "我是Dolos Black\n叫我Black就行", "duration": 4.0},
             {"type": "say", "actor": "dolos", "text": "我将引导你\n完成接下来的关卡", "duration": 4.0},
