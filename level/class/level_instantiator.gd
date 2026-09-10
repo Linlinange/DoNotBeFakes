@@ -62,6 +62,8 @@ static func build_level_with_refs(level: LevelData, parent: Node) -> Dictionary:
 		refs["external_wall"] = spawn_external_walls(level, parent)
 	if not level.items.is_empty():
 		refs["items"] = spawn_items(level, parent, refs)
+		# ButtonController 的 name 绑定与顺序无关：所有 items 实例化后统一解析
+		_resolve_bc_bindings(level, parent, refs)
 	if not level.characters.is_empty():
 		refs["characters"] = spawn_characters(level, parent, refs)
 		for node in refs["characters"]:
@@ -408,18 +410,19 @@ static func spawn_items(level: LevelData, parent: Node, refs: Dictionary = {}) -
 			# 由 spawn_mirrors 在所有节点实例化后统一处理，这里跳过
 			if _resolve_class_name(item) == "MapMirror":
 				continue
-			var node := _spawn_single_item(item, level, parent)
+			var node := _spawn_single_item(item, level, parent, refs)
 			if node:
 				spawned.append(node)
 				_register_named_ref(refs, node, item)
 	return spawned
 
 ## 根据 Class 字段分发到具体的实例化函数，返回实例化出的节点（未知类型返回 null）
-static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node) -> Node:
+## refs 传给 ButtonController（其 button/wall 数组可能按 name 绑定之前单独实例化的 item）
+static func _spawn_single_item(item: Dictionary, level: LevelData, parent: Node, refs: Dictionary = {}) -> Node:
 	var item_class := _resolve_class_name(item)
 	match item_class:
 		"ButtonController":
-			return _spawn_button_controller(item, level, parent)
+			return _spawn_button_controller(item, level, parent, refs)
 		"FakableWall":
 			return _spawn_fakable_wall(item, level, parent)
 		"FakableButton":
@@ -565,9 +568,55 @@ static func _facing_opposite_half_cell(facing: String, cell_size: Vector2i) -> V
 		"E", "e": return Vector2(-half.x, 0)
 	return Vector2.ZERO
 
+## ButtonController 子对象（button/wall 数组元素）解析，支持三种形式：
+##   1. 普通对象 {X,Y,color,...}      -> 重新实例化（is_button 决定用按钮还是墙场景）
+##   2. 字符串 "name"                  -> 绑定单独实例化 item 的节点（refs[name]）
+##   3. {"bind": "name"}              -> 同上，显式绑定
+## 绑定的 name 若此刻 refs 里还没有（被绑定的 item 写在后面），记进 pending，
+## 由 _resolve_bc_bindings 在所有 items 实例化后统一解析，因此与书写顺序无关。
+static func _resolve_bc_child(data: Variant, level: LevelData, parent: Node, refs: Dictionary, is_button: bool, pending: Array) -> Node2D:
+	var bound_name := ""
+	if typeof(data) == TYPE_STRING:
+		bound_name = str(data)
+	elif typeof(data) == TYPE_DICTIONARY and data.has("bind"):
+		bound_name = str(data["bind"])
+	if not bound_name.is_empty():
+		var node: Variant = refs.get(bound_name)
+		if node is Node2D:
+			return node
+		# 此刻还没有 -> 记入待绑定，稍后统一解析（与顺序无关）
+		pending.append(bound_name)
+		return null
+	if typeof(data) != TYPE_DICTIONARY:
+		push_warning("LevelInstantiator: ButtonController 子对象格式无效，跳过：%s" % str(data))
+		return null
+	if is_button:
+		return _instantiate_button(data, level, parent)
+	return _instantiate_wall(data, level, parent)
+
+## 解析所有 ButtonController 的待绑定引用（_resolve_bc_child 里未即时解析的 name）。
+## 必须在所有 items 实例化完成、refs 引用齐全后调用。
+static func _resolve_bc_bindings(_level: LevelData, _parent: Node, refs: Dictionary) -> void:
+	for node in (refs.get("items", []) as Array):
+		if not (node.has_meta("_pending_buttons") or node.has_meta("_pending_walls")):
+			continue
+		for name in (node.get_meta("_pending_buttons", []) as Array):
+			var target: Variant = refs.get(str(name))
+			if target is Node2D:
+				node.buttons.append(target)
+			else:
+				push_warning("LevelInstantiator: ButtonController 绑定 '%s' 未找到（需为单独实例化 item 的 name）" % name)
+		for name in (node.get_meta("_pending_walls", []) as Array):
+			var target: Variant = refs.get(str(name))
+			if target is Node2D:
+				node.walls.append(target)
+			else:
+				push_warning("LevelInstantiator: ButtonController 绑定 '%s' 未找到（需为单独实例化 item 的 name）" % name)
+
 ## ButtonController 实例化：空 Node2D + 挂脚本，然后实例化 buttons 和 walls 挂载其下。
 ## 返回 ButtonController 节点。
-static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node) -> Node:
+## refs 用于按 name 绑定之前单独实例化的按钮/墙（见 _resolve_bc_child）。
+static func _spawn_button_controller(item: Dictionary, level: LevelData, parent: Node, refs: Dictionary = {}) -> Node:
 	var bc := Node2D.new()
 	bc.name = "ButtonController"
 	var script := load(BUTTON_CONTROLLER_SCRIPT) as Script
@@ -578,23 +627,30 @@ static func _spawn_button_controller(item: Dictionary, level: LevelData, parent:
 
 	var buttons: Array[Node2D] = []
 	var walls: Array[Node2D] = []
+	var pending_buttons: Array = []
+	var pending_walls: Array = []
 
-	# 实例化 buttons（挂载到 ButtonController 下，global_position 自动转相对坐标）
-	# JSON 键名单数 button 优先，复数 buttons 兼容
+	# buttons：JSON 键名单数 button 优先，复数 buttons 兼容。
+	# 元素支持三种形式：普通对象（重新实例化）/ 字符串 name / {"bind": name}（绑定单独实例化的按钮）
 	for btn_data in item.get("button", item.get("buttons", [])):
-		if typeof(btn_data) == TYPE_DICTIONARY:
-			var btn := _instantiate_button(btn_data, level, bc)
+		var btn := _resolve_bc_child(btn_data, level, bc, refs, true, pending_buttons)
+		if btn:
 			buttons.append(btn)
 
-	# 实例化 walls（挂载到 ButtonController 下，global_position 自动转相对坐标）
-	# JSON 键名单数 wall 优先，复数 walls 兼容
+	# walls：同上
 	for wall_data in item.get("wall", item.get("walls", [])):
-		if typeof(wall_data) == TYPE_DICTIONARY:
-			var wall := _instantiate_wall(wall_data, level, bc)
+		var wall := _resolve_bc_child(wall_data, level, bc, refs, false, pending_walls)
+		if wall:
 			walls.append(wall)
 
 	bc.buttons = buttons
 	bc.walls = walls
+
+	# 有未即时解析的绑定引用则记入 meta，由 _resolve_bc_bindings 在所有 items 实例化后统一解析
+	if not pending_buttons.is_empty():
+		bc.set_meta("_pending_buttons", pending_buttons)
+	if not pending_walls.is_empty():
+		bc.set_meta("_pending_walls", pending_walls)
 
 	# size_on / size_off（支持 [x,y] 数组、{"x":..,"y":..} 对象、{"W":..,"H":..} 格子单位）
 	if item.has("size_on"):
@@ -681,7 +737,7 @@ static func spawn_mirrors(level: LevelData, parent: Node, refs: Dictionary = {})
 static func _spawn_mirror(item: Dictionary, level: LevelData, parent: Node, refs: Dictionary) -> MapMirror:
 	var mirror := MIRROR_SCENE.instantiate() as MapMirror
 
-	# axis（可选，缺省 X）
+	# axis（可选，缺省 X）；int 值需 as 转成枚举类型（Godot 静态类型要求）
 	mirror.axis = _parse_mirror_axis(item.get("axis", "X")) as MapMirror.Axis
 	# tomap（可选，name 数组 -> 节点；此时 refs 已含全部 item/character 的 name 引用）
 	mirror.nodes_tomap = _resolve_tomap(item.get("tomap", []), refs)
@@ -698,8 +754,8 @@ static func _spawn_mirror(item: Dictionary, level: LevelData, parent: Node, refs
 			ic.tooltip_offset = offset
 	return mirror
 
-## 解析 axis 字段：X / Y 字符串，或 0 / 1 整数
-static func _parse_mirror_axis(data: Variant) -> int:
+## 解析 axis 字段：X / Y 字符串，或 0 / 1 整数（返回枚举类型）
+static func _parse_mirror_axis(data: Variant) -> MapMirror.Axis:
 	match str(data).to_lower():
 		"y", "1":
 			return MapMirror.Axis.Y
