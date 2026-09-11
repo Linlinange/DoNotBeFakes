@@ -12,7 +12,7 @@ size = Vector2(160, 352)
 [node name="level1" unique_id=1783115374 instance=ExtResource("1_un6df")]
 Level_id = 1
 
-[node name="Node2D" type="Node2D" parent="." index="1" unique_id=111785908]
+[node name="Node2D" type="Node2D" parent="." index="3" unique_id=111785908]
 script = ExtResource("2_y7bbx")
 
 [node name="a1" type="Area2D" parent="Node2D" index="0" unique_id=1448944546]

@@ -13,7 +13,7 @@ extends FakableObject
 ## 线索显示的时长
 @export var duration: float = 5.0
 ## 线索唯一标识
-@export var id: int = -1
+@export var id: String = "-1"
 
 ## 最大交互次数，-1 表示无限
 @export var max_interact_times: int = -1:
@@ -61,9 +61,9 @@ func interact() -> void:
 	
 	if is_functional():
 		chat.say(content, duration)
-		if id!=-1:
+		if id!="-1":
 			var json: Dictionary = FilesManager.json_read(FilesManager.Path.CLUES)
-			json[str(id)] = true
+			json[id] = true
 			FilesManager.json_write(FilesManager.Path.CLUES, json)
 	audio.pitch_scale = randf_range(0.4, 0.7)
 	audio.play()

@@ -1,0 +1,198 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": 5,
+        "name": "关卡 5",
+        "description": "虚实转换墙"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 2,  "Y": 0,
+            "facing": "E",
+            "next_scene": "res://level/level6/level6.tscn",
+            "tooltip_offset": [16, 32]
+        },
+        "external_wall": [
+            { "X": 0,  "Y": 0  },
+            { "X": 1,  "Y": 0,  "dirs": {"E": false} },
+            { "X": 4,  "Y": 0,  "dirs": {"W": false} },
+            { "X": 1,  "Y": -1 },
+            { "X": 4,  "Y": -1 },
+            { "X": 15, "Y": 0  },
+            { "X": 15, "Y": 10 },
+            { "X": 14, "Y": 10, "dirs": {"W": false} },
+            { "X": 2,  "Y": 10, "type": null },
+            { "X": 3,  "Y": 10, "type": null },
+            { "X": 0,  "Y": 10 },
+            { "X": 11, "Y": 10, "dirs": {"E": false} },
+            { "X": 11, "Y": 12, "dirs": {"S": false} },
+            { "X": 11, "Y": 18, "dirs": {"N": false} },
+            { "X": 11, "Y": 21 },
+            { "X": 0,  "Y": 21 },
+            { "X": 11, "Y": 24, "dirs": {"E": false} },
+            { "X": 15, "Y": 24, "dirs": {"W": false} },
+            { "X": 5,  "Y": 0  },
+            { "X": 5,  "Y": 5  },
+            { "X": 10, "Y": 5  }
+        ],
+        "floor": {
+            "X": 0,  "Y": 0,
+            "W": 15, "H": 21,
+            "seed": 5,
+            "preset_tiles": [
+                { "X": 12, "Y": 21, "tile": [0, 0] },
+                { "X": 13, "Y": 21, "tile": [0, 0] },
+                { "X": 14, "Y": 21, "tile": [0, 0] },
+                { "X": 12, "Y": 22, "tile": [0, 1] },
+                { "X": 13, "Y": 22, "tile": [0, 0] },
+                { "X": 14, "Y": 22, "tile": [0, 0] },
+                { "X": 12, "Y": 23, "tile": [0, 1] },
+                { "X": 13, "Y": 23, "tile": [0, 0] },
+                { "X": 14, "Y": 23, "tile": [0, 1] },
+                { "X": 12, "Y": 24, "tile": [0, 0] },
+                { "X": 13, "Y": 24, "tile": [0, 0] },
+                { "X": 14, "Y": 24, "tile": [0, 1] },
+                { "X": 13, "Y": 10, "tile": [3, 0], "facing": "E" },
+                { "X": 12, "Y": 10, "tile": [2, 0], "facing": "E" },
+                { "X": 13, "Y": 14, "tile": [1, 0], "facing": "N" },
+                { "X": 13, "Y": 18, "tile": [1, 0], "facing": "N" },
+                { "X": 13, "Y": 22, "tile": [1, 0], "facing": "N" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "FakableButton",
+            "name": "green_button",
+            "X": 7.5, "Y": 2.5,
+            "color": "green",
+            "fake": true,
+            "fakable": true
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 1,  "Y": 5,
+                    "color": "green",
+                    "facing": "E",
+                    "size": { "W": 4, "H": 1 }
+                }
+            ],
+            "size_on": { "W": 1, "H": 1 },
+            "size_off": { "W": 4, "H": 1 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 11, "Y": 5,
+            "color": "red",
+            "facing": "E",
+            "size": { "W": 4, "H": 1 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 5,  "Y": 6,
+            "color": "orange",
+            "facing": "S",
+            "size": { "W": 1, "H": 4 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 14, "Y": 11,
+            "color": "blue",
+            "facing": "W",
+            "size": { "W": 3, "H": 1 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 11, "Y": 13,
+            "color": "blue",
+            "facing": "S",
+            "size": { "W": 1, "H": 5 }
+        },
+        {
+            "Class": "FakableWall",
+            "name": "wall",
+            "X": 2,  "Y": 10,
+            "color": "fakable_external",
+            "facing": "E",
+            "size": { "W": 2, "H": 1 }
+        },
+        {
+            "Class": "Clue",
+            "X": 10,  "Y": 12,
+            "content": "[font_size=42]实验档案室5[font_size=24]\n[left][s]请妥善保管实验数据[/s]\n因遭袭击，现已废弃\n[/left][/font_size]",
+            "fake": false,
+            "fakable": false
+        },
+        {
+            "Class": "Clue",
+            "X": 2,  "Y": 13,
+            "content": "[font_size=42]*&…记录[font_size=24]\n[left].?^第…^#\n%*&#$)*!:\"?/\n}…￥#A&[/left]\n[font_size=16](上面的字模糊不清)[/font_size]",
+            "duration": 2.0,
+            "fake": false,
+            "fakable": false
+        },
+        {
+            "Class": "Clue",
+            "X": 3,  "Y": 17,
+            "content": "[font_size=42]*&…记录[font_size=24]\n[left]批$^%&*@次\n%*&*(#!\n^*@%…￥[/left]\n[font_size=16](上面的字模糊不清)[/font_size]",
+            "duration": 2.0,
+            "fake": false,
+            "fakable": false
+        },
+        {
+            "Class": "Clue",
+            "X": 5,  "Y": 14,
+            "content": "[font_size=42]&验记^![font_size=24]\n[left]批次: $^(#\n^*@!%…\n%*&*￥[/left]\n[font_size=16](上面的字模糊不清)[/font_size]",
+            "duration": 2.0,
+            "fake": false,
+            "fakable": false
+        },
+        {
+            "Class": "Clue",
+            "X": 6,  "Y": 16,
+            "content": "[font_size=42]实验记录[font_size=24]\n[left]批次: 第157次\n实验人员离开后，\n克隆体进行了书写行为。\n后续检查中，\n却并未发现任何书写物。[/left][/font_size]",
+            "id": "5",
+            "fake": false,
+            "fakable": false
+        }
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 13, "Y": 10
+        },
+        {
+            "type": "DolosBlack",
+            "name": "dolos",
+            "X": 8,  "Y": 6
+        }
+    ],
+    "event": [
+        [
+            {"type": "set", "target": "player", "property": "movable", "value": false},
+            {"type": "say", "actor": "dolos", "text": "除了眼见为\"实\"\n还可以自欺欺人", "duration": 3.0},
+            {"type": "set", "target": "player", "property": "movable", "value": true},
+            {"type": "end"}
+        ],
+        [
+            {"type": "comment", "content": "dolos.speak(\"使用%s\\n睁开或闭上双眼\" % InputManager.get_key_name(\"switch\")); 暂无法以事件表示"},
+            {"type": "end"}
+        ],
+        [
+            {"type": "shut_up", "actor": "dolos"},
+            {"type": "end"}
+        ]
+    ]
+}

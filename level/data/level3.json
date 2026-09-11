@@ -70,7 +70,7 @@
             "X": 7,  "Y": 8,
             "content": "[left][font_size=24]他离开了\n我才有机会写下这些。\n我不清楚我做过什么，\n也不清楚怎么会在这。\n总之我想离开这里[/font_size][/left]",
             "duration": 2.8,
-            "id": 2
+            "id": "2"
         },
         { "Class": "FakableBomb", "X": 6,  "Y": 1,  "color": "red"  },
         { "Class": "FakableBomb", "X": 7,  "Y": 1,  "color": "green"},

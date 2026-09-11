@@ -6,10 +6,7 @@
 [node name="level4" unique_id=1783115374 instance=ExtResource("1_3tm8n")]
 Level_id = 4
 
-[node name="Node2D" type="Node2D" parent="." index="1" unique_id=365742211]
-position = Vector2(304, 176)
-
-[node name="Camera2D" parent="." index="2" unique_id=1566341157]
+[node name="Camera2D" parent="." index="1" unique_id=1566341157]
 limit_left = 0
 limit_top = 0
 limit_right = 672

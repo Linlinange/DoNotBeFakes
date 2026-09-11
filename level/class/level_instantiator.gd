@@ -24,6 +24,16 @@ const WALL_SOURCE_ID := 0
 ## 需要调整时改这个常量即可。
 const WALL_CONNECT_MAX_DISTANCE := 50
 
+## 外墙 type -> 图集 Y 偏移（单位：16px 小格行数）。
+## blue（缺省）= 0；green=3、red=6、orange=9、white=12（wall.png 每 3 行一个颜色块）。
+## 特殊值 null 表示"挖空"：该格不铺墙，且连接段经过此处时断开（不参与连接判断）。
+const WALL_TYPE_Y_OFFSETS := {
+	"green": 3,
+	"red": 6,
+	"orange": 9,
+	"white": 12,
+}
+
 # 方向常量（与 CoordinateSystem 一致，这里局部复用避免循环依赖）
 const _DIR_N := Vector2i(0, -1)
 const _DIR_S := Vector2i(0, 1)
@@ -237,10 +247,17 @@ static func spawn_external_walls(level: LevelData, parent: Node) -> TileMapLayer
 
 	# 3. 统一铺设（原始节点 + 自动生成的连接段）
 	for node in all_nodes:
+		if node.has("type") and node["type"] == null:
+			continue  # type=null：挖空，不铺设（连接段生成时已因占位跳过该格）
 		var coord := Vector2i(int(node.get("X", 0)), int(node.get("Y", 0)))
 		var dirs: Dictionary = node.get("dirs", {})
-		_paint_wall_node(tile_map, coord, dirs)
+		var type_name := str(node.get("type", "blue")).to_lower()
+		_paint_wall_node(tile_map, coord, dirs, _wall_type_y_offset(type_name))
 	return tile_map
+
+## 外墙 type -> 图集 Y 偏移（未知值按 blue=0 处理，调用方已做警告）
+static func _wall_type_y_offset(type_name: String) -> int:
+	return int(WALL_TYPE_Y_OFFSETS.get(type_name, 0))
 
 ## 推导所有节点的 dirs：
 ##   - dirs 中写了的方向，用写的值
@@ -250,6 +267,15 @@ static func _resolve_all_wall_dirs(nodes: Array) -> Array:
 	var result := []
 	for node in nodes:
 		var resolved: Dictionary = node.duplicate(true)
+		# type=null：挖空节点，不参与连接判断（不推导 dirs），
+		# 但保留在列表里占位，连接段生成时经过该格会自动跳过
+		if resolved.has("type") and resolved["type"] == null:
+			result.append(resolved)
+			continue
+		# 未知 type 警告一次（按 blue 处理）
+		var type_name := str(resolved.get("type", "blue")).to_lower()
+		if type_name != "blue" and not WALL_TYPE_Y_OFFSETS.has(type_name):
+			push_warning("LevelInstantiator: 未知外墙 type '%s'，按默认 blue 处理" % type_name)
 		var resolved_dirs := {}
 		var coord := Vector2i(int(resolved.get("X", 0)), int(resolved.get("Y", 0)))
 		for dir_name in ["N", "S", "W", "E"]:
@@ -288,6 +314,12 @@ static func _build_connecting_segments(nodes: Array) -> Array:
 			var target_coord := Vector2i(int(target.get("X", 0)), int(target.get("Y", 0)))
 
 			# 在中间逐格生成直墙连接段
+			# 连接段 type：两端同色则跟随（green-green -> green），异色或缺省则用默认 blue
+			var seg_type: Variant = "blue"
+			var type_a: Variant = node.get("type", "blue")
+			var type_b: Variant = target.get("type", "blue")
+			if type_a != null and type_b != null and str(type_a).to_lower() == str(type_b).to_lower():
+				seg_type = type_a
 			var current := coord + direction
 			while current != target_coord:
 				var key := "%d,%d" % [current.x, current.y]
@@ -298,15 +330,21 @@ static func _build_connecting_segments(nodes: Array) -> Array:
 						segment_dirs = {"N": true, "S": true}  # 垂直直墙
 					else:
 						segment_dirs = {"W": true, "E": true}  # 水平直墙
-					all.append({"X": current.x, "Y": current.y, "dirs": segment_dirs})
+					var seg: Dictionary = {"X": current.x, "Y": current.y, "dirs": segment_dirs}
+					if str(seg_type).to_lower() != "blue":
+						seg["type"] = seg_type  # 非默认类型才写，保持数据简洁
+					all.append(seg)
 				current += direction
 	return all
 
 ## 在指定方向上找最近的节点（同一行/列，距离 <= WALL_CONNECT_MAX_DISTANCE）
+## type=null 的挖空节点不参与连接判断，直接跳过
 static func _find_nearest_in_direction(nodes: Array, from_coord: Vector2i, direction: Vector2i) -> Dictionary:
 	var best := {}
 	var best_dist := WALL_CONNECT_MAX_DISTANCE + 1
 	for node in nodes:
+		if node.has("type") and node["type"] == null:
+			continue  # 挖空节点不参与连接
 		var coord := Vector2i(int(node.get("X", 0)), int(node.get("Y", 0)))
 		if coord == from_coord:
 			continue
@@ -344,18 +382,20 @@ static func _opposite_dir(dir_name: String) -> String:
 
 ## 铺设一个 32x32 墙节点 = 2x2 个 16x16 cell
 ## dirs: {"N":bool, "S":bool, "W":bool, "E":bool}
-static func _paint_wall_node(tile_map: TileMapLayer, node_coord: Vector2i, dirs: Dictionary) -> void:
+## type_y_offset: 图集行偏移（blue=0，green=3 等），整块素材下移
+static func _paint_wall_node(tile_map: TileMapLayer, node_coord: Vector2i, dirs: Dictionary, type_y_offset: int = 0) -> void:
 	var n: bool = dirs.get("N", false)
 	var s: bool = dirs.get("S", false)
 	var w: bool = dirs.get("W", false)
 	var e: bool = dirs.get("E", false)
+	var y: int = type_y_offset
 
 	# 四个角的素材坐标（Godot atlas_coords: x=列, y=行）
 	# _pick_corner(vertical, horizontal, 都不连, 只垂直连, 只水平连, 都连=内角)
-	var tl := _pick_corner(n, w, Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(4, 1))
-	var _tr := _pick_corner(n, e, Vector2i(2, 0), Vector2i(2, 1), Vector2i(1, 0), Vector2i(3, 1))
-	var bl := _pick_corner(s, w, Vector2i(0, 2), Vector2i(0, 1), Vector2i(1, 2), Vector2i(4, 0))
-	var br := _pick_corner(s, e, Vector2i(2, 2), Vector2i(2, 1), Vector2i(1, 2), Vector2i(3, 0))
+	var tl := _pick_corner(n, w, Vector2i(0, 0 + y), Vector2i(0, 1 + y), Vector2i(1, 0 + y), Vector2i(4, 1 + y))
+	var _tr := _pick_corner(n, e, Vector2i(2, 0 + y), Vector2i(2, 1 + y), Vector2i(1, 0 + y), Vector2i(3, 1 + y))
+	var bl := _pick_corner(s, w, Vector2i(0, 2 + y), Vector2i(0, 1 + y), Vector2i(1, 2 + y), Vector2i(4, 0 + y))
+	var br := _pick_corner(s, e, Vector2i(2, 2 + y), Vector2i(2, 1 + y), Vector2i(1, 2 + y), Vector2i(3, 0 + y))
 
 	# 关卡坐标(X,Y) -> TileMapLayer cell(2X,2Y)，因为 tile=16, 关卡 cell=32
 	var base := node_coord * 2
@@ -537,6 +577,12 @@ static func _instantiate_wall(wall_data: Dictionary, level: LevelData, parent: N
 	var scene := load(_wall_scene_path(color)) as PackedScene
 	var wall := scene.instantiate() as Node2D
 
+	# 朝向 -> anchor（支持 "facing" 和 "朝向" 两种键名）
+	# anchor 赋值需早于尺寸赋值，否则尺寸设置后会出现异常
+	var facing := str(wall_data.get("facing", wall_data.get("朝向", "")))
+	if not facing.is_empty() and wall.has_method("set"):
+		wall.anchor = _facing_to_anchor(facing)
+
 	# 尺寸（支持 [x,y] 数组、{"x":..,"y":..} 对象和 {"W":..,"H":..} 格子单位）
 	# 尺寸赋值需早于 add_child（早于 ready 阶段），否则会出现动画异常
 	if wall_data.has("size"):
@@ -544,12 +590,9 @@ static func _instantiate_wall(wall_data: Dictionary, level: LevelData, parent: N
 
 	parent.add_child(wall)
 	wall.global_position = world_coord_to_vector2(wall_data, level)
-	# 朝向 -> anchor（支持 "facing" 和 "朝向" 两种键名）
-	var facing := str(wall_data.get("facing", wall_data.get("朝向", "")))
+	# auto_offset：可选字段，默认开——坐标向 facing 反方向偏移半格，
+	# 修正墙从格子中心向一侧伸缩导致的半格错位；无 facing 不处理
 	if not facing.is_empty() and wall.has_method("set"):
-		wall.anchor = _facing_to_anchor(facing)
-		# auto_offset：可选字段，默认开——坐标向 facing 反方向偏移半格，
-		# 修正墙从格子中心向一侧伸缩导致的半格错位；无 facing 不处理
 		if bool(wall_data.get("auto_offset", true)):
 			wall.global_position += _facing_opposite_half_cell(facing, level.cell_size)
 

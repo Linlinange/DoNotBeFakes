@@ -7,13 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://cvnubfack753p" path="res://ui/main_menu/scene_jumper.tscn" id="7_0sqyv"]
 [ext_resource type="PackedScene" uid="uid://ct7dsuuetixp5" path="res://level/scence/level1.tscn" id="8_3x7sr"]
 [ext_resource type="Texture2D" uid="uid://dte55yvsdwwnr" path="res://ui/pause_menu/back.png" id="8_cwskq"]
-[ext_resource type="PackedScene" uid="uid://sd1avb781rh2" path="res://level/level5/level5.tscn" id="8_wuawr"]
 [ext_resource type="PackedScene" uid="uid://cpgho1lxc8q5o" path="res://level/scence/level2.tscn" id="9_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://c6ytjjws833ca" path="res://level/level6/level6.tscn" id="9_ux8gv"]
 [ext_resource type="PackedScene" uid="uid://cj75wya85fyea" path="res://level/scence/level3.tscn" id="10_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://i47e0yfbdn2x" path="res://level/level7/level7.tscn" id="10_p262h"]
 [ext_resource type="PackedScene" uid="uid://b2i42v7n1q40d" path="res://level/scence/level4.tscn" id="11_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://dniig8wrydpkw" path="res://level/level8/level8.tscn" id="11_p262h"]
+[ext_resource type="PackedScene" uid="uid://dquj1rthhd6fh" path="res://level/scence/level5.tscn" id="12_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="12_wuawr"]
 [ext_resource type="PackedScene" uid="uid://bjistfcfj1brx" path="res://ui/main_menu/main_menu.tscn" id="14_3x7sr"]
 
@@ -105,7 +105,7 @@ label_text = "4"
 
 [node name="5" parent="VBoxContainer/MarginContainer/HFlowContainer" unique_id=566272005 instance=ExtResource("2_40swp")]
 layout_mode = 2
-scene = ExtResource("8_wuawr")
+scene = ExtResource("12_3x7sr")
 label_text = "5"
 
 [node name="6" parent="VBoxContainer/MarginContainer/HFlowContainer" unique_id=1495378190 instance=ExtResource("2_40swp")]

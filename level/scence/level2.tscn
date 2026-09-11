@@ -6,5 +6,5 @@
 [node name="level2" unique_id=1783115374 instance=ExtResource("1_pqpex")]
 Level_id = 2
 
-[node name="Node2D" type="Node2D" parent="." index="1" unique_id=111785908]
+[node name="Node2D" type="Node2D" parent="." index="3" unique_id=111785908]
 script = ExtResource("2_pqpex")

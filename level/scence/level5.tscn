@@ -1,0 +1,84 @@
+[gd_scene format=4 uid="uid://dquj1rthhd6fh"]
+
+[ext_resource type="PackedScene" uid="uid://dqjd6no7gngoc" path="res://level/scence/level_loader.tscn" id="1_s8yte"]
+[ext_resource type="PackedScene" uid="uid://cw31p1mbxbl2h" path="res://item/walls/external_wall.tscn" id="2_0psf7"]
+[ext_resource type="FontFile" uid="uid://da0jd0ruqe20p" path="res://assets/font/点点像素体方形.ttf" id="2_afouo"]
+[ext_resource type="PackedScene" uid="uid://b0bej4kpe3812" path="res://character/player/clone_player.tscn" id="3_afouo"]
+[ext_resource type="Script" uid="uid://ji7ryjg3y6vg" path="res://level/script/level5.gd" id="3_kfxyp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kfxyp"]
+font = ExtResource("2_afouo")
+font_size = 24
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kfxyp"]
+size = Vector2(320, 319.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bft8g"]
+size = Vector2(64, 128)
+
+[node name="level5" unique_id=1783115374 instance=ExtResource("1_s8yte")]
+Level_id = 5
+
+[node name="Camera2D" parent="." index="2" unique_id=1566341157]
+position = Vector2(256, 176)
+
+[node name="item_layer" type="CanvasLayer" parent="." index="3" unique_id=1943660960]
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 0, 0)
+follow_viewport_enabled = true
+
+[node name="Label" type="Label" parent="item_layer" index="0" unique_id=148356791]
+visible = false
+offset_top = 608.0
+offset_right = 252.0
+offset_bottom = 645.0
+theme_override_fonts/font = ExtResource("2_afouo")
+theme_override_font_sizes/font_size = 36
+text = "门从外面锁上了"
+label_settings = SubResource("LabelSettings_kfxyp")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Node2D" type="Node2D" parent="." index="4" unique_id=365742211]
+position = Vector2(304, 176)
+script = ExtResource("3_kfxyp")
+
+[node name="area1" type="Area2D" parent="Node2D" index="0" unique_id=1037902302]
+position = Vector2(48, 16)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Node2D/area1" index="0" unique_id=1503719422]
+polygon = PackedVector2Array(0, -160, 0, 0, -160, 0, -160, 128, 128, 128, 128, -160)
+
+[node name="area2" type="Area2D" parent="Node2D" index="1" unique_id=1999502244]
+position = Vector2(-112, 304)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/area2" index="0" unique_id=850564168]
+shape = SubResource("RectangleShape2D_kfxyp")
+debug_color = Color(1, 1, 0.7019608, 0.41960785)
+
+[node name="area3" type="Area2D" parent="Node2D" index="2" unique_id=1138054309]
+position = Vector2(48, 336)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/area3" index="0" unique_id=1431579393]
+shape = SubResource("RectangleShape2D_bft8g")
+debug_color = Color(1, 1, 0.7019608, 0.41960785)
+
+[node name="external_wall" parent="." index="5" unique_id=1309993977 instance=ExtResource("2_0psf7")]
+position = Vector2(256, 176)
+tile_map_data = PackedByteArray("AADy/xsAAAAGAAwAAADz/xsAAAAGAAwAAAD0/xsAAAAGAAwAAAD0/xwAAAAGAA4AAADz/xwAAAAGAA4AAADy/xwAAAAGAA4AAADy/x0AAAAGAAEAAADy/x4AAAAGAAEAAADz/x4AAAAGAAEAAADz/x0AAAAGAAEAAAD0/x0AAAAGAAEAAAD0/x4AAAAGAAEAAAD1/xsAAAAGAAwAAAD1/xwAAAAJAAwAAAD1/x0AAAAFAA0AAAD1/x4AAAAFAA0AAAD2/xsAAAAGAAwAAAD2/xwAAAAIAAwAAAD2/x0AAAAHAA0AAAD2/x4AAAAHAA0AAAD3/xsAAAAGAAwAAAD3/xwAAAAGAA4AAAD3/x0AAAAGAAEAAAD3/x4AAAAGAAEAAAD4/xsAAAAGAAwAAAD4/xwAAAAGAA4AAAD4/x0AAAAGAAEAAAD4/x4AAAAGAAEAAAD5/xsAAAAGAAwAAAD5/xwAAAAGAA4AAAD5/x0AAAAGAAEAAAD5/x4AAAAGAAEAAAD6/xsAAAAGAAwAAAD6/xwAAAAGAA4AAAD6/x0AAAAGAAEAAAD6/x4AAAAGAAEAAAD7/xsAAAAGAAwAAAD7/xwAAAAJAAwAAAD7/x0AAAAFAA0AAAD7/x4AAAAFAA0AAAD8/xsAAAAGAAwAAAD8/xwAAAAIAAwAAAD8/x0AAAAHAA0AAAD8/x4AAAAHAA0AAAD9/xsAAAAGAAwAAAD9/xwAAAAGAA4AAAD9/x0AAAAGAAEAAAD9/x4AAAAGAAEAAAD+/xsAAAAGAAwAAAD+/xwAAAAGAA4AAAD+/x0AAAAGAAEAAAD+/x4AAAAGAAEAAAD//xsAAAAGAAwAAAD//xwAAAAGAA4AAAD//x0AAAAGAAEAAAD//x4AAAAGAAEAAAAAABsAAAAGAAwAAAAAABwAAAAGAA4AAAAAAB0AAAAGAAEAAAAAAB4AAAAGAAEAAAABABsAAAAGAAwAAAABABwAAAAJAAwAAAABAB0AAAAFAA0AAAABAB4AAAAFAA0AAAACABsAAAAGAAwAAAACABwAAAAIAAwAAAACAB0AAAAHAA0AAAACAB4AAAAHAA0AAAADABsAAAAGAAwAAAADABwAAAAGAA4AAAADAB0AAAAGAAEAAAADAB4AAAAGAAEAAAAEABsAAAAGAAwAAAAEABwAAAAGAA4AAAAEAB0AAAAGAAEAAAAEAB4AAAAGAAEAAAAFABsAAAAGAAwAAAAFABwAAAAGAA4AAAAFAB0AAAAGAAEAAAAFAB4AAAAGAAEAAAA=")
+
+[node name="clone_player" parent="external_wall" index="0" unique_id=1654329773 instance=ExtResource("3_afouo")]
+z_index = -1
+position = Vector2(-192, 480)
+
+[node name="clone_player2" parent="external_wall" index="1" unique_id=1730403281 instance=ExtResource("3_afouo")]
+z_index = -1
+position = Vector2(-112, 480)
+
+[node name="clone_player3" parent="external_wall" index="2" unique_id=1219445225 instance=ExtResource("3_afouo")]
+z_index = -1
+position = Vector2(-16, 480)
+
+[node name="clone_player4" parent="external_wall" index="3" unique_id=248292847 instance=ExtResource("3_afouo")]
+z_index = -1
+position = Vector2(64, 480)

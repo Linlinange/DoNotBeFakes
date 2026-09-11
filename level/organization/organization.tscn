@@ -42,7 +42,7 @@ script = ExtResource("8_q43nj")
 [node name="clue_level2" parent="items_control" unique_id=1442932112 instance=ExtResource("9_dep2x")]
 position = Vector2(112, 240)
 duration = 3.0
-id = 2
+id = "2"
 tooltip_offset = Vector2(0, -42)
 fakable = false
 
@@ -54,7 +54,7 @@ content = "[left][font_size=24]他离开了
 也不清楚怎么会在这。
 总之我想离开这里[/font_size][/left]"
 duration = 8.0
-id = 3
+id = "3"
 tooltip_offset = Vector2(0, -42)
 fakable = false
 
@@ -66,7 +66,7 @@ content = "[font_size=42]实验记录[font_size=24]
 克隆体进行了书写行为。
 后续检查中，
 却并未发现任何书写物。[/left][/font_size]"
-id = 5
+id = "5"
 tooltip_offset = Vector2(0, -42)
 fakable = false
 
@@ -82,7 +82,7 @@ content = "[font_size=24][left]我很痛苦，却无法离开
 但愿没有下一个“我”遭罪
 [/left][/font_size]"
 duration = 15.0
-id = 8
+id = "8"
 tooltip_offset = Vector2(0, -42)
 fakable = false
 

@@ -59,8 +59,7 @@
         {
             "Class": "FakableButton",
             "name": "green_button",
-            "X": 18,
-            "Y": 14,
+            "X": 18, "Y": 14,
             "color": "green",
             "fake": true,
             "fakable": true
@@ -68,24 +67,21 @@
         {
             "Class": "FakableButton",
             "name": "orange_button",
-            "X": 10,
-            "Y": 10,
+            "X": 10, "Y": 10,
             "color": "orange",
             "fake": true,
             "fakable": true
         },
         {
             "Class": "ButtonController",
-            "X": 0,
-            "Y": 0,
+            "X": 0,  "Y": 0,
             "button": [
                 { "bind": "green_button" }
             ],
             "wall": [
                 {
                     "Class": "FakableWall",
-                    "X": 4,
-                    "Y": 13,
+                    "X": 4,  "Y": 13,
                     "color": "green",
                     "facing": "S",
                     "size": { "W": 1, "H": 3 }
@@ -94,24 +90,21 @@
         },
         {
             "Class": "ButtonController",
-            "X": 0,
-            "Y": 0,
+            "X": 0,  "Y": 0,
             "button": [
                 { "bind": "green_button" }
             ],
             "wall": [
                 {
                     "Class": "FakableWall",
-                    "X": 8,
-                    "Y": 4,
+                    "X": 8,  "Y": 4,
                     "color": "green",
                     "facing": "W",
                     "size": { "W": 1, "H": 1 }
                 },
                 {
                     "Class": "FakableWall",
-                    "X": 12,
-                    "Y": 12,
+                    "X": 12, "Y": 12,
                     "color": "green",
                     "facing": "W",
                     "size": { "W": 1, "H": 1 }
@@ -122,16 +115,14 @@
         },
         {
             "Class": "ButtonController",
-            "X": 0,
-            "Y": 0,
+            "X": 0,  "Y": 0,
             "button": [
                 { "bind": "orange_button" }
             ],
             "wall": [
                 {
                     "Class": "FakableWall",
-                    "X": 3,
-                    "Y": 12,
+                    "X": 3,  "Y": 12,
                     "color": "orange",
                     "facing": "W",
                     "size": { "W": 3, "H": 1 },
@@ -142,16 +133,14 @@
         },
         {
             "Class": "ButtonController",
-            "X": 0,
-            "Y": 0,
+            "X": 0,  "Y": 0,
             "button": [
                 { "bind": "orange_button" }
             ],
             "wall": [
                 {
                     "Class": "FakableWall",
-                    "X": 16,
-                    "Y": 8,
+                    "X": 16, "Y": 8,
                     "color": "orange",
                     "facing": "N",
                     "size": { "W": 1, "H": 1 },
@@ -159,8 +148,7 @@
                 },
                 {
                     "Class": "FakableWall",
-                    "X": 8,
-                    "Y": 12,
+                    "X": 8,  "Y": 12,
                     "color": "orange",
                     "facing": "N",
                     "size": { "W": 1, "H": 1 },
