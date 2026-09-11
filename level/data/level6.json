@@ -1,0 +1,173 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": 5,
+        "name": "关卡 5",
+        "description": "虚实转换墙"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 14, "Y": 12,
+            "facing": "W",
+            "next_scene": "res://level/level7/level7.tscn",
+            "tooltip_offset": [-16, -32]
+        },
+        "external_wall": [
+            { "X": 0,  "Y": 0  },
+            { "X": 20, "Y": 0  },
+            { "X": 20, "Y": 12 },
+            { "X": 0,  "Y": 12 },
+            { "X": 4,  "Y": 0,  "dirs": {"E": false, "S": false} },
+            { "X": 7,  "Y": 0,  "dirs": {"W": false} },
+            { "X": 4,  "Y": -1 },
+            { "X": 7,  "Y": -1 },
+            { "X": 12, "Y": 12, "dirs": {"E": false} },
+            { "X": 15, "Y": 12, "dirs": {"W": false} },
+            { "X": 12, "Y": 13 },
+            { "X": 15, "Y": 13 },
+
+            { "X": 12, "Y": 0  },
+            
+            { "X": 4,  "Y": 4,  "dirs": {"N": false, "S": false, "W": false, "E": false} },
+            { "X": 8,  "Y": 4,  "dirs": {"N": false, "S": false, "W": false, "E": false} },
+            { "X": 12, "Y": 4,  "dirs": {"N": true,  "S": false, "W": false, "E": false} },
+            { "X": 16, "Y": 4,  "dirs": {"N": false, "S": true,  "W": false, "E": false} },
+            
+            { "X": 4,  "Y": 8,  "dirs": {"N": false, "S": false, "W": false, "E": true } },
+            { "X": 8,  "Y": 8,  "dirs": {"N": false, "S": false, "W": true,  "E": false} },
+            { "X": 12, "Y": 8,  "dirs": {"N": false, "S": true,  "W": false, "E": true } },
+            { "X": 16, "Y": 8,  "dirs": {"N": true,  "S": false, "W": true,  "E": false} }
+        ],
+        "floor": {
+            "X": 0,  "Y": 0,
+            "W": 20, "H": 12,
+            "seed": 5,
+            "preset_tiles": [
+                { "X": 5,  "Y": 0, "tile": [3, 0], "facing": "W" },
+                { "X": 6,  "Y": 0, "tile": [2, 0], "facing": "W" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "FakableButton",
+            "name": "green_button",
+            "X": 6,  "Y": 10,
+            "color": "green",
+            "fakable": true
+        },
+        {
+            "Class": "FakableButton",
+            "name": "orange_button",
+            "X": 14, "Y": 6,
+            "color": "orange",
+            "fakable": true
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 16, "Y": 9,
+                    "color": "green",
+                    "facing": "S",
+                    "size": { "W": 1, "H": 3 }
+                },
+                {
+                    "Class": "FakableWall",
+                    "X": 8,  "Y": 9,
+                    "color": "green",
+                    "facing": "S",
+                    "size": { "W": 1, "H": 3 }
+                }
+            ]
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "orange_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 3,  "Y": 8,
+                    "color": "orange",
+                    "facing": "W",
+                    "size": { "W": 3, "H": 1 }
+                }
+            ],
+            "size_off": { "W": 3, "H": 1 }
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "orange_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 17, "Y": 8,
+                    "color": "orange",
+                    "facing": "E",
+                    "size": { "W": 1, "H": 1 }
+                }
+            ],
+            "size_on": { "W": 3, "H": 1 },
+            "size_off": { "W": 1, "H": 1 }
+        },
+        { "Class": "FakableBomb", "X": 5,  "Y": 4,  "color": "red" },
+        { "Class": "FakableBomb", "X": 4,  "Y": 2,  "color": "red" },
+        { "Class": "FakableBomb", "X": 4,  "Y": 1,  "color": "red" },
+        { "Class": "FakableBomb", "X": 6,  "Y": 4,  "color": "red" },
+        { "Class": "FakableBomb", "X": 8,  "Y": 2,  "color": "red" },
+        { "Class": "FakableBomb", "X": 7,  "Y": 4,  "color": "red" },
+        { "Class": "FakableBomb", "X": 8,  "Y": 1,  "color": "red" },
+        { "Class": "FakableBomb", "X": 3,  "Y": 9,  "color": "red" },
+        { "Class": "FakableBomb", "X": 2,  "Y": 9,  "color": "red" },
+        { "Class": "FakableBomb", "X": 1,  "Y": 9,  "color": "red" },
+        { "Class": "FakableBomb", "X": 3,  "Y": 10, "color": "red" },
+        { "Class": "FakableBomb", "X": 2,  "Y": 10, "color": "red" },
+        { "Class": "FakableBomb", "X": 1,  "Y": 10, "color": "red" },
+        { "Class": "FakableBomb", "X": 17, "Y": 7,  "color": "red" },
+        { "Class": "FakableBomb", "X": 18, "Y": 7,  "color": "red" },
+        { "Class": "FakableBomb", "X": 19, "Y": 7,  "color": "red" },
+        { "Class": "FakableBomb", "X": 4,  "Y": 3,  "color": "red" },
+        { "Class": "FakableBomb", "X": 8,  "Y": 3,  "color": "red" },
+        { "Class": "FakableBomb", "X": 9,  "Y": 8,  "color": "orange" },
+        { "Class": "FakableBomb", "X": 10, "Y": 8,  "color": "orange" },
+        { "Class": "FakableBomb", "X": 11, "Y": 8,  "color": "orange" },
+        { "Class": "FakableBomb", "X": 12, "Y": 5,  "color": "orange" },
+        { "Class": "FakableBomb", "X": 12, "Y": 6,  "color": "orange" },
+        { "Class": "FakableBomb", "X": 12, "Y": 7,  "color": "orange" }
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 6,  "Y": 2,
+            "view_angle": 60
+        },
+        {
+            "type": "DolosBlack",
+            "name": "dolos",
+            "X": 6,  "Y": 7
+        }
+    ],
+    "event": [
+        [
+            {"type": "say", "actor": "dolos", "text": "你可以控制的物品不止一种", "duration": 3.0},
+            {"type": "say", "actor": "dolos", "text": "尽管不是任意种类都会生效\n但你可以多试试", "duration": 5.0},
+            {"type": "end"}
+        ]
+    ]
+}

@@ -13,7 +13,7 @@
         "exit": {
             "X": 2,  "Y": 0,
             "facing": "E",
-            "next_scene": "res://level/level6/level6.tscn",
+            "next_scene": "res://level/scence/level6.tscn",
             "tooltip_offset": [16, 32]
         },
         "external_wall": [
