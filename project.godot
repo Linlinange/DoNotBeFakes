@@ -37,6 +37,7 @@ EventSystem="*uid://oam4a67ffej8"
 
 window/size/viewport_width=1200
 window/size/viewport_height=700
+window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_height"
 window/stretch/scale_mode="integer"
 

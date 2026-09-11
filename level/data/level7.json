@@ -1,0 +1,282 @@
+{
+    "format_version": 1,
+    "meta": {
+      "id": "level7",
+      "name": "关卡 7",
+      "description": "虚实交错"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 0,  "Y": 6,
+            "facing": "N",
+            "next_scene": "res://level/level8/level8.tscn",
+            "tooltip_offset": [48, 16]
+        },
+        "external_wall": [
+            { "X": 3,  "Y": 0  },
+            { "X": 15, "Y": 0  },
+            { "X": 15, "Y": 16 },
+            { "X": 3,  "Y": 16 },
+
+            { "X": 8,  "Y": 0,  "dirs": {"E": false} },
+            { "X": 11, "Y": 0,  "dirs": {"W": false, "S": false} },
+            { "X": 8,  "Y": -1 },
+            { "X": 11, "Y": -1 },
+            { "X": 3,  "Y": 4,  "dirs": {"S": false, "E": false} },
+            { "X": 3,  "Y": 8,  "dirs": {"N": false, "E": false} },
+            { "X": -1, "Y": 4 },
+            { "X": -1, "Y": 8 },
+            
+            { "X": 3,  "Y": 12 },
+            { "X": 7,  "Y": 4,  "dirs": {"N": false, "S": false, "W": false, "E": false} },
+            { "X": 11, "Y": 4,  "dirs": {"N": false, "S": true,  "W": false, "E": false} },
+            { "X": 7,  "Y": 8,  "dirs": {"N": false, "S": false, "W": false, "E": false} },
+            { "X": 11, "Y": 8,  "dirs": {"N": true,  "S": false, "W": false, "E": false} },
+            { "X": 7,  "Y": 12, "dirs": {"N": false, "S": false, "W": true,  "E": false} },
+            { "X": 11, "Y": 12, "dirs": {"N": false, "S": false, "W": false, "E": false} }
+        ],
+        "floor": {
+            "X": 3,  "Y": 0,
+            "W": 12, "H": 16,
+            "seed": 5,
+            "preset_tiles": [
+                { "X": 9,  "Y": 0, "tile": [3, 0], "facing": "W" },
+                { "X": 10, "Y": 0, "tile": [2, 0], "facing": "W" },
+                { "X": 0,  "Y": 5, "tile": [0, 1] },
+                { "X": 0,  "Y": 6, "tile": [0, 0] },
+                { "X": 0,  "Y": 7, "tile": [0, 1] },
+                { "X": 1,  "Y": 5, "tile": [0, 0] },
+                { "X": 1,  "Y": 6, "tile": [0, 0] },
+                { "X": 1,  "Y": 7, "tile": [0, 1] },
+                { "X": 2,  "Y": 5, "tile": [0, 1] },
+                { "X": 2,  "Y": 6, "tile": [0, 0] },
+                { "X": 2,  "Y": 7, "tile": [0, 0] }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "FakableButton",
+            "name": "green_button",
+            "X": 5,  "Y": 10,
+            "color": "green",
+            "fake": true,
+            "fakable": true
+        },
+        {
+            "Class": "FakableButton",
+            "name": "white_button",
+            "X": 13, "Y": 6,
+            "fake": true,
+            "fakable": true
+        },
+        {
+            "Class": "FakableButton",
+            "name": "blue_button",
+            "X": 5,  "Y": 14,
+            "color": "blue",
+            "fake": true,
+            "fakable": true
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 11, "Y": 3,
+                    "color": "green",
+                    "facing": "N",
+                    "size": { "W": 1, "H": 3 }
+                }
+            ]
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,
+            "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 7,  "Y": 5,
+                    "color": "green",
+                    "facing": "S",
+                    "size": { "W": 1, "H": 1 }
+                },
+                {
+                    "Class": "FakableWall",
+                    "X": 7,  "Y": 13,
+                    "color": "green",
+                    "facing": "S",
+                    "size": { "W": 1, "H": 1 }
+                }
+            ],
+            "size_on": { "W": 1, "H": 3 },
+            "size_off": { "W": 1, "H": 1 }
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 6,  "Y": 8,
+                    "color": "green",
+                    "facing": "W",
+                    "size": { "W": 1, "H": 1 }
+                }
+            ],
+            "size_on": { "W": 3, "H": 1 },
+            "size_off": { "W": 1, "H": 1 }
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "white_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 12, "Y": 4,
+                    "facing": "E",
+                    "size": { "W": 1, "H": 1 },
+                    "fakable": false
+                },
+                {
+                    "Class": "FakableWall",
+                    "X": 6,  "Y": 4,
+                    "facing": "W",
+                    "size": { "W": 1, "H": 1 },
+                    "fakable": false
+                },
+                {
+                    "Class": "FakableWall",
+                    "X": 8,  "Y": 12,
+                    "facing": "E",
+                    "size": { "W": 1, "H": 1 },
+                    "fakable": false
+                }
+            ],
+            "size_on": { "W": 3, "H": 1 },
+            "size_off": { "W": 1, "H": 1 }
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "white_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 12, "Y": 8,
+                    "facing": "E",
+                    "size": { "W": 3, "H": 1 },
+                    "fakable": false
+                },
+                {
+                    "Class": "FakableWall",
+                    "X": 12, "Y": 12,
+                    "facing": "E",
+                    "size": { "W": 3, "H": 1 },
+                    "fakable": false
+                }
+            ],
+            "size_off": { "W": 3, "H": 1 }
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "white_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 1,  "Y": 5,
+                    "facing": "S",
+                    "size": { "W": 1, "H": 3 },
+                    "fakable": false
+                }
+            ]
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "blue_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 2,  "Y": 5,
+                    "color": "blue",
+                    "facing": "S",
+                    "size": { "W": 1, "H": 3 },
+                    "fake": false,
+                    "fakable": false
+                }
+            ]
+        },
+        {
+            "Class": "FakableWall",
+            "X": 7,  "Y": 9,
+            "color": "red",
+            "facing": "S",
+            "size": { "W": 1, "H": 3 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 8,  "Y": 8,
+            "color": "red",
+            "facing": "E",
+            "size": { "W": 3, "H": 1 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 11, "Y": 9,
+            "color": "orange",
+            "facing": "S",
+            "size": { "W": 1, "H": 3 }
+        },
+        {
+            "Class": "FakableWall",
+            "X": 7,  "Y": 1,
+            "color": "orange",
+            "facing": "S",
+            "size": { "W": 1, "H": 3 }
+        },
+        {
+            "Class": "FakableBomb",
+            "X": 5,  "Y": 2,
+            "color": "red"
+        },
+        {
+            "Class": "FakableBomb",
+            "X": 9,  "Y": 10,
+            "color": "orange"
+        }
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 9,  "Y": 1
+        }
+    ],
+    "event": []
+  }
