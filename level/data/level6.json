@@ -13,7 +13,7 @@
         "exit": {
             "X": 14, "Y": 12,
             "facing": "W",
-            "next_scene": "res://level/level7/level7.tscn",
+            "next_scene": "res://level/scence/level7.tscn",
             "tooltip_offset": [-16, -32]
         },
         "external_wall": [
@@ -45,7 +45,7 @@
         "floor": {
             "X": 0,  "Y": 0,
             "W": 20, "H": 12,
-            "seed": 5,
+            "seed": 6,
             "preset_tiles": [
                 { "X": 5,  "Y": 0, "tile": [3, 0], "facing": "W" },
                 { "X": 6,  "Y": 0, "tile": [2, 0], "facing": "W" }

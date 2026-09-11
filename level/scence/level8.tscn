@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b1wi42kd0hwty"]
+
+[ext_resource type="PackedScene" uid="uid://dqjd6no7gngoc" path="res://level/scence/level_loader.tscn" id="1_ifj14"]
+[ext_resource type="Script" uid="uid://bv7nplmt2pqsi" path="res://level/script/camera_follow.gd" id="2_2eouc"]
+[ext_resource type="Script" uid="uid://uhnpybwixfu8" path="res://level/script/level8.gd" id="2_odkex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifj14"]
+size = Vector2(160, 103.75)
+
+[node name="level8" unique_id=1783115374 instance=ExtResource("1_ifj14")]
+Level_id = 8
+
+[node name="Camera2D" parent="." index="2" unique_id=1566341157]
+position = Vector2(320, 240)
+limit_left = 0
+limit_top = 0
+limit_right = 608
+limit_bottom = 416
+script = ExtResource("2_2eouc")
+mode = 0
+
+[node name="Node2D" type="Node2D" parent="." index="3" unique_id=1155508678]
+position = Vector2(304, 208)
+script = ExtResource("2_odkex")
+
+[node name="area1" type="Area2D" parent="Node2D" index="0" unique_id=2024710643]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/area1" index="0" unique_id=1616500295]
+position = Vector2(-192, 128)
+shape = SubResource("RectangleShape2D_ifj14")
+debug_color = Color(1, 1, 0.7019608, 0.41960785)

@@ -60,6 +60,7 @@ region = Rect2(16, 224, 16, 16)
 [node name="fakable_external_wall" unique_id=295473202 groups=["blue"] instance=ExtResource("1_4bx8j")]
 collision_layer = 0
 collision_mask = 0
+fake_collision_layer = 4
 
 [node name="TL" parent="Visuals" parent_id_path=PackedInt32Array(191496420) index="0" unique_id=1913200412]
 material = SubResource("ShaderMaterial_16tg4")

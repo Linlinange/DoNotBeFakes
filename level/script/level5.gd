@@ -10,7 +10,6 @@ extends Node2D
 
 func _ready() -> void:
 	if not level_loader:
-		print("OMG!")
 		return
 	
 	a1.body_entered.connect(_tip1)
@@ -20,7 +19,6 @@ func _ready() -> void:
 	a3.body_entered.connect(_enter_a3)
 	a3.body_exited.connect(_exit_a3)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if not level_loader:

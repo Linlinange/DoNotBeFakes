@@ -1,19 +1,26 @@
 extends Camera2D
 
+enum Mode{
+	ANY,
+	PLAYER
+}
+
+@export var mode: Mode = Mode.PLAYER
 @onready var level_loader: Node2D = $".."
-@onready var player: Node2D = null
+@onready var follow: Node2D = null
 
 
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
-	if not level_loader:
-		return
-
-	if not "player" in level_loader.refs:
-		return
+	if mode == Mode.PLAYER:
+		if not level_loader:
+			return
+		if not "player" in level_loader.refs:
+			return
+		
+		follow = level_loader.refs["player"]
+		if not follow or not follow is Player:
+			return
 	
-	player = level_loader.refs["player"]
-	if not player or not player is Player:
-		return
-	
-	self.global_position = player.global_position
+	if follow:
+		self.global_position = follow.global_position

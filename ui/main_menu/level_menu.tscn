@@ -10,12 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://cpgho1lxc8q5o" path="res://level/scence/level2.tscn" id="9_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://cj75wya85fyea" path="res://level/scence/level3.tscn" id="10_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://b2i42v7n1q40d" path="res://level/scence/level4.tscn" id="11_3x7sr"]
-[ext_resource type="PackedScene" uid="uid://dniig8wrydpkw" path="res://level/level8/level8.tscn" id="11_p262h"]
 [ext_resource type="PackedScene" uid="uid://dquj1rthhd6fh" path="res://level/scence/level5.tscn" id="12_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://tiq6vow81ih3" path="res://character/npc/Dolos_Black.tscn" id="12_wuawr"]
 [ext_resource type="PackedScene" uid="uid://5rlx7ncw2bnm" path="res://level/scence/level6.tscn" id="13_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://bjistfcfj1brx" path="res://ui/main_menu/main_menu.tscn" id="14_3x7sr"]
 [ext_resource type="PackedScene" uid="uid://fblcxbvtq811" path="res://level/scence/level7.tscn" id="14_i2pvy"]
+[ext_resource type="PackedScene" uid="uid://b1wi42kd0hwty" path="res://level/scence/level8.tscn" id="15_3x7sr"]
 
 [node name="level_choose" type="Control" unique_id=31535998]
 layout_mode = 3
@@ -120,7 +120,7 @@ label_text = "7"
 
 [node name="8" parent="VBoxContainer/MarginContainer/HFlowContainer" unique_id=877312504 instance=ExtResource("2_40swp")]
 layout_mode = 2
-scene = ExtResource("11_p262h")
+scene = ExtResource("15_3x7sr")
 label_text = "8"
 
 [node name="Control" type="Control" parent="." unique_id=1966360709]

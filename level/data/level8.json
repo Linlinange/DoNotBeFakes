@@ -1,0 +1,164 @@
+{
+    "format_version": 1,
+    "meta": {
+        "id": "level8",
+        "name": "关卡 8",
+        "description": "镜像与线索"
+    },
+    "map": {
+        "cell_size": {
+            "width": 32,
+            "height": 32
+        },
+        "exit": {
+            "X": 0,  "Y": 6,
+            "facing": "N",
+            "tooltip_offset": [72, -16]
+        },
+        "external_wall": [
+            { "X": 0,  "Y": 0  },
+            { "X": 18, "Y": 0  },
+            { "X": 18, "Y": 12 },
+            { "X": 0,  "Y": 12 },
+
+            { "X": 0,  "Y": 4,  "dirs": {"S": false} },
+            { "X": 0,  "Y": 7,  "dirs": {"N": false, "E": false} },
+            { "X": -1, "Y": 4  },
+            { "X": -1, "Y": 7  },
+
+            { "X": 18, "Y": 4,  "dirs": {"S": false} },
+            { "X": 18, "Y": 7,  "dirs": {"N": false, "W": false} },
+            { "X": 19, "Y": 4  },
+            { "X": 19, "Y": 7  },
+            
+            { "X": 5,  "Y": 2,  "type": null },
+            { "X": 5,  "Y": 3,  "type": null },
+            { "X": 5,  "Y": 0  },
+            { "X": 9,  "Y": 0  },
+            { "X": 5,  "Y": 4,  "dirs": {"S": false, "E": false} },
+            { "X": 9,  "Y": 4,  "dirs": {"S": false, "W": false} },
+
+            { "X": 0,  "Y": 8  },
+            { "X": 9,  "Y": 8,  "dirs": {"N": false, "E": false} },
+            { "X": 13, "Y": 8,  "dirs": {"W": false} },
+            { "X": 9,  "Y": 12 },
+            { "X": 13, "Y": 12 }
+        ],
+        "floor": {
+            "X": 0,  "Y": 0,
+            "W": 18, "H": 12,
+            "seed": 8,
+            "preset_tiles": [
+                { "X": 18, "Y": 5, "tile": [3, 0], "facing": "N" },
+                { "X": 18, "Y": 6, "tile": [2, 0], "facing": "N" }
+            ]
+        }
+    },
+    "item": [
+        {
+            "Class": "Clue",
+            "name": "clue",
+            "X": 2,  "Y": 10,
+            "content": "[left][font_size=24]我很痛苦，却无法离开\n我毁了他们的档案室\n里面有好多和我相似的家伙\n马上他们就要来抓我了\n我也许要死了\n在这之前我想写下这些\n他们发现不了\n但愿没有下一个“我”遭罪\n[/font_size][/left]",
+            "duration": 15.0
+        },
+        {
+            "Class": "FakableButton",
+            "name": "green_button",
+            "X": 11, "Y": 2,
+            "color": "green"
+        },
+        {
+            "Class": "FakableButton",
+            "name": "blue_button",
+            "X": 7,  "Y": 10,
+            "color": "blue"
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "green_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 5, "Y": 7,
+                    "color": "green",
+                    "facing": "N",
+                    "size": { "W": 1, "H": 3 }
+                }
+            ]
+        },
+        {
+            "Class": "ButtonController",
+            "X": 0,  "Y": 0,
+            "button": [
+                { "bind": "blue_button" }
+            ],
+            "wall": [
+                {
+                    "Class": "FakableWall",
+                    "X": 3,  "Y": 7,
+                    "color": "blue",
+                    "facing": "N",
+                    "size": { "W": 1, "H": 3 }
+                }
+            ]
+        },
+        {
+            "Class": "FakableWall",
+            "X": 6,  "Y": 4,
+            "color": "orange",
+            "facing": "E",
+            "size": { "W": 3, "H": 1 },
+            "fakable": false
+        },
+        {
+            "Class": "FakableWall",
+            "X": 10, "Y": 8,
+            "color": "red",
+            "facing": "E",
+            "size": { "W": 3, "H": 1 },
+            "fakable": false
+        },
+        {
+            "Class": "FakableWall",
+            "name":"wall",
+            "X": 5.5,  "Y": 1.5,
+            "color": "fakable_external",
+            "facing": "E",
+            "size": { "W": 2, "H": 1 }
+        },
+        {
+            "Class": "MapMirror",
+            "name": "map_mirror",
+            "X": 7,  "Y": 6,
+            "tomap": [ "player" ]
+        }
+    ],
+    "character": [
+        {
+            "type": "Player",
+            "name": "player",
+            "X": 16, "Y": 7
+        },
+        {
+            "type": "Dolos_Black",
+            "name": "dolos",
+            "X": 15, "Y": 10
+        }
+    ],
+    "event": [
+        [
+            {"type": "set", "target": "player", "property": "movable", "value": false},
+            {"type": "say", "actor": "dolos", "text": "这有面能复制物体的映射镜\n复制出的称作映射体", "duration": 6.0},
+            {"type": "say", "actor": "dolos", "text": "你也可以被复制\n交互后能控制你的映射体", "duration": 5.0},
+            {"type": "set", "target": "player", "property": "movable", "value": true},
+            {"type": "say", "actor": "dolos", "text": "本体无法通过实墙\n但可以通过虚墙", "duration": 4.0},
+            {"type": "say", "actor": "dolos", "text": "映射体可以通过实墙\n无法通过虚墙", "duration": 4.0},
+            {"type": "say", "actor": "dolos", "text": "本体和映射体\n都无法通过外墙", "duration": 4.0},
+            {"type": "end"}
+        ]
+    ]
+}
